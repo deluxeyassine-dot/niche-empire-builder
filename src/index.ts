@@ -252,10 +252,8 @@ export async function initializeSystem(config: SystemConfig): Promise<NicheEmpir
   let dashboard: EmpireDashboard | undefined;
   if (config.features?.realtimeUpdates !== false) {
     dashboard = new EmpireDashboard({
-      empireId: 'system',
-      empireName: 'Empire Portfolio',
       enableRealtime: true,
-      updateInterval: 5000,
+      refreshInterval: 5,
     });
 
     if (config.debug) {
@@ -329,40 +327,35 @@ export async function quickStart(
   }
 
   // Analyze niche
-  await builder.analyzeNiche(niche);
+  const nicheAnalysis = await builder.analyzeNiche(niche);
 
   if (options?.debug) {
     console.log('[NicheEmpireBuilder] Niche analyzed');
   }
 
   // Generate brand
-  await builder.generateBrand();
+  const brandData = await builder.generateBrand(nicheAnalysis);
 
   if (options?.debug) {
     console.log('[NicheEmpireBuilder] Brand generated');
   }
 
   // Create products
-  await builder.createProducts(3);
+  const products = await builder.createProducts(brandData, 3);
 
   if (options?.debug) {
     console.log('[NicheEmpireBuilder] Products created');
   }
 
   // Build website
-  await builder.buildWebsite();
+  const websiteData = await builder.buildWebsite(brandData, products);
 
   if (options?.debug) {
     console.log('[NicheEmpireBuilder] Website built');
   }
 
-  // Auto launch if requested
-  if (options?.autoLaunch) {
-    await builder.launch();
-
-    if (options?.debug) {
-      console.log('[NicheEmpireBuilder] Empire launched!');
-    }
+  if (options?.debug && options?.autoLaunch) {
+    console.log('[NicheEmpireBuilder] Empire ready for launch!');
   }
 
   return builder;
@@ -479,10 +472,8 @@ export async function launchDashboard(
   }
 
   const dashboard = new EmpireDashboard({
-    empireId,
-    empireName,
     enableRealtime: options?.enableRealtime ?? true,
-    updateInterval: options?.updateInterval ?? 5000,
+    refreshInterval: options?.updateInterval ? options.updateInterval / 1000 : 5,
   });
 
   await dashboard.initializeDashboard();

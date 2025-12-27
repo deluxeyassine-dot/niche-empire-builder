@@ -665,13 +665,14 @@ export class AnalyticsTracker {
         recordCount = data.length;
         break;
       case 'all':
-        data = {
+        const allData = {
           metrics: this.prepareMetricsExport(options),
           reports: Array.from(this.reports.values()),
           dashboards: Array.from(this.dashboards.values()),
           roi: Array.from(this.roiAnalyses.values())
         };
-        recordCount = Object.values(data).reduce((sum: number, arr: any) =>
+        data = [allData];
+        recordCount = Object.values(allData).reduce((sum: number, arr: any) =>
           sum + (Array.isArray(arr) ? arr.length : 0), 0);
         break;
     }

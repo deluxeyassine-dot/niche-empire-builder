@@ -466,6 +466,7 @@ export class SocialMediaDeployer {
             canAccessInsights: false,
             canManageMessages: false,
           },
+          metadata: {},
           errors: [{
             code: 'CONNECTION_FAILED',
             message: error instanceof Error ? error.message : 'Unknown error',
