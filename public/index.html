@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-powered platform for building and managing multiple online business empires across different niches">
+    <meta name="keywords" content="niche empire, business automation, AI marketing, online business, empire builder">
+    <meta name="author" content="Niche Empire Builder Team">
+
+    <title>Niche Empire Builder - Build Your Online Empire</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                        accent: '#ec4899',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-crown text-primary text-2xl mr-3"></i>
+                    <span class="text-xl font-bold gradient-text">Niche Empire Builder</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#features" class="text-gray-700 hover:text-primary transition">Features</a>
+                    <a href="#how-it-works" class="text-gray-700 hover:text-primary transition">How It Works</a>
+                    <a href="#get-started" class="text-gray-700 hover:text-primary transition">Get Started</a>
+                    <a href="https://github.com/yourusername/niche-empire-builder" class="text-gray-700 hover:text-primary transition" target="_blank">
+                        <i class="fab fa-github mr-2"></i>GitHub
+                    </a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-primary">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-4 py-3 space-y-3">
+                <a href="#features" class="block text-gray-700 hover:text-primary transition">Features</a>
+                <a href="#how-it-works" class="block text-gray-700 hover:text-primary transition">How It Works</a>
+                <a href="#get-started" class="block text-gray-700 hover:text-primary transition">Get Started</a>
+                <a href="https://github.com/yourusername/niche-empire-builder" class="block text-gray-700 hover:text-primary transition">
+                    <i class="fab fa-github mr-2"></i>GitHub
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-20 md:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center animate-fade-in">
+                <div class="inline-block mb-4">
+                    <span class="bg-white bg-opacity-20 text-white px-4 py-2 rounded-full text-sm font-medium">
+                        🚀 AI-Powered Business Empire Builder
+                    </span>
+                </div>
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+                    Build Multiple Online Empires<br>
+                    <span class="text-purple-200">In Any Niche, Automatically</span>
+                </h1>
+                <p class="text-xl md:text-2xl mb-8 text-purple-100 max-w-3xl mx-auto">
+                    AI-powered platform that handles niche analysis, brand creation, product development,
+                    website deployment, and marketing automation—all in one place.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="#get-started" class="bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold hover:bg-purple-50 transition shadow-lg hover-lift">
+                        <i class="fas fa-rocket mr-2"></i>Get Started Free
+                    </a>
+                    <a href="#how-it-works" class="glass-morphism px-8 py-4 rounded-lg font-semibold hover:bg-white hover:bg-opacity-20 transition">
+                        <i class="fas fa-play-circle mr-2"></i>See How It Works
+                    </a>
+                </div>
+                <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                    <div class="glass-morphism p-6 rounded-lg">
+                        <div class="text-3xl font-bold mb-1">15+</div>
+                        <div class="text-purple-200 text-sm">Core Modules</div>
+                    </div>
+                    <div class="glass-morphism p-6 rounded-lg">
+                        <div class="text-3xl font-bold mb-1">100+</div>
+                        <div class="text-purple-200 text-sm">API Methods</div>
+                    </div>
+                    <div class="glass-morphism p-6 rounded-lg">
+                        <div class="text-3xl font-bold mb-1">12+</div>
+                        <div class="text-purple-200 text-sm">Platforms</div>
+                    </div>
+                    <div class="glass-morphism p-6 rounded-lg">
+                        <div class="text-3xl font-bold mb-1">100%</div>
+                        <div class="text-purple-200 text-sm">TypeScript</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    Everything You Need to Build an Empire
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    From market research to deployment, we've got you covered with AI-powered automation
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature Cards -->
+                <div class="bg-gradient-to-br from-purple-50 to-blue-50 p-6 rounded-xl hover-lift">
+                    <div class="w-12 h-12 bg-primary rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-line text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-900">Niche Analysis</h3>
+                    <p class="text-gray-600">
+                        AI-powered market research, competition analysis, and profitability scoring to find winning niches
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-pink-50 to-purple-50 p-6 rounded-xl hover-lift">
+                    <div class="w-12 h-12 bg-accent rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-palette text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-900">Brand Generator</h3>
+                    <p class="text-gray-600">
+                        Generate brand names, logos, color palettes, and complete brand guidelines automatically
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-xl hover-lift">
+                    <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-box text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-900">Product Creation</h3>
+                    <p class="text-gray-600">
+                        AI-generated product ideas, specifications, pricing strategies, and descriptions
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-green-50 to-blue-50 p-6 rounded-xl hover-lift">
+                    <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-globe text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-900">Website Builder</h3>
+                    <p class="text-gray-600">
+                        Generate full-stack websites with React/Next.js, SEO optimization, and deployment configuration
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-xl hover-lift">
+                    <div class="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-hashtag text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-900">Social Media</h3>
+                    <p class="text-gray-600">
+                        Multi-platform management, content scheduling, and automation for 12+ social platforms
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-xl hover-lift">
+                    <div class="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-envelope text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-900">Email Marketing</h3>
+                    <p class="text-gray-600">
+                        Automated campaigns, email sequences, segmentation, and personalization at scale
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-xl hover-lift">
+                    <div class="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-robot text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-900">AI Chatbot</h3>
+                    <p class="text-gray-600">
+                        Intelligent customer service with intent recognition, sentiment analysis, and multi-channel support
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-indigo-50 to-purple-50 p-6 rounded-xl hover-lift">
+                    <div class="w-12 h-12 bg-indigo-500 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-database text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-900">Database Setup</h3>
+                    <p class="text-gray-600">
+                        Automated Supabase deployment, migrations, backups, and health monitoring
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-teal-50 to-green-50 p-6 rounded-xl hover-lift">
+                    <div class="w-12 h-12 bg-teal-500 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-pie text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-900">Analytics Dashboard</h3>
+                    <p class="text-gray-600">
+                        Real-time metrics, interactive charts, ROI tracking, and portfolio management
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    From Idea to Launch in Minutes
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Simple 4-step process to create your niche empire
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">1</div>
+                    <h3 class="text-lg font-semibold mb-2">Analyze Niche</h3>
+                    <p class="text-gray-600">AI analyzes market trends, competition, and profitability</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-accent text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">2</div>
+                    <h3 class="text-lg font-semibold mb-2">Generate Brand</h3>
+                    <p class="text-gray-600">Create brand identity, products, and content automatically</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">3</div>
+                    <h3 class="text-lg font-semibold mb-2">Deploy Infrastructure</h3>
+                    <p class="text-gray-600">Build website, database, and social media presence</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">4</div>
+                    <h3 class="text-lg font-semibold mb-2">Launch & Monitor</h3>
+                    <p class="text-gray-600">Go live and track performance in real-time dashboard</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Get Started Section -->
+    <section id="get-started" class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    Start Building Your Empire
+                </h2>
+                <p class="text-xl text-gray-600">
+                    Enter your niche and API key to get started
+                </p>
+            </div>
+
+            <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8 md:p-12 shadow-xl">
+                <form id="empire-form" class="space-y-6">
+                    <!-- Niche Input -->
+                    <div>
+                        <label for="niche" class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-bullseye mr-2 text-primary"></i>Niche
+                        </label>
+                        <input
+                            type="text"
+                            id="niche"
+                            name="niche"
+                            placeholder="e.g., fitness, tech gadgets, eco-friendly products"
+                            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent transition"
+                            required
+                        >
+                        <p class="mt-2 text-sm text-gray-500">
+                            <i class="fas fa-info-circle mr-1"></i>Enter the market niche you want to target
+                        </p>
+                    </div>
+
+                    <!-- API Key Input -->
+                    <div>
+                        <label for="apiKey" class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-key mr-2 text-primary"></i>API Key
+                        </label>
+                        <input
+                            type="password"
+                            id="apiKey"
+                            name="apiKey"
+                            placeholder="Enter your API key"
+                            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent transition"
+                            required
+                        >
+                        <p class="mt-2 text-sm text-gray-500">
+                            <i class="fas fa-shield-alt mr-1"></i>Your API key is stored locally and never sent to our servers
+                        </p>
+                    </div>
+
+                    <!-- OpenAI Key Input (Optional) -->
+                    <div>
+                        <label for="openaiKey" class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-brain mr-2 text-primary"></i>OpenAI API Key (Optional)
+                        </label>
+                        <input
+                            type="password"
+                            id="openaiKey"
+                            name="openaiKey"
+                            placeholder="Enter OpenAI API key for enhanced AI features"
+                            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent transition"
+                        >
+                        <p class="mt-2 text-sm text-gray-500">
+                            <i class="fas fa-magic mr-1"></i>Optional: Enhanced AI-powered content generation
+                        </p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="grid md:grid-cols-3 gap-4 pt-4">
+                        <button
+                            type="button"
+                            id="quick-start-btn"
+                            class="bg-primary text-white px-6 py-4 rounded-lg font-semibold hover:bg-purple-700 transition shadow-lg hover-lift flex items-center justify-center"
+                        >
+                            <i class="fas fa-rocket mr-2"></i>Quick Start
+                        </button>
+
+                        <button
+                            type="button"
+                            id="portfolio-btn"
+                            class="bg-accent text-white px-6 py-4 rounded-lg font-semibold hover:bg-pink-700 transition shadow-lg hover-lift flex items-center justify-center"
+                        >
+                            <i class="fas fa-layer-group mr-2"></i>Create Portfolio
+                        </button>
+
+                        <button
+                            type="button"
+                            id="dashboard-btn"
+                            class="bg-green-500 text-white px-6 py-4 rounded-lg font-semibold hover:bg-green-600 transition shadow-lg hover-lift flex items-center justify-center"
+                        >
+                            <i class="fas fa-chart-line mr-2"></i>Launch Dashboard
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Result Display -->
+                <div id="result-container" class="hidden mt-8">
+                    <div class="bg-white rounded-lg p-6 shadow-md">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-900">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>Result
+                            </h3>
+                            <button id="close-result" class="text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div id="result-content" class="text-gray-700">
+                            <!-- Result will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Examples -->
+            <div class="mt-12 grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <div class="text-primary mb-2">
+                        <i class="fas fa-dumbbell text-2xl"></i>
+                    </div>
+                    <h4 class="font-semibold mb-2">Fitness Empire</h4>
+                    <p class="text-sm text-gray-600 mb-3">
+                        Target: Busy professionals<br>
+                        Products: Digital programs<br>
+                        Revenue: High
+                    </p>
+                    <button class="text-primary text-sm font-medium hover:underline example-niche" data-niche="fitness">
+                        Use this example →
+                    </button>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <div class="text-accent mb-2">
+                        <i class="fas fa-microchip text-2xl"></i>
+                    </div>
+                    <h4 class="font-semibold mb-2">Tech Gadgets</h4>
+                    <p class="text-sm text-gray-600 mb-3">
+                        Target: Tech enthusiasts<br>
+                        Products: Physical + Digital<br>
+                        Revenue: Very High
+                    </p>
+                    <button class="text-accent text-sm font-medium hover:underline example-niche" data-niche="tech gadgets">
+                        Use this example →
+                    </button>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <div class="text-green-500 mb-2">
+                        <i class="fas fa-leaf text-2xl"></i>
+                    </div>
+                    <h4 class="font-semibold mb-2">Eco Products</h4>
+                    <p class="text-sm text-gray-600 mb-3">
+                        Target: Conscious consumers<br>
+                        Products: Physical + Subscription<br>
+                        Revenue: Growing
+                    </p>
+                    <button class="text-green-500 text-sm font-medium hover:underline example-niche" data-niche="eco-friendly products">
+                        Use this example →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="gradient-bg text-white py-16">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                Ready to Build Your Empire?
+            </h2>
+            <p class="text-xl text-purple-100 mb-8">
+                Join thousands of entrepreneurs building successful online businesses
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#get-started" class="bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold hover:bg-purple-50 transition shadow-lg">
+                    Get Started Now
+                </a>
+                <a href="https://github.com/yourusername/niche-empire-builder" class="glass-morphism px-8 py-4 rounded-lg font-semibold hover:bg-white hover:bg-opacity-20 transition" target="_blank">
+                    <i class="fab fa-github mr-2"></i>View on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-crown text-primary text-2xl mr-3"></i>
+                        <span class="text-white font-bold text-lg">Niche Empire Builder</span>
+                    </div>
+                    <p class="text-sm text-gray-400">
+                        AI-powered platform for building and managing multiple online business empires
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Product</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#features" class="hover:text-white transition">Features</a></li>
+                        <li><a href="#how-it-works" class="hover:text-white transition">How It Works</a></li>
+                        <li><a href="#get-started" class="hover:text-white transition">Get Started</a></li>
+                        <li><a href="#" class="hover:text-white transition">Pricing</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition">Documentation</a></li>
+                        <li><a href="#" class="hover:text-white transition">API Reference</a></li>
+                        <li><a href="#" class="hover:text-white transition">Examples</a></li>
+                        <li><a href="#" class="hover:text-white transition">Blog</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Connect</h4>
+                    <div class="flex space-x-4">
+                        <a href="https://github.com/yourusername/niche-empire-builder" class="text-gray-400 hover:text-white transition" target="_blank">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                        <a href="https://twitter.com/nicheempire" class="text-gray-400 hover:text-white transition" target="_blank">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="https://discord.gg/nicheempire" class="text-gray-400 hover:text-white transition" target="_blank">
+                            <i class="fab fa-discord text-xl"></i>
+                        </a>
+                        <a href="mailto:support@nicheempirebuilder.com" class="text-gray-400 hover:text-white transition">
+                            <i class="fas fa-envelope text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 text-center text-sm">
+                <p>&copy; 2024 Niche Empire Builder. All rights reserved. Built with ❤️ by the Niche Empire Builder team.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Example niche buttons
+        const exampleButtons = document.querySelectorAll('.example-niche');
+        exampleButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const niche = btn.getAttribute('data-niche');
+                document.getElementById('niche').value = niche;
+            });
+        });
+
+        // Get form values
+        function getFormValues() {
+            return {
+                niche: document.getElementById('niche').value,
+                apiKey: document.getElementById('apiKey').value,
+                openaiKey: document.getElementById('openaiKey').value,
+            };
+        }
+
+        // Show loading state
+        function showLoading(button) {
+            button.disabled = true;
+            button.innerHTML = '<span class="loading"></span> Processing...';
+        }
+
+        // Reset button state
+        function resetButton(button, icon, text) {
+            button.disabled = false;
+            button.innerHTML = `<i class="fas ${icon} mr-2"></i>${text}`;
+        }
+
+        // Show result
+        function showResult(title, message, type = 'success') {
+            const resultContainer = document.getElementById('result-container');
+            const resultContent = document.getElementById('result-content');
+
+            const iconClass = type === 'success' ? 'fa-check-circle text-green-500' :
+                            type === 'error' ? 'fa-exclamation-circle text-red-500' :
+                            'fa-info-circle text-blue-500';
+
+            resultContent.innerHTML = `
+                <div class="flex items-start">
+                    <i class="fas ${iconClass} text-2xl mr-4 mt-1"></i>
+                    <div class="flex-1">
+                        <h4 class="font-semibold text-lg mb-2">${title}</h4>
+                        <p class="text-gray-600">${message}</p>
+                    </div>
+                </div>
+            `;
+
+            resultContainer.classList.remove('hidden');
+        }
+
+        // Close result
+        document.getElementById('close-result').addEventListener('click', () => {
+            document.getElementById('result-container').classList.add('hidden');
+        });
+
+        // Quick Start Button
+        document.getElementById('quick-start-btn').addEventListener('click', async () => {
+            const button = document.getElementById('quick-start-btn');
+            const values = getFormValues();
+
+            if (!values.niche || !values.apiKey) {
+                showResult('Missing Information', 'Please enter both niche and API key', 'error');
+                return;
+            }
+
+            showLoading(button);
+
+            // Simulate API call
+            setTimeout(() => {
+                resetButton(button, 'fa-rocket', 'Quick Start');
+                showResult(
+                    'Empire Creation Started!',
+                    `Creating your <strong>${values.niche}</strong> empire. This includes:<br><br>
+                    ✓ Analyzing niche and competition<br>
+                    ✓ Generating brand identity<br>
+                    ✓ Creating product ideas<br>
+                    ✓ Building website structure<br>
+                    ✓ Setting up automation<br><br>
+                    <em>In a real implementation, this would call the Niche Empire Builder API.</em>`,
+                    'success'
+                );
+            }, 2000);
+        });
+
+        // Portfolio Button
+        document.getElementById('portfolio-btn').addEventListener('click', async () => {
+            const button = document.getElementById('portfolio-btn');
+            const values = getFormValues();
+
+            if (!values.niche || !values.apiKey) {
+                showResult('Missing Information', 'Please enter both niche and API key', 'error');
+                return;
+            }
+
+            showLoading(button);
+
+            // Simulate API call
+            setTimeout(() => {
+                resetButton(button, 'fa-layer-group', 'Create Portfolio');
+                showResult(
+                    'Portfolio Creation Started!',
+                    `Creating a portfolio with <strong>${values.niche}</strong> and related niches:<br><br>
+                    🎯 ${values.niche}<br>
+                    🎯 ${values.niche}-related niche 1<br>
+                    🎯 ${values.niche}-related niche 2<br><br>
+                    All empires will be created in parallel for maximum efficiency.<br><br>
+                    <em>Use the EmpireManager API to manage your portfolio.</em>`,
+                    'success'
+                );
+            }, 2000);
+        });
+
+        // Dashboard Button
+        document.getElementById('dashboard-btn').addEventListener('click', async () => {
+            const button = document.getElementById('dashboard-btn');
+            const values = getFormValues();
+
+            if (!values.apiKey) {
+                showResult('Missing Information', 'Please enter your API key', 'error');
+                return;
+            }
+
+            showLoading(button);
+
+            // Simulate API call
+            setTimeout(() => {
+                resetButton(button, 'fa-chart-line', 'Launch Dashboard');
+                showResult(
+                    'Dashboard Launching!',
+                    `Your Empire Dashboard is being initialized with:<br><br>
+                    📊 Real-time metrics monitoring<br>
+                    📈 Interactive charts and visualizations<br>
+                    💰 Revenue tracking<br>
+                    👥 Customer analytics<br>
+                    🚀 Performance insights<br><br>
+                    <em>Dashboard will update every 5 seconds with live data.</em>`,
+                    'success'
+                );
+            }, 2000);
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu if open
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
