@@ -5,6 +5,8 @@
  * post generation, graphic design, content scheduling, hashtag research, and automation setup.
  */
 
+import { getGeminiService, GeminiService } from '../services/GeminiService';
+
 export interface ProfileOptions {
   platform: 'instagram' | 'facebook' | 'twitter' | 'linkedin' | 'tiktok' | 'pinterest' | 'youtube';
   brandName: string;
@@ -390,6 +392,11 @@ export class SocialMediaGenerator {
   private brandVoice: string = 'professional';
   private brandColors: string[] = [];
   private targetAudience: string | null = null;
+  private geminiService: GeminiService;
+
+  constructor() {
+    this.geminiService = getGeminiService();
+  }
 
   /**
    * Set context for social media generation
@@ -446,16 +453,6 @@ export class SocialMediaGenerator {
    * @returns Social media post with content and media specs
    */
   async generatePosts(options: PostGenerationOptions): Promise<SocialPost[]> {
-    // TODO: Implement AI-powered post generation
-    // This would typically involve:
-    // - GPT/Claude for copywriting
-    // - Trend analysis for topics
-    // - Engagement prediction algorithms
-    // - Platform-specific optimization
-    // - Hook testing and optimization
-    // - Call-to-action optimization
-    // - Emoji and formatting suggestions
-
     console.log(`Generating ${options.count || 1} ${options.platform} posts...`);
 
     const count = options.count || 1;

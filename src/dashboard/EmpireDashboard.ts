@@ -198,7 +198,7 @@ export class EmpireDashboard {
 
     this.state = {
       initialized: false,
-      currentView: this.config.defaultView,
+      currentView: this.config.defaultView || 'overview',
       filters: {
         dateRange: {
           start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago

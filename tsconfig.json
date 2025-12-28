@@ -22,6 +22,6 @@
     "strictNullChecks": false
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist", "src/dashboard", "src/test-*.ts", "src/list-models.ts", "src/examples"]
 }
 

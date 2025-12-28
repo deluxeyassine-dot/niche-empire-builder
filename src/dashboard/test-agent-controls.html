@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Controls - Test Preview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes pulse-ring {
+      0%, 100% {
+        opacity: 0.5;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0;
+        transform: scale(1.5);
+      }
+    }
+
+    .pulse-ring {
+      animation: pulse-ring 2s ease-in-out infinite;
+    }
+
+    /* Custom scrollbar for logs */
+    .logs-container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .logs-container::-webkit-scrollbar-track {
+      background: #1f2937;
+    }
+
+    .logs-container::-webkit-scrollbar-thumb {
+      background: #4b5563;
+      border-radius: 4px;
+    }
+
+    .logs-container::-webkit-scrollbar-thumb:hover {
+      background: #6b7280;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <div id="root" class="min-h-screen py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Header -->
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Agent Controls</h1>
+        <p class="text-gray-600">Manage and monitor all AI agents in your empire</p>
+      </div>
+
+      <!-- Overall Metrics -->
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div class="flex items-center space-x-3">
+            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Total Agents</p>
+              <p class="text-2xl font-bold text-gray-900">5</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div class="flex items-center space-x-3">
+            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center relative">
+              <div class="absolute inset-0 bg-green-400 rounded-lg pulse-ring"></div>
+              <svg class="w-6 h-6 text-green-600 relative z-10" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Running</p>
+              <p class="text-2xl font-bold text-green-600">1</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div class="flex items-center space-x-3">
+            <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Idle</p>
+              <p class="text-2xl font-bold text-gray-600">2</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div class="flex items-center space-x-3">
+            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Errors</p>
+              <p class="text-2xl font-bold text-red-600">1</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div class="flex items-center space-x-3">
+            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Avg Success</p>
+              <p class="text-2xl font-bold text-purple-600">89.8%</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters and Controls -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+        <div class="flex items-center justify-between flex-wrap gap-4">
+          <div class="flex items-center space-x-2">
+            <span class="text-sm font-medium text-gray-700">Filter:</span>
+            <button class="px-3 py-1 rounded-lg text-sm font-medium bg-blue-600 text-white">All</button>
+            <button class="px-3 py-1 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200">Running</button>
+            <button class="px-3 py-1 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200">Idle</button>
+            <button class="px-3 py-1 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200">Error</button>
+            <button class="px-3 py-1 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200">Completed</button>
+          </div>
+
+          <div class="flex items-center space-x-2">
+            <span class="text-sm font-medium text-gray-700">Sort by:</span>
+            <select class="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option>Name</option>
+              <option>Status</option>
+              <option>Success Rate</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sample Agent Card: Product Generator (Running) -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow mb-6" style="border-left: 4px solid #3b82f6;">
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-start space-x-3">
+              <div class="w-12 h-12 rounded-lg flex items-center justify-center text-2xl" style="background-color: rgba(59, 130, 246, 0.13);">
+                📦
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-900">Product Generator</h3>
+                <p class="text-sm text-gray-600">Creates product ideas, specifications, features, and pricing</p>
+              </div>
+            </div>
+            <span class="inline-flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
+              <span>▶️</span>
+              <span>Running</span>
+            </span>
+          </div>
+
+          <!-- Progress -->
+          <div class="mb-4">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm text-gray-600">Generating product specifications...</span>
+              <span class="text-sm font-semibold text-gray-900">67%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+              <div class="h-full bg-blue-500 transition-all duration-500" style="width: 67%;"></div>
+            </div>
+          </div>
+
+          <!-- Metrics -->
+          <div class="grid grid-cols-4 gap-4 mb-4">
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-600 mb-1">Success Rate</p>
+              <p class="text-lg font-bold text-gray-900">85.3%</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-600 mb-1">Completed</p>
+              <p class="text-lg font-bold text-gray-900">128/150</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-600 mb-1">Avg Time</p>
+              <p class="text-lg font-bold text-gray-900">18.2s</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-600 mb-1">Total Runs</p>
+              <p class="text-lg font-bold text-gray-900">150</p>
+            </div>
+          </div>
+
+          <!-- Control Buttons -->
+          <div class="flex items-center space-x-2">
+            <button class="flex-1 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 flex items-center justify-center space-x-2 transition-colors">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
+              <span>Pause</span>
+            </button>
+            <button class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center justify-center space-x-2 transition-colors">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z" clip-rule="evenodd" />
+              </svg>
+              <span>Stop</span>
+            </button>
+            <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center space-x-2 transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span>Config</span>
+            </button>
+            <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center space-x-2 transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>Logs</span>
+              <span class="ml-1 bg-gray-300 text-gray-700 text-xs font-semibold px-2 py-0.5 rounded-full">4</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sample Agent Card: Brand Generator (Idle) -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow mb-6" style="border-left: 4px solid #8b5cf6;">
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-start space-x-3">
+              <div class="w-12 h-12 rounded-lg flex items-center justify-center text-2xl" style="background-color: rgba(139, 92, 246, 0.13);">
+                🎨
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-900">Brand Generator</h3>
+                <p class="text-sm text-gray-600">Generates brand names, taglines, logos, and brand guidelines</p>
+              </div>
+            </div>
+            <span class="inline-flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">
+              <span>⏸️</span>
+              <span>Idle</span>
+            </span>
+          </div>
+
+          <!-- Metrics -->
+          <div class="grid grid-cols-4 gap-4 mb-4">
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-600 mb-1">Success Rate</p>
+              <p class="text-lg font-bold text-gray-900">90.0%</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-600 mb-1">Completed</p>
+              <p class="text-lg font-bold text-gray-900">45/50</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-600 mb-1">Avg Time</p>
+              <p class="text-lg font-bold text-gray-900">12.5s</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-600 mb-1">Total Runs</p>
+              <p class="text-lg font-bold text-gray-900">50</p>
+            </div>
+          </div>
+
+          <!-- Control Buttons -->
+          <div class="flex items-center space-x-2">
+            <button class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center space-x-2 transition-colors">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+              </svg>
+              <span>Start</span>
+            </button>
+            <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center space-x-2 transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span>Config</span>
+            </button>
+            <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center space-x-2 transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>Logs</span>
+              <span class="ml-1 bg-gray-300 text-gray-700 text-xs font-semibold px-2 py-0.5 rounded-full">3</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sample Agent Card: Website Generator (Error) -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow" style="border-left: 4px solid #ec4899;">
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-start space-x-3">
+              <div class="w-12 h-12 rounded-lg flex items-center justify-center text-2xl" style="background-color: rgba(236, 72, 153, 0.13);">
+                🌐
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-900">Website Generator</h3>
+                <p class="text-sm text-gray-600">Builds complete websites with pages, components, and assets</p>
+              </div>
+            </div>
+            <span class="inline-flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+              <span>❌</span>
+              <span>Error</span>
+            </span>
+          </div>
+
+          <!-- Error Message -->
+          <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+            <div class="flex items-start space-x-2">
+              <svg class="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+              </svg>
+              <div class="flex-1">
+                <p class="text-sm font-semibold text-red-900">Failed to generate homepage</p>
+                <p class="text-xs text-red-700 mt-1">API rate limit exceeded (Error Code: 429)</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Metrics -->
+          <div class="grid grid-cols-4 gap-4 mb-4">
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-600 mb-1">Success Rate</p>
+              <p class="text-lg font-bold text-gray-900">80.0%</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-600 mb-1">Completed</p>
+              <p class="text-lg font-bold text-gray-900">12/15</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-600 mb-1">Avg Time</p>
+              <p class="text-lg font-bold text-gray-900">45.6s</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-600 mb-1">Total Runs</p>
+              <p class="text-lg font-bold text-gray-900">15</p>
+            </div>
+          </div>
+
+          <!-- Control Buttons -->
+          <div class="flex items-center space-x-2">
+            <button class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center space-x-2 transition-colors">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+              </svg>
+              <span>Retry</span>
+            </button>
+            <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center space-x-2 transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span>Config</span>
+            </button>
+            <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center space-x-2 transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>Logs</span>
+              <span class="ml-1 bg-red-300 text-red-700 text-xs font-semibold px-2 py-0.5 rounded-full">3</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Add interactive functionality
+    console.log('Agent Controls Test Preview Loaded');
+    console.log('This is a static preview. For full functionality, use the React component.');
+  </script>
+</body>
+</html>

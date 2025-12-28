@@ -5,6 +5,8 @@
  * features, pricing strategies, descriptions, and product imagery.
  */
 
+import { getGeminiService, GeminiService } from '../services/GeminiService';
+
 export interface ProductIdeaOptions {
   niche: string;
   targetAudience?: string;
@@ -166,6 +168,11 @@ export class ProductGenerator {
   private brandName: string | null = null;
   private brandColors: string[] = [];
   private targetAudience: string | null = null;
+  private geminiService: GeminiService;
+
+  constructor() {
+    this.geminiService = getGeminiService();
+  }
 
   /**
    * Set context for product generation
@@ -572,41 +579,24 @@ export class ProductGenerator {
     specs: ProductSpecs,
     brandVoice?: string
   ): Promise<ProductDescription> {
-    // TODO: Implement AI-powered copywriting
-    // This would typically involve:
-    // - GPT/Claude for creative copywriting
-    // - SEO optimization tools
-    // - A/B testing different versions
-    // - Conversion-focused writing
-    // - Multi-language support
-    // - Brand voice consistency checking
-
     console.log(`Creating product descriptions for "${productName}"...`);
 
     const voice = brandVoice || 'professional';
     const category = specs.category;
     const mustHaveFeatures = features.filter(f => f.priority === 'must-have');
 
-    const shortDescription = `Discover the ${productName} - your ultimate ${category} solution. Premium quality meets innovative design in this carefully crafted product that delivers exceptional performance and lasting value.`;
+    // Use Gemini AI to generate product description
+    const result = await this.geminiService.generateProductDescription({
+      productName,
+      features: features.map(f => f.name),
+      benefits: features.map(f => f.benefit),
+      category,
+      tone: voice,
+      length: 'medium'
+    });
 
-    const longDescription = `
-Introducing the ${productName}
-
-Transform your ${category} experience with the ${productName}, meticulously designed for those who demand excellence. This isn't just another ${category} product – it's a carefully engineered solution that combines premium materials, innovative features, and thoughtful design.
-
-What Makes ${productName} Special:
-
-${mustHaveFeatures.map(f => `• ${f.name}: ${f.benefit}`).join('\n')}
-
-Built to Last, Designed to Impress
-
-Crafted from ${specs.materials[0].toLowerCase()} and backed by our ${specs.warranty}, the ${productName} represents our commitment to quality and customer satisfaction. Every detail has been refined to ensure you receive a product that exceeds expectations.
-
-Perfect For:
-Whether you're a beginner or a seasoned professional, the ${productName} adapts to your needs. Its versatile design and intuitive features make it the ideal choice for anyone seeking reliable, high-performance ${category} solutions.
-
-Join thousands of satisfied customers who have made the switch to ${productName}. Your satisfaction is guaranteed.
-    `.trim();
+    const shortDescription = result.shortDescription;
+    const longDescription = result.longDescription;
 
     const keywords = [
       productName.toLowerCase(),

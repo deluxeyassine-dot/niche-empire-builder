@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Monitor - Test Preview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes pulse-ring {
+      0%, 100% {
+        opacity: 0.5;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0;
+        transform: scale(1.5);
+      }
+    }
+
+    @keyframes pulse-once {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.02);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .pulse-ring {
+      animation: pulse-ring 2s ease-in-out infinite;
+    }
+
+    .animate-pulse-once {
+      animation: pulse-once 1s ease-in-out;
+    }
+
+    /* Custom scrollbar */
+    .activity-feed::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .activity-feed::-webkit-scrollbar-track {
+      background: #f3f4f6;
+    }
+
+    .activity-feed::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 4px;
+    }
+
+    .activity-feed::-webkit-scrollbar-thumb:hover {
+      background: #9ca3af;
+    }
+
+    /* Smooth scroll */
+    .activity-feed {
+      scroll-behavior: smooth;
+    }
+
+    /* Activity item fade-in */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .activity-item-new {
+      animation: fadeIn 0.3s ease-out;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <div class="min-h-screen py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Header -->
+      <div class="mb-8">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h1 class="text-3xl font-bold text-gray-900 flex items-center space-x-3">
+              <span>Live Monitor</span>
+              <span class="flex items-center space-x-2 text-sm font-normal text-green-600">
+                <span class="flex h-2 w-2">
+                  <span class="animate-ping absolute h-2 w-2 rounded-full bg-green-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                <span>Live</span>
+              </span>
+            </h1>
+            <p class="text-gray-600 mt-1">Real-time activity monitoring and system health</p>
+          </div>
+
+          <!-- Controls -->
+          <div class="flex items-center space-x-2">
+            <button id="pauseBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 flex items-center space-x-2 transition-colors">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
+              <span>Pause</span>
+            </button>
+
+            <button id="clearBtn" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center space-x-2 transition-colors">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
+              <span>Clear</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="grid grid-cols-5 gap-4">
+          <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <p class="text-sm text-gray-600 mb-1">Total Activities</p>
+            <p class="text-2xl font-bold text-gray-900" id="totalActivities">23</p>
+          </div>
+          <div class="bg-green-50 rounded-lg border border-green-200 p-4">
+            <p class="text-sm text-green-600 mb-1">Completions</p>
+            <p class="text-2xl font-bold text-green-700">15</p>
+          </div>
+          <div class="bg-blue-50 rounded-lg border border-blue-200 p-4">
+            <p class="text-sm text-blue-600 mb-1">API Calls</p>
+            <p class="text-2xl font-bold text-blue-700">8</p>
+          </div>
+          <div class="bg-red-50 rounded-lg border border-red-200 p-4">
+            <p class="text-sm text-red-600 mb-1">Errors</p>
+            <p class="text-2xl font-bold text-red-700">2</p>
+          </div>
+          <div class="bg-purple-50 rounded-lg border border-purple-200 p-4">
+            <p class="text-sm text-purple-600 mb-1">Active Agents</p>
+            <p class="text-2xl font-bold text-purple-700">3</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Left Column: Activity Feed -->
+        <div class="lg:col-span-2 space-y-6">
+
+          <!-- Activity Filter -->
+          <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <div class="flex items-center space-x-2 overflow-x-auto">
+              <span class="text-sm font-medium text-gray-700 whitespace-nowrap">Filter:</span>
+              <button class="px-3 py-1 rounded-lg text-sm font-medium bg-blue-600 text-white">All</button>
+              <button class="px-3 py-1 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200">Generation Complete</button>
+              <button class="px-3 py-1 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200">API Call</button>
+              <button class="px-3 py-1 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200">Agent Start</button>
+              <button class="px-3 py-1 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200">Agent Error</button>
+            </div>
+          </div>
+
+          <!-- Activity Feed -->
+          <div class="bg-white rounded-lg border border-gray-200">
+            <div class="p-4 border-b border-gray-200 flex items-center justify-between">
+              <h2 class="text-lg font-bold text-gray-900">Activity Feed</h2>
+              <span class="text-sm text-gray-600">23 activities</span>
+            </div>
+
+            <div class="p-4 max-h-[600px] overflow-y-auto activity-feed space-y-2" id="activityFeed">
+              <!-- Activities will be added here dynamically -->
+
+              <!-- Sample Activity 1: Generation Complete -->
+              <div class="flex items-start space-x-3 p-3 rounded-lg border bg-white border-gray-200 hover:bg-gray-50 transition-all">
+                <div class="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
+                  <span class="text-sm">✨</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between mb-1">
+                    <p class="text-sm font-semibold text-gray-900">Generated brand name: "TechVista Pro"</p>
+                    <span class="text-xs text-gray-500 whitespace-nowrap ml-2">2s ago</span>
+                  </div>
+                  <div class="flex items-center space-x-3 text-xs text-gray-600">
+                    <span class="flex items-center space-x-1">
+                      <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
+                      </svg>
+                      <span>Brand Generator</span>
+                    </span>
+                    <span class="flex items-center space-x-1">
+                      <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                      </svg>
+                      <span>2.5s</span>
+                    </span>
+                    <span class="flex items-center space-x-1 text-green-600">
+                      ✓
+                      <span>Success</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sample Activity 2: API Call -->
+              <div class="flex items-start space-x-3 p-3 rounded-lg border bg-white border-gray-200 hover:bg-gray-50 transition-all">
+                <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
+                  <span class="text-sm">🔌</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between mb-1">
+                    <p class="text-sm font-semibold text-gray-900">API call to Gemini Pro completed</p>
+                    <span class="text-xs text-gray-500 whitespace-nowrap ml-2">5s ago</span>
+                  </div>
+                  <div class="flex items-center space-x-3 text-xs text-gray-600">
+                    <span class="flex items-center space-x-1">
+                      <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
+                      </svg>
+                      <span>Product Generator</span>
+                    </span>
+                    <span class="flex items-center space-x-1">
+                      <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                      </svg>
+                      <span>1.2s</span>
+                    </span>
+                    <span class="flex items-center space-x-1 text-green-600">
+                      ✓
+                      <span>Success</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sample Activity 3: Agent Start -->
+              <div class="flex items-start space-x-3 p-3 rounded-lg border bg-white border-gray-200 hover:bg-gray-50 transition-all">
+                <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
+                  <span class="text-sm">▶️</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between mb-1">
+                    <p class="text-sm font-semibold text-gray-900">Social Media Generator started</p>
+                    <span class="text-xs text-gray-500 whitespace-nowrap ml-2">12s ago</span>
+                  </div>
+                  <div class="flex items-center space-x-3 text-xs text-gray-600">
+                    <span class="flex items-center space-x-1">
+                      <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
+                      </svg>
+                      <span>Social Media</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sample Activity 4: Error -->
+              <div class="flex items-start space-x-3 p-3 rounded-lg border bg-white border-gray-200 hover:bg-gray-50 transition-all">
+                <div class="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0">
+                  <span class="text-sm">❌</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between mb-1">
+                    <p class="text-sm font-semibold text-gray-900">Failed to generate homepage: API rate limit exceeded</p>
+                    <span class="text-xs text-gray-500 whitespace-nowrap ml-2">25s ago</span>
+                  </div>
+                  <div class="flex items-center space-x-3 text-xs text-gray-600">
+                    <span class="flex items-center space-x-1">
+                      <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
+                      </svg>
+                      <span>Website Generator</span>
+                    </span>
+                    <span class="flex items-center space-x-1 text-red-600">
+                      ✗
+                      <span>Failed</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: System Info -->
+        <div class="space-y-6">
+
+          <!-- System Health -->
+          <div class="bg-white rounded-lg border border-gray-200 p-6">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-lg font-bold text-gray-900">System Health</h3>
+              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-600">HEALTHY</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-6">
+              <!-- CPU Usage -->
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-sm text-gray-600">CPU</span>
+                  <span class="text-sm font-semibold text-gray-900">45%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="h-full rounded-full bg-green-500 transition-all duration-500" style="width: 45%;"></div>
+                </div>
+              </div>
+
+              <!-- Memory Usage -->
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-sm text-gray-600">Memory</span>
+                  <span class="text-sm font-semibold text-gray-900">62%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="h-full rounded-full bg-yellow-500 transition-all duration-500" style="width: 62%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- API Calls -->
+            <div class="mb-6">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm text-gray-600">API Success Rate</span>
+                <span class="text-sm font-semibold text-gray-900">97.1%</span>
+              </div>
+              <div class="grid grid-cols-3 gap-2 text-xs">
+                <div class="bg-gray-50 rounded p-2">
+                  <p class="text-gray-600">Total</p>
+                  <p class="font-semibold text-gray-900">1234</p>
+                </div>
+                <div class="bg-green-50 rounded p-2">
+                  <p class="text-green-600">Success</p>
+                  <p class="font-semibold text-green-700">1198</p>
+                </div>
+                <div class="bg-red-50 rounded p-2">
+                  <p class="text-red-600">Failed</p>
+                  <p class="font-semibold text-red-700">36</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- WebSocket Status -->
+            <div class="mb-6">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm text-gray-600">WebSocket</span>
+                <div class="flex items-center space-x-2">
+                  <span class="inline-flex h-2 w-2 rounded-full bg-green-500"></span>
+                  <span class="text-xs font-semibold text-gray-900">23ms</span>
+                </div>
+              </div>
+              <div class="text-xs text-gray-600">Reconnects: 0</div>
+            </div>
+
+            <!-- Agent Stats -->
+            <div class="grid grid-cols-4 gap-2 text-xs mb-4">
+              <div class="bg-blue-50 rounded p-2 text-center">
+                <p class="text-blue-600 mb-1">Total</p>
+                <p class="font-bold text-blue-700 text-lg">5</p>
+              </div>
+              <div class="bg-green-50 rounded p-2 text-center">
+                <p class="text-green-600 mb-1">Running</p>
+                <p class="font-bold text-green-700 text-lg">3</p>
+              </div>
+              <div class="bg-gray-50 rounded p-2 text-center">
+                <p class="text-gray-600 mb-1">Idle</p>
+                <p class="font-bold text-gray-700 text-lg">1</p>
+              </div>
+              <div class="bg-red-50 rounded p-2 text-center">
+                <p class="text-red-600 mb-1">Errors</p>
+                <p class="font-bold text-red-700 text-lg">1</p>
+              </div>
+            </div>
+
+            <!-- System Uptime -->
+            <div class="pt-4 border-t border-gray-200">
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-gray-600">System Uptime</span>
+                <span class="font-semibold text-gray-900">1h 30m</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Agents -->
+          <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Active Agents</h3>
+            <div class="space-y-3">
+
+              <!-- Agent 1: Brand Generator -->
+              <div class="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-lg" style="background-color: rgba(139, 92, 246, 0.13);">
+                      🎨
+                    </div>
+                    <div>
+                      <h4 class="text-sm font-semibold text-gray-900">Brand Generator</h4>
+                      <p class="text-xs text-gray-600">1h uptime</p>
+                    </div>
+                  </div>
+                  <div class="relative">
+                    <span class="flex h-3 w-3">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                    </span>
+                  </div>
+                </div>
+                <p class="text-xs text-gray-600 mb-2 truncate">Generating brand guidelines...</p>
+                <div class="flex items-center justify-between text-xs">
+                  <span class="text-gray-600">Tasks: 45</span>
+                  <span class="px-2 py-0.5 rounded-full font-semibold bg-green-100 text-green-700">RUNNING</span>
+                </div>
+              </div>
+
+              <!-- Agent 2: Product Generator -->
+              <div class="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-lg" style="background-color: rgba(59, 130, 246, 0.13);">
+                      📦
+                    </div>
+                    <div>
+                      <h4 class="text-sm font-semibold text-gray-900">Product Generator</h4>
+                      <p class="text-xs text-gray-600">2h uptime</p>
+                    </div>
+                  </div>
+                  <div class="relative">
+                    <span class="flex h-3 w-3">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                    </span>
+                  </div>
+                </div>
+                <p class="text-xs text-gray-600 mb-2 truncate">Creating product specifications...</p>
+                <div class="flex items-center justify-between text-xs">
+                  <span class="text-gray-600">Tasks: 128</span>
+                  <span class="px-2 py-0.5 rounded-full font-semibold bg-green-100 text-green-700">RUNNING</span>
+                </div>
+              </div>
+
+              <!-- Agent 3: Content Generator (Idle) -->
+              <div class="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-lg" style="background-color: rgba(16, 185, 129, 0.13);">
+                      📝
+                    </div>
+                    <div>
+                      <h4 class="text-sm font-semibold text-gray-900">Content Generator</h4>
+                      <p class="text-xs text-gray-600">30m uptime</p>
+                    </div>
+                  </div>
+                  <div class="relative">
+                    <span class="inline-flex rounded-full h-3 w-3 bg-gray-400"></span>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between text-xs">
+                  <span class="text-gray-600">Tasks: 234</span>
+                  <span class="px-2 py-0.5 rounded-full font-semibold bg-gray-100 text-gray-700">IDLE</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Connection Status -->
+          <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <h3 class="text-sm font-bold text-gray-900 mb-3">Connection Status</h3>
+            <div class="space-y-2 text-sm">
+              <div class="flex items-center justify-between">
+                <span class="text-gray-600">WebSocket</span>
+                <span class="flex items-center space-x-1 font-semibold text-green-600">
+                  <span class="inline-flex h-2 w-2 rounded-full bg-green-500"></span>
+                  <span>Connected</span>
+                </span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-gray-600">Feed Status</span>
+                <span class="font-semibold text-green-600">Active</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-gray-600">Auto-scroll</span>
+                <span class="font-semibold text-green-600">Enabled</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Simple interactive functionality
+    let isPaused = false;
+    const pauseBtn = document.getElementById('pauseBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const activityFeed = document.getElementById('activityFeed');
+
+    pauseBtn.addEventListener('click', () => {
+      isPaused = !isPaused;
+      if (isPaused) {
+        pauseBtn.innerHTML = `
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+          </svg>
+          <span>Resume</span>
+        `;
+        pauseBtn.className = 'px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center space-x-2 transition-colors';
+      } else {
+        pauseBtn.innerHTML = `
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+          </svg>
+          <span>Pause</span>
+        `;
+        pauseBtn.className = 'px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 flex items-center space-x-2 transition-colors';
+      }
+    });
+
+    clearBtn.addEventListener('click', () => {
+      if (confirm('Clear all activities?')) {
+        activityFeed.innerHTML = `
+          <div class="text-center py-12">
+            <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+            </svg>
+            <p class="text-gray-600">No activities to display</p>
+          </div>
+        `;
+        document.getElementById('totalActivities').textContent = '0';
+      }
+    });
+
+    console.log('Live Monitor Test Preview Loaded');
+    console.log('This is a static preview. For full functionality with real-time updates, use the React component.');
+  </script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empire Manager - Test Page</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- React & ReactDOM -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <!-- Babel Standalone for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    /* Custom animations */
+    @keyframes pulse-slow {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .5; }
+    }
+
+    .animate-pulse-slow {
+      animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- Component Code -->
+  <script type="text/babel" src="./components/EmpireManager.tsx"></script>
+
+  <!-- Test Application -->
+  <script type="text/babel">
+    const { EmpireManager } = window;
+    const { useState } = React;
+
+    function TestApp() {
+      const [empires, setEmpires] = useState([
+        {
+          id: 'emp-001',
+          name: 'SmartHome Pro',
+          niche: 'Smart Home Products',
+          status: 'active',
+          createdAt: new Date('2024-01-15'),
+          updatedAt: new Date('2024-02-20'),
+          metrics: {
+            revenue: 45780,
+            customers: 342,
+            products: 12,
+            orders: 1256,
+            traffic: 15420,
+            conversionRate: 3.2
+          },
+          performance: {
+            health: 'excellent',
+            score: 92,
+            trend: 'up'
+          },
+          branding: {
+            primaryColor: '#2563eb',
+            icon: '🏠'
+          },
+          lastSync: new Date('2024-02-20T10:30:00'),
+          syncStatus: 'synced'
+        },
+        {
+          id: 'emp-002',
+          name: 'TaskFlow Pro',
+          niche: 'Project Management',
+          status: 'active',
+          createdAt: new Date('2024-01-20'),
+          updatedAt: new Date('2024-02-19'),
+          metrics: {
+            revenue: 28500,
+            customers: 156,
+            products: 3,
+            orders: 478,
+            traffic: 8920,
+            conversionRate: 4.1
+          },
+          performance: {
+            health: 'good',
+            score: 85,
+            trend: 'up'
+          },
+          branding: {
+            primaryColor: '#7c3aed',
+            icon: '📊'
+          },
+          lastSync: new Date('2024-02-19T15:45:00'),
+          syncStatus: 'synced'
+        },
+        {
+          id: 'emp-003',
+          name: 'FitLife Plus',
+          niche: 'Health & Fitness',
+          status: 'paused',
+          createdAt: new Date('2024-01-10'),
+          updatedAt: new Date('2024-02-15'),
+          metrics: {
+            revenue: 12350,
+            customers: 89,
+            products: 5,
+            orders: 234,
+            traffic: 4560,
+            conversionRate: 2.8
+          },
+          performance: {
+            health: 'fair',
+            score: 68,
+            trend: 'down'
+          },
+          branding: {
+            primaryColor: '#10b981',
+            icon: '💪'
+          },
+          lastSync: new Date('2024-02-15T08:20:00'),
+          syncStatus: 'synced'
+        },
+        {
+          id: 'emp-004',
+          name: 'Home Services Hub',
+          niche: 'Home Repair Services',
+          status: 'active',
+          createdAt: new Date('2024-02-01'),
+          updatedAt: new Date('2024-02-20'),
+          metrics: {
+            revenue: 18900,
+            customers: 124,
+            products: 8,
+            orders: 356,
+            traffic: 6780,
+            conversionRate: 3.5
+          },
+          performance: {
+            health: 'good',
+            score: 79,
+            trend: 'stable'
+          },
+          branding: {
+            primaryColor: '#f59e0b',
+            icon: '🔧'
+          },
+          lastSync: new Date('2024-02-20T09:15:00'),
+          syncStatus: 'synced'
+        },
+        {
+          id: 'emp-005',
+          name: 'EcoBeauty',
+          niche: 'Organic Skincare',
+          status: 'draft',
+          createdAt: new Date('2024-02-18'),
+          updatedAt: new Date('2024-02-18'),
+          metrics: {
+            revenue: 0,
+            customers: 0,
+            products: 6,
+            orders: 0,
+            traffic: 0,
+            conversionRate: 0
+          },
+          performance: {
+            health: 'poor',
+            score: 25,
+            trend: 'stable'
+          },
+          branding: {
+            primaryColor: '#ec4899',
+            icon: '🌿'
+          },
+          syncStatus: 'synced'
+        }
+      ]);
+
+      const handleEmpireClick = (empire) => {
+        console.log('Empire clicked:', empire);
+        alert(`Viewing details for ${empire.name}`);
+      };
+
+      const handleEmpireEdit = (empire) => {
+        console.log('Edit empire:', empire);
+        alert(`Editing ${empire.name}`);
+      };
+
+      const handleEmpireDelete = (empireId) => {
+        console.log('Delete empire:', empireId);
+        setEmpires(prev => prev.filter(e => e.id !== empireId));
+      };
+
+      const handleEmpirePause = (empireId) => {
+        console.log('Pause empire:', empireId);
+        setEmpires(prev => prev.map(e =>
+          e.id === empireId ? { ...e, status: 'paused', updatedAt: new Date() } : e
+        ));
+      };
+
+      const handleEmpireResume = (empireId) => {
+        console.log('Resume empire:', empireId);
+        setEmpires(prev => prev.map(e =>
+          e.id === empireId ? { ...e, status: 'active', updatedAt: new Date() } : e
+        ));
+      };
+
+      const handleEmpireSync = async (empireId) => {
+        console.log('Sync empire:', empireId);
+        // Simulate sync
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        setEmpires(prev => prev.map(e =>
+          e.id === empireId ? { ...e, lastSync: new Date(), syncStatus: 'synced' } : e
+        ));
+      };
+
+      const handleBulkAction = (action) => {
+        console.log('Bulk action:', action);
+
+        switch (action.type) {
+          case 'pause':
+            setEmpires(prev => prev.map(e =>
+              action.empireIds.includes(e.id) ? { ...e, status: 'paused' } : e
+            ));
+            break;
+          case 'resume':
+            setEmpires(prev => prev.map(e =>
+              action.empireIds.includes(e.id) ? { ...e, status: 'active' } : e
+            ));
+            break;
+          case 'archive':
+            setEmpires(prev => prev.map(e =>
+              action.empireIds.includes(e.id) ? { ...e, status: 'archived' } : e
+            ));
+            break;
+          case 'delete':
+            setEmpires(prev => prev.filter(e => !action.empireIds.includes(e.id)));
+            break;
+          case 'sync':
+            setEmpires(prev => prev.map(e =>
+              action.empireIds.includes(e.id) ? { ...e, lastSync: new Date(), syncStatus: 'synced' } : e
+            ));
+            break;
+        }
+
+        alert(`${action.type} action performed on ${action.empireIds.length} empire(s)`);
+      };
+
+      const handleCreateNew = () => {
+        console.log('Create new empire');
+        alert('Opening empire creator...');
+      };
+
+      return (
+        <EmpireManager
+          empires={empires}
+          onEmpireClick={handleEmpireClick}
+          onEmpireEdit={handleEmpireEdit}
+          onEmpireDelete={handleEmpireDelete}
+          onEmpirePause={handleEmpirePause}
+          onEmpireResume={handleEmpireResume}
+          onEmpireSync={handleEmpireSync}
+          onBulkAction={handleBulkAction}
+          onCreateNew={handleCreateNew}
+        />
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<TestApp />);
+  </script>
+</body>
+</html>

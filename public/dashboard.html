@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Niche Empire Builder - Premium Dashboard</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Chart.js for beautiful charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Premium gradient backgrounds */
+        .gradient-purple-blue {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .gradient-orange-pink {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .gradient-green-blue {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .gradient-yellow-orange {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .gradient-teal {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        /* Animated gradient border */
+        @keyframes gradient-border {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .animated-border {
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .animated-border::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #667eea);
+            background-size: 200% 200%;
+            animation: gradient-border 3s ease infinite;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+
+        /* Hover effects */
+        .metric-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Pulse animation for real-time indicators */
+        @keyframes pulse-glow {
+            0%, 100% {
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(67, 233, 123, 0.7);
+            }
+            50% {
+                opacity: 0.8;
+                box-shadow: 0 0 0 10px rgba(67, 233, 123, 0);
+            }
+        }
+
+        .pulse-green {
+            animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* Sidebar hover effect */
+        .sidebar-item {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 0;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            border-radius: 0 4px 4px 0;
+            transition: height 0.3s ease;
+        }
+
+        .sidebar-item:hover::before,
+        .sidebar-item.active::before {
+            height: 70%;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            padding-left: 24px;
+        }
+
+        .sidebar-item.active {
+            background: rgba(102, 126, 234, 0.15);
+            padding-left: 24px;
+        }
+
+        /* Chart container */
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Activity feed animations */
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .activity-item {
+            animation: slideInRight 0.5s ease forwards;
+        }
+
+        /* Badge glow */
+        .badge-glow {
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.7);
+        }
+
+        /* Number counter animation */
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .counter {
+            animation: countUp 0.8s ease forwards;
+        }
+
+        /* Shimmer loading effect */
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        .shimmer {
+            background: linear-gradient(90deg,
+                rgba(255, 255, 255, 0.05) 0px,
+                rgba(255, 255, 255, 0.15) 50%,
+                rgba(255, 255, 255, 0.05) 100%);
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        /* Table row hover */
+        .table-row {
+            transition: all 0.3s ease;
+        }
+
+        .table-row:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: scale(1.01);
+        }
+
+        /* Status badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-active {
+            background: rgba(67, 233, 123, 0.2);
+            color: #43e97b;
+            border: 1px solid rgba(67, 233, 123, 0.3);
+        }
+
+        .status-pending {
+            background: rgba(254, 225, 64, 0.2);
+            color: #fee140;
+            border: 1px solid rgba(254, 225, 64, 0.3);
+        }
+
+        .status-paused {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+
+        /* Floating action button */
+        .fab {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .fab:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 15px 50px rgba(102, 126, 234, 0.7);
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                z-index: 50;
+            }
+
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+        }
+    </style>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f5f7ff',
+                            100: '#ebf0ff',
+                            500: '#667eea',
+                            600: '#5568d3',
+                            700: '#4451b8',
+                        },
+                        secondary: {
+                            500: '#764ba2',
+                            600: '#613c85',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-gray-100">
+
+    <!-- Mobile Menu Toggle -->
+    <button id="mobile-menu-toggle" class="md:hidden fixed top-4 left-4 z-50 glass-strong p-3 rounded-xl">
+        <i class="fas fa-bars text-xl"></i>
+    </button>
+
+    <div class="flex min-h-screen">
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar w-64 glass-strong p-6 flex flex-col min-h-screen sticky top-0 transition-transform duration-300">
+            <!-- Logo -->
+            <div class="mb-8">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl gradient-purple-blue flex items-center justify-center">
+                        <i class="fas fa-crown text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                            NicheEmpire
+                        </h1>
+                        <p class="text-xs text-gray-400">Premium Dashboard</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 space-y-2">
+                <a href="#" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-xl text-white">
+                    <i class="fas fa-home text-lg w-5"></i>
+                    <span class="font-medium">Dashboard</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                    <i class="fab fa-youtube text-lg w-5"></i>
+                    <span class="font-medium">YouTube</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                    <i class="fab fa-instagram text-lg w-5"></i>
+                    <span class="font-medium">Instagram</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                    <i class="fab fa-tiktok text-lg w-5"></i>
+                    <span class="font-medium">TikTok</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                    <i class="fab fa-pinterest text-lg w-5"></i>
+                    <span class="font-medium">Pinterest</span>
+                </a>
+
+                <div class="pt-4 mt-4 border-t border-gray-700">
+                    <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                        <i class="fas fa-chart-line text-lg w-5"></i>
+                        <span class="font-medium">Analytics</span>
+                    </a>
+                    <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                        <i class="fas fa-calendar-alt text-lg w-5"></i>
+                        <span class="font-medium">Schedule</span>
+                    </a>
+                    <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                        <i class="fas fa-robot text-lg w-5"></i>
+                        <span class="font-medium">Automation</span>
+                    </a>
+                    <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                        <i class="fas fa-cog text-lg w-5"></i>
+                        <span class="font-medium">Settings</span>
+                    </a>
+                </div>
+            </nav>
+
+            <!-- User Profile -->
+            <div class="mt-auto pt-6 border-t border-gray-700">
+                <div class="flex items-center gap-3 px-4 py-3 glass rounded-xl cursor-pointer hover:bg-white/10 transition-all">
+                    <div class="w-10 h-10 rounded-full gradient-teal flex items-center justify-center font-bold">
+                        JD
+                    </div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">John Doe</p>
+                        <p class="text-xs text-gray-400">Pro Plan</p>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400 text-sm"></i>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+
+            <!-- Header -->
+            <header class="mb-8">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-2">Welcome back, John! 👋</h2>
+                        <p class="text-gray-400">Here's what's happening with your empire today</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="glass px-4 py-2 rounded-xl flex items-center gap-2">
+                            <div class="w-2 h-2 rounded-full bg-green-400 pulse-green"></div>
+                            <span class="text-sm font-medium">All Systems Active</span>
+                        </div>
+                        <button class="gradient-purple-blue px-6 py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all">
+                            <i class="fas fa-plus mr-2"></i>New Campaign
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Metrics Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+
+                <!-- Total Revenue -->
+                <div class="metric-card glass-strong rounded-2xl p-6 animated-border">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl gradient-purple-blue flex items-center justify-center">
+                            <i class="fas fa-dollar-sign text-white text-xl"></i>
+                        </div>
+                        <span class="status-badge status-active">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+12.5%</span>
+                        </span>
+                    </div>
+                    <h3 class="text-gray-400 text-sm font-medium mb-1">Total Revenue</h3>
+                    <p class="text-3xl font-bold counter">$47,842</p>
+                    <p class="text-xs text-gray-500 mt-2">This month</p>
+                </div>
+
+                <!-- Total Reach -->
+                <div class="metric-card glass-strong rounded-2xl p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl gradient-orange-pink flex items-center justify-center">
+                            <i class="fas fa-users text-white text-xl"></i>
+                        </div>
+                        <span class="status-badge status-active">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+28.4%</span>
+                        </span>
+                    </div>
+                    <h3 class="text-gray-400 text-sm font-medium mb-1">Total Reach</h3>
+                    <p class="text-3xl font-bold counter">2.4M</p>
+                    <p class="text-xs text-gray-500 mt-2">Across all platforms</p>
+                </div>
+
+                <!-- Engagement Rate -->
+                <div class="metric-card glass-strong rounded-2xl p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl gradient-green-blue flex items-center justify-center">
+                            <i class="fas fa-heart text-white text-xl"></i>
+                        </div>
+                        <span class="status-badge status-active">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+5.2%</span>
+                        </span>
+                    </div>
+                    <h3 class="text-gray-400 text-sm font-medium mb-1">Engagement Rate</h3>
+                    <p class="text-3xl font-bold counter">8.7%</p>
+                    <p class="text-xs text-gray-500 mt-2">Average across platforms</p>
+                </div>
+
+                <!-- Active Campaigns -->
+                <div class="metric-card glass-strong rounded-2xl p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl gradient-yellow-orange flex items-center justify-center">
+                            <i class="fas fa-rocket text-white text-xl"></i>
+                        </div>
+                        <span class="status-badge status-pending">
+                            <i class="fas fa-clock"></i>
+                            <span>3 Pending</span>
+                        </span>
+                    </div>
+                    <h3 class="text-gray-400 text-sm font-medium mb-1">Active Campaigns</h3>
+                    <p class="text-3xl font-bold counter">12</p>
+                    <p class="text-xs text-gray-500 mt-2">Running this week</p>
+                </div>
+
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+
+                <!-- Revenue Chart -->
+                <div class="lg:col-span-2 glass-strong rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="text-xl font-bold mb-1">Revenue Overview</h3>
+                            <p class="text-sm text-gray-400">Monthly performance tracking</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="px-4 py-2 rounded-lg bg-purple-500/20 text-purple-400 text-sm font-medium">7D</button>
+                            <button class="px-4 py-2 rounded-lg glass text-gray-300 text-sm font-medium hover:bg-white/10">30D</button>
+                            <button class="px-4 py-2 rounded-lg glass text-gray-300 text-sm font-medium hover:bg-white/10">90D</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Platform Distribution -->
+                <div class="glass-strong rounded-2xl p-6">
+                    <h3 class="text-xl font-bold mb-1">Platform Performance</h3>
+                    <p class="text-sm text-gray-400 mb-6">Engagement by platform</p>
+                    <div class="chart-container">
+                        <canvas id="platformChart"></canvas>
+                    </div>
+                    <div class="mt-6 space-y-3">
+                        <div class="flex items-center justify-between text-sm">
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full" style="background: #FF0000;"></div>
+                                <span>YouTube</span>
+                            </div>
+                            <span class="font-bold">42%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-sm">
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full" style="background: #E4405F;"></div>
+                                <span>Instagram</span>
+                            </div>
+                            <span class="font-bold">28%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-sm">
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full" style="background: #000000;"></div>
+                                <span>TikTok</span>
+                            </div>
+                            <span class="font-bold">18%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-sm">
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full" style="background: #E60023;"></div>
+                                <span>Pinterest</span>
+                            </div>
+                            <span class="font-bold">12%</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Channel Management & Activity Feed -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+
+                <!-- Channel Management -->
+                <div class="lg:col-span-2 glass-strong rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="text-xl font-bold mb-1">Channel Management</h3>
+                            <p class="text-sm text-gray-400">Manage all your social channels</p>
+                        </div>
+                        <button class="px-4 py-2 rounded-lg gradient-purple-blue text-sm font-medium hover:shadow-lg transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Channel
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="text-left text-sm text-gray-400 border-b border-gray-700">
+                                    <th class="pb-3 font-medium">Channel</th>
+                                    <th class="pb-3 font-medium">Followers</th>
+                                    <th class="pb-3 font-medium">Engagement</th>
+                                    <th class="pb-3 font-medium">Revenue</th>
+                                    <th class="pb-3 font-medium">Status</th>
+                                    <th class="pb-3 font-medium">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm">
+                                <tr class="table-row border-b border-gray-800">
+                                    <td class="py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-xl bg-red-500 flex items-center justify-center">
+                                                <i class="fab fa-youtube text-white"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-semibold">Tech Reviews Pro</p>
+                                                <p class="text-xs text-gray-400">@techreviewspro</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 font-semibold">847K</td>
+                                    <td class="py-4">
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-semibold">12.4%</span>
+                                            <span class="text-green-400 text-xs">↑ 2.1%</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 font-semibold text-green-400">$24,350</td>
+                                    <td class="py-4">
+                                        <span class="status-badge status-active">
+                                            <i class="fas fa-circle text-xs"></i>
+                                            Active
+                                        </span>
+                                    </td>
+                                    <td class="py-4">
+                                        <button class="text-gray-400 hover:text-white transition-colors">
+                                            <i class="fas fa-ellipsis-h"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr class="table-row border-b border-gray-800">
+                                    <td class="py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                                                <i class="fab fa-instagram text-white"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-semibold">Lifestyle Vibes</p>
+                                                <p class="text-xs text-gray-400">@lifestylevibes</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 font-semibold">524K</td>
+                                    <td class="py-4">
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-semibold">8.9%</span>
+                                            <span class="text-green-400 text-xs">↑ 1.5%</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 font-semibold text-green-400">$15,240</td>
+                                    <td class="py-4">
+                                        <span class="status-badge status-active">
+                                            <i class="fas fa-circle text-xs"></i>
+                                            Active
+                                        </span>
+                                    </td>
+                                    <td class="py-4">
+                                        <button class="text-gray-400 hover:text-white transition-colors">
+                                            <i class="fas fa-ellipsis-h"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr class="table-row border-b border-gray-800">
+                                    <td class="py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-xl bg-black flex items-center justify-center">
+                                                <i class="fab fa-tiktok text-white"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-semibold">Viral Moments</p>
+                                                <p class="text-xs text-gray-400">@viralmoments</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 font-semibold">1.2M</td>
+                                    <td class="py-4">
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-semibold">15.7%</span>
+                                            <span class="text-green-400 text-xs">↑ 4.8%</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 font-semibold text-green-400">$8,252</td>
+                                    <td class="py-4">
+                                        <span class="status-badge status-pending">
+                                            <i class="fas fa-clock text-xs"></i>
+                                            Pending
+                                        </span>
+                                    </td>
+                                    <td class="py-4">
+                                        <button class="text-gray-400 hover:text-white transition-colors">
+                                            <i class="fas fa-ellipsis-h"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr class="table-row">
+                                    <td class="py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-xl bg-red-600 flex items-center justify-center">
+                                                <i class="fab fa-pinterest text-white"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-semibold">E-Commerce Hub</p>
+                                                <p class="text-xs text-gray-400">@ecommercehub</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 font-semibold">342K</td>
+                                    <td class="py-4">
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-semibold">6.2%</span>
+                                            <span class="text-red-400 text-xs">↓ 0.8%</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 font-semibold text-green-400">$18,420</td>
+                                    <td class="py-4">
+                                        <span class="status-badge status-active">
+                                            <i class="fas fa-circle text-xs"></i>
+                                            Active
+                                        </span>
+                                    </td>
+                                    <td class="py-4">
+                                        <button class="text-gray-400 hover:text-white transition-colors">
+                                            <i class="fas fa-ellipsis-h"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Activity Feed -->
+                <div class="glass-strong rounded-2xl p-6">
+                    <h3 class="text-xl font-bold mb-1">Recent Activity</h3>
+                    <p class="text-sm text-gray-400 mb-6">Real-time updates</p>
+
+                    <div class="space-y-4" id="activity-feed">
+                        <!-- Activity items will be dynamically inserted -->
+                    </div>
+
+                    <button class="w-full mt-6 py-3 rounded-lg glass hover:bg-white/10 transition-all text-sm font-medium">
+                        View All Activity
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <div class="glass rounded-2xl p-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl gradient-teal flex items-center justify-center">
+                            <i class="fas fa-video text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold counter">2,847</p>
+                            <p class="text-sm text-gray-400">Videos Posted</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass rounded-2xl p-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl gradient-orange-pink flex items-center justify-center">
+                            <i class="fas fa-eye text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold counter">124M</p>
+                            <p class="text-sm text-gray-400">Total Views</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass rounded-2xl p-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl gradient-purple-blue flex items-center justify-center">
+                            <i class="fas fa-comment text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold counter">847K</p>
+                            <p class="text-sm text-gray-400">Comments</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass rounded-2xl p-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl gradient-yellow-orange flex items-center justify-center">
+                            <i class="fas fa-share text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold counter">324K</p>
+                            <p class="text-sm text-gray-400">Shares</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="fab">
+        <i class="fas fa-magic text-white text-2xl"></i>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('mobile-open');
+        });
+
+        // Revenue Chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        const revenueChart = new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                datasets: [{
+                    label: 'Revenue',
+                    data: [28000, 32000, 29500, 38000, 42000, 45000, 47842],
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointBackgroundColor: '#667eea',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 8,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: '#667eea',
+                        borderWidth: 1,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return '$' + context.parsed.y.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.05)',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: '#9ca3af',
+                            callback: function(value) {
+                                return '$' + value.toLocaleString();
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: '#9ca3af'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Platform Chart (Doughnut)
+        const platformCtx = document.getElementById('platformChart').getContext('2d');
+        const platformChart = new Chart(platformCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['YouTube', 'Instagram', 'TikTok', 'Pinterest'],
+                datasets: [{
+                    data: [42, 28, 18, 12],
+                    backgroundColor: [
+                        '#FF0000',
+                        '#E4405F',
+                        '#000000',
+                        '#E60023'
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: '#667eea',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + '%';
+                            }
+                        }
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+
+        // Activity Feed - Dynamic Content
+        const activities = [
+            {
+                icon: 'fa-video',
+                color: 'gradient-purple-blue',
+                text: 'New video uploaded to YouTube',
+                channel: 'Tech Reviews Pro',
+                time: '2 minutes ago'
+            },
+            {
+                icon: 'fa-heart',
+                color: 'gradient-orange-pink',
+                text: 'Post reached 10K likes',
+                channel: 'Lifestyle Vibes',
+                time: '15 minutes ago'
+            },
+            {
+                icon: 'fa-comment',
+                color: 'gradient-green-blue',
+                text: '247 new comments received',
+                channel: 'Viral Moments',
+                time: '32 minutes ago'
+            },
+            {
+                icon: 'fa-dollar-sign',
+                color: 'gradient-yellow-orange',
+                text: 'Revenue milestone reached',
+                channel: 'E-Commerce Hub',
+                time: '1 hour ago'
+            },
+            {
+                icon: 'fa-users',
+                color: 'gradient-teal',
+                text: '1,247 new followers',
+                channel: 'Tech Reviews Pro',
+                time: '2 hours ago'
+            }
+        ];
+
+        function renderActivityFeed() {
+            const feed = document.getElementById('activity-feed');
+            feed.innerHTML = '';
+
+            activities.forEach((activity, index) => {
+                const item = document.createElement('div');
+                item.className = 'activity-item flex gap-4 p-4 rounded-xl glass hover:bg-white/10 transition-all cursor-pointer';
+                item.style.animationDelay = `${index * 0.1}s`;
+                item.innerHTML = `
+                    <div class="w-10 h-10 rounded-lg ${activity.color} flex items-center justify-center flex-shrink-0">
+                        <i class="fas ${activity.icon} text-white"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium mb-1">${activity.text}</p>
+                        <p class="text-xs text-gray-400">${activity.channel}</p>
+                    </div>
+                    <div class="text-xs text-gray-500 flex-shrink-0">${activity.time}</div>
+                `;
+                feed.appendChild(item);
+            });
+        }
+
+        renderActivityFeed();
+
+        // Counter animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = counter.textContent;
+                counter.textContent = '0';
+
+                setTimeout(() => {
+                    counter.textContent = target;
+                }, 100);
+            });
+        }
+
+        animateCounters();
+
+        // Simulate real-time updates every 30 seconds
+        setInterval(() => {
+            // Update a random metric
+            const metrics = document.querySelectorAll('.counter');
+            const randomMetric = metrics[Math.floor(Math.random() * metrics.length)];
+
+            // Add shimmer effect
+            randomMetric.parentElement.classList.add('shimmer');
+            setTimeout(() => {
+                randomMetric.parentElement.classList.remove('shimmer');
+            }, 2000);
+        }, 30000);
+    </script>
+
+</body>
+</html>

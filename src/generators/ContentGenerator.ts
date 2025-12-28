@@ -5,6 +5,8 @@
  * product descriptions, email campaigns, video scripts, and advertising content.
  */
 
+import { getGeminiService, GeminiService } from '../services/GeminiService';
+
 export interface BlogPostOptions {
   topic: string;
   keywords?: string[];
@@ -336,6 +338,11 @@ export class ContentGenerator {
   private brandVoice: string = 'professional';
   private targetAudience: string | null = null;
   private brandColors: string[] = [];
+  private geminiService: GeminiService;
+
+  constructor() {
+    this.geminiService = getGeminiService();
+  }
 
   /**
    * Set context for content generation
@@ -365,16 +372,6 @@ export class ContentGenerator {
    * @returns Complete blog post with SEO metadata
    */
   async generateBlogPosts(options: BlogPostOptions): Promise<BlogPost> {
-    // TODO: Implement AI-powered blog writing
-    // This would typically involve:
-    // - GPT/Claude for content generation
-    // - SEO keyword research tools
-    // - Competitor content analysis
-    // - Readability scoring (Flesch-Kincaid)
-    // - Plagiarism checking
-    // - Content optimization tools
-    // - Internal linking suggestions
-
     console.log(`Generating blog post about "${options.topic}"...`);
 
     const wordCount = options.wordCount || 1500;
@@ -504,41 +501,25 @@ export class ContentGenerator {
    * @returns Multi-format product descriptions
    */
   async writeProductDescriptions(options: ProductDescriptionOptions): Promise<ProductDescription> {
-    // TODO: Implement AI-powered product copywriting
-    // This would typically involve:
-    // - Conversion-optimized copywriting
-    // - Benefit-focused language
-    // - SEO keyword integration
-    // - A/B testing different versions
-    // - Competitor description analysis
-    // - Platform-specific optimization
-    // - Emotional trigger identification
-
     console.log(`Writing product description for "${options.productName}"...`);
 
     const tone = options.tone || 'persuasive';
     const format = options.format || 'medium';
 
-    const headline = `${options.productName} - ${this.createProductTagline(options.productName, options.category)}`;
+    // Use Gemini AI to generate product description
+    const result = await this.geminiService.generateProductDescription({
+      productName: options.productName,
+      features: options.features,
+      benefits: options.benefits,
+      category: options.category,
+      tone,
+      length: format
+    });
+
+    const headline = result.headline;
     const tagline = options.features[0] ? `${options.features[0]} for ${options.targetAudience || 'Everyone'}` : 'Quality You Can Trust';
-
-    const shortDescription = `Discover the ${options.productName}, your ultimate ${options.category} solution. ${options.benefits[0] || 'Premium quality meets innovative design'} in a product that delivers exceptional results.`;
-
-    const longDescription = `
-Introducing ${options.productName}
-
-${options.benefits[0] || 'Transform your experience'} with the ${options.productName}, meticulously crafted for those who demand excellence. This isn't just another ${options.category} – it's a carefully engineered solution that combines premium quality, innovative features, and thoughtful design.
-
-What Makes ${options.productName} Special
-
-${options.features.map((f, idx) => `${idx + 1}. ${f}`).join('\n')}
-
-Experience the Difference
-
-${options.benefits.join(' ')} Whether you're a beginner or a seasoned professional, ${options.productName} adapts to your needs with intuitive design and powerful performance.
-
-Join thousands of satisfied customers who have made ${options.productName} their go-to ${options.category} choice. Your satisfaction is guaranteed.
-    `.trim();
+    const shortDescription = result.shortDescription;
+    const longDescription = result.longDescription;
 
     const bulletPoints = options.features.map((f, idx) =>
       `✓ ${f}${options.benefits[idx] ? ` - ${options.benefits[idx]}` : ''}`

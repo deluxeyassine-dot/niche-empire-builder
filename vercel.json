@@ -2,16 +2,33 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
 
-  "build": {
-    "env": {
-      "NODE_ENV": "production"
-    }
-  },
-
-  "buildCommand": "echo 'No build needed for static site'",
+  "buildCommand": "echo 'No build required - using static HTML files'",
   "outputDirectory": "public",
-  "installCommand": "npm install",
-  "devCommand": "npm run dev",
+  "installCommand": "npm ci",
+  "devCommand": "npx http-server public -p 3000",
+
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/dashboard.html"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/dashboard.html"
+    },
+    {
+      "source": "/channels",
+      "destination": "/channels.html"
+    },
+    {
+      "source": "/analytics",
+      "destination": "/analytics.html"
+    },
+    {
+      "source": "/calendar",
+      "destination": "/calendar.html"
+    }
+  ],
 
   "headers": [
     {

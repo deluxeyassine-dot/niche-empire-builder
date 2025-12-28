@@ -5,6 +5,8 @@
  * logo concepts, color palettes, brand voice, and complete brand guidelines.
  */
 
+import { getGeminiService, GeminiService } from '../services/GeminiService';
+
 export interface BrandNameOptions {
   niche: string;
   style?: 'modern' | 'classic' | 'playful' | 'professional' | 'luxurious';
@@ -138,6 +140,11 @@ export class BrandGenerator {
   private niche: string | null = null;
   private targetAudience: string | null = null;
   private brandValues: string[] = [];
+  private geminiService: GeminiService;
+
+  constructor() {
+    this.geminiService = getGeminiService();
+  }
 
   /**
    * Set the niche and basic information for brand generation
@@ -162,54 +169,27 @@ export class BrandGenerator {
       throw new Error('Niche must be provided or set via setContext()');
     }
 
-    // TODO: Implement AI-powered brand name generation
-    // This would typically involve:
-    // - GPT/Claude API for creative name generation
-    // - Domain availability checking (e.g., Namecheap API)
-    // - Trademark database searches
-    // - Linguistic analysis
-    // - Cultural sensitivity checks
-    // - SEO keyword analysis
-
     console.log(`Generating brand name for "${niche}" with style: ${options.style || 'modern'}...`);
 
     const style = options.style || 'modern';
     const length = options.length || 'medium';
 
-    // Generate name based on style and niche
-    let generatedName = '';
-    const nicheWords = niche.split(' ');
+    // Use Gemini AI to generate brand name
+    const result = await this.geminiService.generateBrandName({
+      niche,
+      style,
+      length,
+      targetAudience: options.targetAudience || this.targetAudience || undefined
+    });
 
-    if (style === 'modern' && length === 'short') {
-      generatedName = nicheWords[0].charAt(0).toUpperCase() +
-                      nicheWords[0].slice(1, 4) +
-                      (nicheWords.length > 1 ? nicheWords[1].slice(0, 2) : 'ly');
-    } else if (style === 'luxurious') {
-      generatedName = nicheWords[0].charAt(0).toUpperCase() +
-                      nicheWords[0].slice(1) + ' ' +
-                      (nicheWords.length > 1 ? nicheWords[1].charAt(0).toUpperCase() + nicheWords[1].slice(1) : 'Elite');
-    } else if (style === 'playful') {
-      generatedName = nicheWords[0].charAt(0).toUpperCase() +
-                      nicheWords[0].slice(1) +
-                      (nicheWords.length > 1 ? nicheWords[1].charAt(0).toUpperCase() + nicheWords[1].slice(1) : 'Hub');
-    } else {
-      // Professional/classic style
-      generatedName = nicheWords.map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('') + ' Co';
-    }
-
-    const alternatives = [
-      `${nicheWords[0].charAt(0).toUpperCase() + nicheWords[0].slice(1)}ify`,
-      `${nicheWords[0].charAt(0).toUpperCase() + nicheWords[0].slice(1)} Labs`,
-      `${nicheWords[0].slice(0, 3).toUpperCase()}${nicheWords.length > 1 ? nicheWords[1].slice(0, 2).toLowerCase() : 'ex'}`,
-      `Pure ${nicheWords[0].charAt(0).toUpperCase() + nicheWords[0].slice(1)}`,
-      `${nicheWords[0].charAt(0).toUpperCase() + nicheWords[0].slice(1)} & Co`
-    ];
+    const generatedName = result.name;
+    const alternatives = result.alternatives;
 
     return {
       name: generatedName,
       available: true, // Would check domain availability in production
       domain: `${generatedName.toLowerCase().replace(/\s+/g, '')}.com`,
-      reasoning: `This name reflects ${style} branding with ${length} length, suitable for the ${niche} niche. It's memorable, brandable, and positions the company as ${style === 'luxurious' ? 'premium' : style === 'playful' ? 'approachable' : 'professional'}.`,
+      reasoning: result.reasoning || `This name reflects ${style} branding with ${length} length, suitable for the ${niche} niche.`,
       alternatives
     };
   }
@@ -224,59 +204,20 @@ export class BrandGenerator {
       throw new Error('Brand name is required to create tagline');
     }
 
-    // TODO: Implement AI-powered tagline generation
-    // This would typically involve:
-    // - Analyzing brand positioning
-    // - Identifying unique value propositions
-    // - Testing emotional resonance
-    // - Ensuring memorability and clarity
-    // - A/B testing variations
-
     console.log(`Creating tagline for "${options.brandName}" in ${options.niche} niche...`);
 
     const tone = options.tone || 'professional';
-    const maxWords = options.maxWords || 7;
 
-    // Generate tagline based on tone
-    let primaryTagline = '';
-    const variations: string[] = [];
+    // Use Gemini AI to generate tagline
+    const result = await this.geminiService.createTagline({
+      brandName: options.brandName,
+      niche: options.niche,
+      values: options.values || this.brandValues,
+      tone
+    });
 
-    if (tone === 'inspiring') {
-      primaryTagline = `Elevate Your ${options.niche.split(' ')[0]} Experience`;
-      variations.push(
-        `Transforming ${options.niche} for a Better Tomorrow`,
-        `Where ${options.niche.split(' ')[0]} Meets Excellence`,
-        `Empowering Your ${options.niche.split(' ')[0]} Journey`
-      );
-    } else if (tone === 'witty') {
-      primaryTagline = `${options.niche.split(' ')[0]} That Makes Sense`;
-      variations.push(
-        `Seriously Good ${options.niche.split(' ')[0]}`,
-        `${options.niche.split(' ')[0]} Without the Fuss`,
-        `Smart ${options.niche.split(' ')[0]} for Smart People`
-      );
-    } else if (tone === 'emotional') {
-      primaryTagline = `Because Your ${options.niche.split(' ')[0]} Matters`;
-      variations.push(
-        `Made with Love for ${options.niche}`,
-        `${options.niche.split(' ')[0]} That Cares`,
-        `Your Partner in ${options.niche.split(' ')[0]}`
-      );
-    } else if (tone === 'direct') {
-      primaryTagline = `Premium ${options.niche.split(' ')[0]}, Delivered`;
-      variations.push(
-        `${options.niche.split(' ')[0]} Done Right`,
-        `The ${options.niche.split(' ')[0]} Solution`,
-        `${options.niche.split(' ')[0]} Simplified`
-      );
-    } else { // professional
-      primaryTagline = `Excellence in ${options.niche.split(' ')[0]}`;
-      variations.push(
-        `Quality ${options.niche.split(' ')[0]} Solutions`,
-        `Your Trusted ${options.niche.split(' ')[0]} Partner`,
-        `Professional ${options.niche.split(' ')[0]} Services`
-      );
-    }
+    const primaryTagline = result.primary;
+    const variations = result.alternatives;
 
     return {
       tagline: primaryTagline,

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metrics Display - Test Page</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- React & ReactDOM -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <!-- Babel Standalone for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- Component Code -->
+  <script type="text/babel" src="./components/MetricsDisplay.tsx"></script>
+
+  <!-- Test Application -->
+  <script type="text/babel">
+    const { MetricsDisplay } = window;
+    const { useState } = React;
+
+    // Generate mock data
+    const generateMockData = (days) => {
+      const data = [];
+      const today = new Date();
+
+      for (let i = days - 1; i >= 0; i--) {
+        const date = new Date(today);
+        date.setDate(date.getDate() - i);
+
+        const baseRevenue = 500 + Math.random() * 200;
+        const seasonality = Math.sin((i / 30) * Math.PI) * 100;
+        const trend = (days - i) * 2;
+
+        data.push({
+          date: date.toISOString().split('T')[0],
+          revenue: Math.round(baseRevenue + seasonality + trend),
+          orders: Math.round((baseRevenue + seasonality + trend) / 45),
+          traffic: Math.round((baseRevenue + seasonality + trend) * 3 + Math.random() * 100),
+          customers: Math.round((baseRevenue + seasonality + trend) / 150),
+          conversion: Math.round((Math.random() * 2 + 2.5) * 10) / 10,
+          engagement: Math.round((Math.random() * 10 + 60))
+        });
+      }
+
+      return data;
+    };
+
+    const mockMetrics = {
+      id: 'emp-001',
+      name: 'SmartHome Pro',
+      timeSeries: generateMockData(90),
+      summary: {
+        revenue: {
+          current: 45780,
+          previous: 38650,
+          change: 18.4,
+          trend: 'up'
+        },
+        traffic: {
+          current: 15420,
+          previous: 13200,
+          change: 16.8,
+          trend: 'up'
+        },
+        conversion: {
+          current: 3.2,
+          previous: 2.9,
+          change: 10.3,
+          trend: 'up'
+        },
+        engagement: {
+          current: 68,
+          previous: 62,
+          change: 9.7,
+          trend: 'up'
+        }
+      },
+      channels: [
+        { channel: 'Organic Search', traffic: 6200, revenue: 18500, conversion: 3.5, color: '#10b981' },
+        { channel: 'Paid Ads', traffic: 4100, revenue: 14200, conversion: 4.2, color: '#3b82f6' },
+        { channel: 'Social Media', traffic: 3200, revenue: 8900, conversion: 2.8, color: '#8b5cf6' },
+        { channel: 'Email', traffic: 1500, revenue: 3200, conversion: 2.1, color: '#f59e0b' },
+        { channel: 'Direct', traffic: 420, revenue: 980, conversion: 2.3, color: '#6b7280' }
+      ],
+      topProducts: [
+        { name: 'Smart Thermostat Pro', revenue: 12400, units: 124, growth: 24.5 },
+        { name: 'Security Camera Kit', revenue: 9800, units: 98, growth: 18.2 },
+        { name: 'Smart Lock Elite', revenue: 8600, units: 86, growth: 15.8 },
+        { name: 'Voice Assistant Hub', revenue: 7200, units: 144, growth: 12.3 },
+        { name: 'Smart Lighting Bundle', revenue: 5900, units: 118, growth: 8.7 }
+      ]
+    };
+
+    function TestApp() {
+      const handleExport = (format) => {
+        console.log('Export format:', format);
+        alert(`Exporting metrics as ${format.toUpperCase()}...`);
+      };
+
+      return (
+        <div>
+          {/* Header */}
+          <header className="bg-white shadow-sm border-b border-gray-200">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h1 className="text-xl font-bold text-gray-900">Niche Empire Builder</h1>
+                    <p className="text-sm text-gray-500">Metrics Display Test</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          {/* Main Content */}
+          <MetricsDisplay
+            empireMetrics={mockMetrics}
+            onExport={handleExport}
+          />
+
+          {/* Footer */}
+          <footer className="bg-white border-t border-gray-200 mt-20">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              <div className="text-center text-sm text-gray-600">
+                <p>Metrics Display Component - Test Page</p>
+                <p className="mt-2 text-gray-500">
+                  Beautiful analytics and performance metrics
+                </p>
+              </div>
+            </div>
+          </footer>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<TestApp />);
+  </script>
+</body>
+</html>
