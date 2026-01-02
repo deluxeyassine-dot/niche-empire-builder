@@ -1,0 +1,17 @@
+# Ignore Next.js and TypeScript files since we're serving static HTML
+pages.disabled/
+src/
+node_modules/
+.next/
+dist/
+.git/
+examples/
+docs/
+
+# Keep these
+!index.html
+!channels.html
+!analytics.html
+!calendar.html
+!public/
+!vercel.json

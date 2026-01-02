@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Channel Management - Niche Empire Builder</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Chart.js for metrics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Premium gradients */
+        .gradient-purple-blue {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .gradient-orange-pink {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .gradient-green-blue {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .gradient-teal {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .gradient-red {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+        }
+
+        .gradient-yellow {
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+        }
+
+        /* Channel card hover */
+        .channel-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .channel-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .channel-card:hover::before {
+            left: 100%;
+        }
+
+        .channel-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Pulse animation */
+        @keyframes pulse-glow {
+            0%, 100% {
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(67, 233, 123, 0.7);
+            }
+            50% {
+                opacity: 0.8;
+                box-shadow: 0 0 0 10px rgba(67, 233, 123, 0);
+            }
+        }
+
+        .pulse-green {
+            animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse-glow-red {
+            0%, 100% {
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7);
+            }
+            50% {
+                opacity: 0.8;
+                box-shadow: 0 0 0 10px rgba(255, 107, 107, 0);
+            }
+        }
+
+        .pulse-red {
+            animation: pulse-glow-red 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* Status badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-active {
+            background: rgba(67, 233, 123, 0.2);
+            color: #43e97b;
+            border: 1px solid rgba(67, 233, 123, 0.3);
+        }
+
+        .status-uploading {
+            background: rgba(79, 172, 254, 0.2);
+            color: #4facfe;
+            border: 1px solid rgba(79, 172, 254, 0.3);
+        }
+
+        .status-scheduled {
+            background: rgba(254, 225, 64, 0.2);
+            color: #fee140;
+            border: 1px solid rgba(254, 225, 64, 0.3);
+        }
+
+        .status-processing {
+            background: rgba(240, 147, 251, 0.2);
+            color: #f093fb;
+            border: 1px solid rgba(240, 147, 251, 0.3);
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            position: relative;
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        /* Quick action buttons */
+        .quick-action {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .quick-action:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Upload queue item */
+        .queue-item {
+            transition: all 0.3s ease;
+        }
+
+        .queue-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(4px);
+        }
+
+        /* Metric animation */
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .metric-value {
+            animation: countUp 0.6s ease forwards;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.7);
+        }
+
+        /* Tab active state */
+        .tab-active {
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+        }
+
+        /* Chart container */
+        .mini-chart {
+            height: 60px;
+        }
+
+        /* Modal overlay */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        /* Animated entrance */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+    </style>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            500: '#667eea',
+                            600: '#5568d3',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-gray-100">
+
+    <!-- Header -->
+    <header class="glass-strong border-b border-gray-700 sticky top-0 z-40">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <a href="dashboard.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                        <div class="w-10 h-10 rounded-xl gradient-purple-blue flex items-center justify-center">
+                            <i class="fas fa-crown text-white"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-lg font-bold">NicheEmpire</h1>
+                            <p class="text-xs text-gray-400">Channel Management</p>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <div class="glass px-4 py-2 rounded-xl flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-green-400 pulse-green"></div>
+                        <span class="text-sm font-medium">5 Channels Active</span>
+                    </div>
+                    <button class="gradient-purple-blue px-6 py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all" onclick="openUploadModal()">
+                        <i class="fas fa-upload mr-2"></i>Upload Video
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8">
+
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 fade-in-up">
+            <div class="glass-strong rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 rounded-xl gradient-purple-blue flex items-center justify-center">
+                        <i class="fab fa-youtube text-white text-xl"></i>
+                    </div>
+                    <span class="text-green-400 text-sm font-semibold">+2.4K</span>
+                </div>
+                <h3 class="text-gray-400 text-sm font-medium mb-1">Total Subscribers</h3>
+                <p class="text-3xl font-bold metric-value">847K</p>
+            </div>
+
+            <div class="glass-strong rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 rounded-xl gradient-orange-pink flex items-center justify-center">
+                        <i class="fas fa-eye text-white text-xl"></i>
+                    </div>
+                    <span class="text-green-400 text-sm font-semibold">+18%</span>
+                </div>
+                <h3 class="text-gray-400 text-sm font-medium mb-1">Monthly Views</h3>
+                <p class="text-3xl font-bold metric-value">12.4M</p>
+            </div>
+
+            <div class="glass-strong rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 rounded-xl gradient-green-blue flex items-center justify-center">
+                        <i class="fas fa-video text-white text-xl"></i>
+                    </div>
+                    <span class="text-green-400 text-sm font-semibold">+7</span>
+                </div>
+                <h3 class="text-gray-400 text-sm font-medium mb-1">Videos Published</h3>
+                <p class="text-3xl font-bold metric-value">847</p>
+            </div>
+
+            <div class="glass-strong rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 rounded-xl gradient-teal flex items-center justify-center">
+                        <i class="fas fa-clock text-white text-xl"></i>
+                    </div>
+                    <span class="text-yellow-400 text-sm font-semibold">In Queue</span>
+                </div>
+                <h3 class="text-gray-400 text-sm font-medium mb-1">Scheduled Videos</h3>
+                <p class="text-3xl font-bold metric-value">12</p>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="flex gap-2 mb-6 glass-strong rounded-xl p-2 fade-in-up">
+            <button class="tab-active flex-1 px-6 py-3 rounded-lg font-semibold transition-all" onclick="switchTab('channels')">
+                <i class="fab fa-youtube mr-2"></i>All Channels
+            </button>
+            <button class="flex-1 px-6 py-3 rounded-lg font-semibold hover:bg-white/10 transition-all" onclick="switchTab('queue')">
+                <i class="fas fa-list mr-2"></i>Upload Queue
+            </button>
+            <button class="flex-1 px-6 py-3 rounded-lg font-semibold hover:bg-white/10 transition-all" onclick="switchTab('analytics')">
+                <i class="fas fa-chart-bar mr-2"></i>Analytics
+            </button>
+        </div>
+
+        <!-- Channel Cards -->
+        <div id="channels-tab" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+            <!-- Channel 1: New Cuisine Deluxe -->
+            <div class="channel-card glass-strong rounded-2xl p-6 fade-in-up" style="animation-delay: 0.1s">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center text-2xl font-bold">
+                            NC
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-1">New Cuisine Deluxe</h3>
+                            <a href="https://youtube.com/@newcuisinedeluxe" target="_blank" class="text-sm text-gray-400 hover:text-purple-400 transition-colors">
+                                @newcuisinedeluxe
+                            </a>
+                        </div>
+                    </div>
+                    <span class="status-badge status-active">
+                        <i class="fas fa-circle text-xs"></i>
+                        Active
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <p class="text-2xl font-bold text-purple-400">284K</p>
+                        <p class="text-xs text-gray-400">Subscribers</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-orange-400">4.2M</p>
+                        <p class="text-xs text-gray-400">Monthly Views</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-green-400">12.8%</p>
+                        <p class="text-xs text-gray-400">Engagement</p>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="flex items-center justify-between text-sm mb-2">
+                        <span class="text-gray-400">Channel Health</span>
+                        <span class="font-semibold text-green-400">Excellent</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 92%;"></div>
+                    </div>
+                </div>
+
+                <div class="mini-chart mb-4">
+                    <canvas id="chart-newcuisine"></canvas>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button class="quick-action glass hover:bg-purple-500/20" title="Upload Video">
+                        <i class="fas fa-upload text-purple-400"></i>
+                    </button>
+                    <button class="quick-action glass hover:bg-blue-500/20" title="Schedule">
+                        <i class="fas fa-calendar text-blue-400"></i>
+                    </button>
+                    <button class="quick-action glass hover:bg-green-500/20" title="Analytics">
+                        <i class="fas fa-chart-line text-green-400"></i>
+                    </button>
+                    <button class="quick-action glass hover:bg-orange-500/20" title="Settings">
+                        <i class="fas fa-cog text-orange-400"></i>
+                    </button>
+                    <button class="flex-1 glass px-4 py-2 rounded-xl text-sm font-semibold hover:bg-white/10 transition-all">
+                        View Dashboard
+                    </button>
+                </div>
+            </div>
+
+            <!-- Channel 2: KIVYU Studio -->
+            <div class="channel-card glass-strong rounded-2xl p-6 fade-in-up" style="animation-delay: 0.2s">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-2xl font-bold">
+                            KS
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-1">KIVYU Studio</h3>
+                            <a href="https://youtube.com/@kivyustudio" target="_blank" class="text-sm text-gray-400 hover:text-purple-400 transition-colors">
+                                @kivyustudio
+                            </a>
+                        </div>
+                    </div>
+                    <span class="status-badge status-active">
+                        <i class="fas fa-circle text-xs"></i>
+                        Active
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <p class="text-2xl font-bold text-purple-400">156K</p>
+                        <p class="text-xs text-gray-400">Subscribers</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-orange-400">2.8M</p>
+                        <p class="text-xs text-gray-400">Monthly Views</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-green-400">9.4%</p>
+                        <p class="text-xs text-gray-400">Engagement</p>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="flex items-center justify-between text-sm mb-2">
+                        <span class="text-gray-400">Channel Health</span>
+                        <span class="font-semibold text-green-400">Very Good</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 85%;"></div>
+                    </div>
+                </div>
+
+                <div class="mini-chart mb-4">
+                    <canvas id="chart-kivyustudio"></canvas>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button class="quick-action glass hover:bg-purple-500/20" title="Upload Video">
+                        <i class="fas fa-upload text-purple-400"></i>
+                    </button>
+                    <button class="quick-action glass hover:bg-blue-500/20" title="Schedule">
+                        <i class="fas fa-calendar text-blue-400"></i>
+                    </button>
+                    <button class="quick-action glass hover:bg-green-500/20" title="Analytics">
+                        <i class="fas fa-chart-line text-green-400"></i>
+                    </button>
+                    <button class="quick-action glass hover:bg-orange-500/20" title="Settings">
+                        <i class="fas fa-cog text-orange-400"></i>
+                    </button>
+                    <button class="flex-1 glass px-4 py-2 rounded-xl text-sm font-semibold hover:bg-white/10 transition-all">
+                        View Dashboard
+                    </button>
+                </div>
+            </div>
+
+            <!-- Channel 3: KIVYU Robotics -->
+            <div class="channel-card glass-strong rounded-2xl p-6 fade-in-up" style="animation-delay: 0.3s">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-2xl font-bold">
+                            KR
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-1">KIVYU Robotics</h3>
+                            <a href="https://youtube.com/@kivyurobotics" target="_blank" class="text-sm text-gray-400 hover:text-purple-400 transition-colors">
+                                @kivyurobotics
+                            </a>
+                        </div>
+                    </div>
+                    <span class="status-badge status-uploading">
+                        <i class="fas fa-spinner fa-spin text-xs"></i>
+                        Uploading
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <p class="text-2xl font-bold text-purple-400">98K</p>
+                        <p class="text-xs text-gray-400">Subscribers</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-orange-400">1.9M</p>
+                        <p class="text-xs text-gray-400">Monthly Views</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-green-400">11.2%</p>
+                        <p class="text-xs text-gray-400">Engagement</p>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="flex items-center justify-between text-sm mb-2">
+                        <span class="text-gray-400">Upload Progress</span>
+                        <span class="font-semibold text-blue-400">68%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 68%;"></div>
+                    </div>
+                </div>
+
+                <div class="mini-chart mb-4">
+                    <canvas id="chart-kivyurobotics"></canvas>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button class="quick-action glass hover:bg-purple-500/20" title="Upload Video">
+                        <i class="fas fa-upload text-purple-400"></i>
+                    </button>
+                    <button class="quick-action glass hover:bg-blue-500/20" title="Schedule">
+                        <i class="fas fa-calendar text-blue-400"></i>
+                    </button>
+                    <button class="quick-action glass hover:bg-green-500/20" title="Analytics">
+                        <i class="fas fa-chart-line text-green-400"></i>
+                    </button>
+                    <button class="quick-action glass hover:bg-orange-500/20" title="Settings">
+                        <i class="fas fa-cog text-orange-400"></i>
+                    </button>
+                    <button class="flex-1 glass px-4 py-2 rounded-xl text-sm font-semibold hover:bg-white/10 transition-all">
+                        View Dashboard
+                    </button>
+                </div>
+            </div>
+
+            <!-- Channel 4: Cat Stand Up -->
+            <div class="channel-card glass-strong rounded-2xl p-6 fade-in-up" style="animation-delay: 0.4s">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center text-2xl font-bold">
+                            CS
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-1">Cat Stand Up</h3>
+                            <a href="https://youtube.com/@CatStandUp" target="_blank" class="text-sm text-gray-400 hover:text-purple-400 transition-colors">
+                                @CatStandUp
+                            </a>
+                        </div>
+                    </div>
+                    <span class="status-badge status-active">
+                        <i class="fas fa-circle text-xs"></i>
+                        Active
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <p class="text-2xl font-bold text-purple-400">187K</p>
+                        <p class="text-xs text-gray-400">Subscribers</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-orange-400">2.1M</p>
+                        <p class="text-xs text-gray-400">Monthly Views</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-green-400">14.6%</p>
+                        <p class="text-xs text-gray-400">Engagement</p>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="flex items-center justify-between text-sm mb-2">
+                        <span class="text-gray-400">Channel Health</span>
+                        <span class="font-semibold text-green-400">Excellent</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 94%;"></div>
+                    </div>
+                </div>
+
+                <div class="mini-chart mb-4">
+                    <canvas id="chart-catstandup"></canvas>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button class="quick-action glass hover:bg-purple-500/20" title="Upload Video">
+                        <i class="fas fa-upload text-purple-400"></i>
+                    </button>
+                    <button class="quick-action glass hover:bg-blue-500/20" title="Schedule">
+                        <i class="fas fa-calendar text-blue-400"></i>
+                    </button>
+                    <button class="quick-action glass hover:bg-green-500/20" title="Analytics">
+                        <i class="fas fa-chart-line text-green-400"></i>
+                    </button>
+                    <button class="quick-action glass hover:bg-orange-500/20" title="Settings">
+                        <i class="fas fa-cog text-orange-400"></i>
+                    </button>
+                    <button class="flex-1 glass px-4 py-2 rounded-xl text-sm font-semibold hover:bg-white/10 transition-all">
+                        View Dashboard
+                    </button>
+                </div>
+            </div>
+
+            <!-- Channel 5: LUMVX Studio -->
+            <div class="channel-card glass-strong rounded-2xl p-6 fade-in-up" style="animation-delay: 0.5s">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-500 to-green-500 flex items-center justify-center text-2xl font-bold">
+                            LX
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-1">LUMVX Studio</h3>
+                            <a href="https://youtube.com/@lumvxstudio" target="_blank" class="text-sm text-gray-400 hover:text-purple-400 transition-colors">
+                                @lumvxstudio
+                            </a>
+                        </div>
+                    </div>
+                    <span class="status-badge status-scheduled">
+                        <i class="fas fa-clock text-xs"></i>
+                        Scheduled
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <p class="text-2xl font-bold text-purple-400">122K</p>
+                        <p class="text-xs text-gray-400">Subscribers</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-orange-400">1.4M</p>
+                        <p class="text-xs text-gray-400">Monthly Views</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-green-400">10.1%</p>
+                        <p class="text-xs text-gray-400">Engagement</p>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="flex items-center justify-between text-sm mb-2">
+                        <span class="text-gray-400">Channel Health</span>
+                        <span class="font-semibold text-green-400">Good</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 78%;"></div>
+                    </div>
+                </div>
+
+                <div class="mini-chart mb-4">
+                    <canvas id="chart-lumvxstudio"></canvas>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button class="quick-action glass hover:bg-purple-500/20" title="Upload Video">
+                        <i class="fas fa-upload text-purple-400"></i>
+                    </button>
+                    <button class="quick-action glass hover:bg-blue-500/20" title="Schedule">
+                        <i class="fas fa-calendar text-blue-400"></i>
+                    </button>
+                    <button class="quick-action glass hover:bg-green-500/20" title="Analytics">
+                        <i class="fas fa-chart-line text-green-400"></i>
+                    </button>
+                    <button class="quick-action glass hover:bg-orange-500/20" title="Settings">
+                        <i class="fas fa-cog text-orange-400"></i>
+                    </button>
+                    <button class="flex-1 glass px-4 py-2 rounded-xl text-sm font-semibold hover:bg-white/10 transition-all">
+                        View Dashboard
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Upload Queue Tab (Hidden by default) -->
+        <div id="queue-tab" class="hidden">
+            <div class="glass-strong rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold mb-1">Upload Queue</h2>
+                        <p class="text-sm text-gray-400">12 videos waiting to be processed</p>
+                    </div>
+                    <button class="gradient-purple-blue px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all">
+                        <i class="fas fa-plus mr-2"></i>Add to Queue
+                    </button>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Queue Item 1 -->
+                    <div class="queue-item glass rounded-xl p-4 flex items-center gap-4">
+                        <div class="w-24 h-16 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                            <i class="fas fa-play text-white text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold mb-1">Ultimate Robotics Tutorial - Part 5</h4>
+                            <div class="flex items-center gap-4 text-sm text-gray-400">
+                                <span><i class="fab fa-youtube mr-1"></i>KIVYU Robotics</span>
+                                <span><i class="fas fa-clock mr-1"></i>Uploading - 68%</span>
+                                <span><i class="fas fa-video mr-1"></i>1080p</span>
+                            </div>
+                        </div>
+                        <div class="w-48">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 68%;"></div>
+                            </div>
+                        </div>
+                        <span class="status-badge status-uploading">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            Uploading
+                        </span>
+                    </div>
+
+                    <!-- Queue Item 2 -->
+                    <div class="queue-item glass rounded-xl p-4 flex items-center gap-4">
+                        <div class="w-24 h-16 rounded-lg bg-gradient-to-br from-teal-500 to-green-500 flex items-center justify-center">
+                            <i class="fas fa-play text-white text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold mb-1">Creative Design Techniques 2025</h4>
+                            <div class="flex items-center gap-4 text-sm text-gray-400">
+                                <span><i class="fab fa-youtube mr-1"></i>LUMVX Studio</span>
+                                <span><i class="fas fa-calendar mr-1"></i>Dec 29, 2025 3:00 PM</span>
+                                <span><i class="fas fa-video mr-1"></i>4K</span>
+                            </div>
+                        </div>
+                        <div class="w-48">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                        <span class="status-badge status-scheduled">
+                            <i class="fas fa-clock"></i>
+                            Scheduled
+                        </span>
+                    </div>
+
+                    <!-- Queue Item 3 -->
+                    <div class="queue-item glass rounded-xl p-4 flex items-center gap-4">
+                        <div class="w-24 h-16 rounded-lg bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center">
+                            <i class="fas fa-play text-white text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold mb-1">Top 10 Recipes for New Year's Eve</h4>
+                            <div class="flex items-center gap-4 text-sm text-gray-400">
+                                <span><i class="fab fa-youtube mr-1"></i>New Cuisine Deluxe</span>
+                                <span><i class="fas fa-hourglass-half mr-1"></i>Processing</span>
+                                <span><i class="fas fa-video mr-1"></i>1080p</span>
+                            </div>
+                        </div>
+                        <div class="w-48">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 42%;"></div>
+                            </div>
+                        </div>
+                        <span class="status-badge status-processing">
+                            <i class="fas fa-cog fa-spin"></i>
+                            Processing
+                        </span>
+                    </div>
+
+                    <!-- Queue Item 4 -->
+                    <div class="queue-item glass rounded-xl p-4 flex items-center gap-4">
+                        <div class="w-24 h-16 rounded-lg bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center">
+                            <i class="fas fa-play text-white text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold mb-1">Funny Cats Compilation #47</h4>
+                            <div class="flex items-center gap-4 text-sm text-gray-400">
+                                <span><i class="fab fa-youtube mr-1"></i>Cat Stand Up</span>
+                                <span><i class="fas fa-calendar mr-1"></i>Dec 30, 2025 10:00 AM</span>
+                                <span><i class="fas fa-video mr-1"></i>1080p</span>
+                            </div>
+                        </div>
+                        <div class="w-48">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                        <span class="status-badge status-scheduled">
+                            <i class="fas fa-clock"></i>
+                            Scheduled
+                        </span>
+                    </div>
+
+                    <!-- Queue Item 5 -->
+                    <div class="queue-item glass rounded-xl p-4 flex items-center gap-4">
+                        <div class="w-24 h-16 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                            <i class="fas fa-play text-white text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold mb-1">Creative Studio Tips & Tricks</h4>
+                            <div class="flex items-center gap-4 text-sm text-gray-400">
+                                <span><i class="fab fa-youtube mr-1"></i>KIVYU Studio</span>
+                                <span><i class="fas fa-calendar mr-1"></i>Jan 1, 2026 6:00 PM</span>
+                                <span><i class="fas fa-video mr-1"></i>4K</span>
+                            </div>
+                        </div>
+                        <div class="w-48">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                        <span class="status-badge status-scheduled">
+                            <i class="fas fa-clock"></i>
+                            Scheduled
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Tab (Hidden by default) -->
+        <div id="analytics-tab" class="hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="glass-strong rounded-2xl p-6">
+                    <h3 class="text-xl font-bold mb-4">Channel Performance Comparison</h3>
+                    <div style="height: 300px;">
+                        <canvas id="comparison-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="glass-strong rounded-2xl p-6">
+                    <h3 class="text-xl font-bold mb-4">Growth Trends</h3>
+                    <div style="height: 300px;">
+                        <canvas id="growth-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Upload Modal -->
+    <div id="upload-modal" class="modal-overlay">
+        <div class="modal-content glass-strong rounded-2xl p-8">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold">Upload New Video</h2>
+                <button onclick="closeUploadModal()" class="w-10 h-10 rounded-lg glass hover:bg-red-500/20 transition-all">
+                    <i class="fas fa-times text-gray-400"></i>
+                </button>
+            </div>
+
+            <form class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Select Channel</label>
+                    <select class="w-full glass px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <option>@newcuisinedeluxe - New Cuisine Deluxe</option>
+                        <option>@kivyustudio - KIVYU Studio</option>
+                        <option>@kivyurobotics - KIVYU Robotics</option>
+                        <option>@CatStandUp - Cat Stand Up</option>
+                        <option>@lumvxstudio - LUMVX Studio</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-2">Video File</label>
+                    <div class="glass rounded-xl p-8 border-2 border-dashed border-gray-600 hover:border-purple-500 transition-colors cursor-pointer">
+                        <div class="text-center">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
+                            <p class="text-sm text-gray-400">Drag & drop your video here or click to browse</p>
+                            <p class="text-xs text-gray-500 mt-2">MP4, MOV, AVI up to 10GB</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-2">Title</label>
+                    <input type="text" class="w-full glass px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Enter video title">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-2">Description</label>
+                    <textarea rows="4" class="w-full glass px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Enter video description"></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Upload Type</label>
+                        <select class="w-full glass px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            <option>Upload Now</option>
+                            <option>Schedule for Later</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Visibility</label>
+                        <select class="w-full glass px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            <option>Public</option>
+                            <option>Unlisted</option>
+                            <option>Private</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <button type="button" onclick="closeUploadModal()" class="flex-1 glass px-6 py-3 rounded-xl font-semibold hover:bg-white/10 transition-all">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 gradient-purple-blue px-6 py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all">
+                        <i class="fas fa-upload mr-2"></i>Upload Video
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        function switchTab(tab) {
+            // Hide all tabs
+            document.getElementById('channels-tab').classList.add('hidden');
+            document.getElementById('queue-tab').classList.add('hidden');
+            document.getElementById('analytics-tab').classList.add('hidden');
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-active');
+            buttons.forEach(btn => {
+                btn.classList.remove('tab-active');
+                btn.classList.add('hover:bg-white/10');
+            });
+
+            // Show selected tab
+            if (tab === 'channels') {
+                document.getElementById('channels-tab').classList.remove('hidden');
+                event.target.classList.add('tab-active');
+                event.target.classList.remove('hover:bg-white/10');
+            } else if (tab === 'queue') {
+                document.getElementById('queue-tab').classList.remove('hidden');
+                event.target.classList.add('tab-active');
+                event.target.classList.remove('hover:bg-white/10');
+            } else if (tab === 'analytics') {
+                document.getElementById('analytics-tab').classList.remove('hidden');
+                event.target.classList.add('tab-active');
+                event.target.classList.remove('hover:bg-white/10');
+                initAnalyticsCharts();
+            }
+        }
+
+        // Modal functions
+        function openUploadModal() {
+            document.getElementById('upload-modal').classList.add('active');
+        }
+
+        function closeUploadModal() {
+            document.getElementById('upload-modal').classList.remove('active');
+        }
+
+        // Close modal on backdrop click
+        document.getElementById('upload-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeUploadModal();
+            }
+        });
+
+        // Mini charts for each channel
+        function createMiniChart(canvasId, data, color) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['', '', '', '', '', '', ''],
+                    datasets: [{
+                        data: data,
+                        borderColor: color,
+                        backgroundColor: `${color}20`,
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                    scales: {
+                        y: { display: false },
+                        x: { display: false }
+                    }
+                }
+            });
+        }
+
+        // Initialize mini charts
+        createMiniChart('chart-newcuisine', [3.2, 3.5, 3.8, 4.0, 3.9, 4.1, 4.2], '#667eea');
+        createMiniChart('chart-kivyustudio', [2.1, 2.3, 2.5, 2.6, 2.7, 2.8, 2.8], '#f093fb');
+        createMiniChart('chart-kivyurobotics', [1.5, 1.6, 1.7, 1.8, 1.85, 1.88, 1.9], '#4facfe');
+        createMiniChart('chart-catstandup', [1.8, 1.85, 1.9, 2.0, 2.05, 2.08, 2.1], '#ffd89b');
+        createMiniChart('chart-lumvxstudio', [1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4], '#43e97b');
+
+        // Analytics charts
+        function initAnalyticsCharts() {
+            // Comparison Chart
+            const comparisonCtx = document.getElementById('comparison-chart').getContext('2d');
+            new Chart(comparisonCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['New Cuisine', 'KIVYU Studio', 'KIVYU Robotics', 'Cat Stand Up', 'LUMVX Studio'],
+                    datasets: [{
+                        label: 'Subscribers (K)',
+                        data: [284, 156, 98, 187, 122],
+                        backgroundColor: '#667eea',
+                    }, {
+                        label: 'Monthly Views (M)',
+                        data: [4.2, 2.8, 1.9, 2.1, 1.4],
+                        backgroundColor: '#f093fb',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#9ca3af' } }
+                    },
+                    scales: {
+                        y: { ticks: { color: '#9ca3af' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        x: { ticks: { color: '#9ca3af' }, grid: { display: false } }
+                    }
+                }
+            });
+
+            // Growth Chart
+            const growthCtx = document.getElementById('growth-chart').getContext('2d');
+            new Chart(growthCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    datasets: [{
+                        label: 'Total Subscribers',
+                        data: [720, 745, 770, 795, 820, 835, 847],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#9ca3af' } }
+                    },
+                    scales: {
+                        y: { ticks: { color: '#9ca3af' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        x: { ticks: { color: '#9ca3af' }, grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        // Simulate upload progress
+        setInterval(() => {
+            const progressBars = document.querySelectorAll('.progress-fill');
+            progressBars.forEach(bar => {
+                const currentWidth = parseInt(bar.style.width);
+                if (currentWidth < 100 && currentWidth > 0 && currentWidth < 90) {
+                    bar.style.width = (currentWidth + 1) + '%';
+                }
+            });
+        }, 2000);
+    </script>
+
+</body>
+</html>

@@ -1,20 +1,21 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
+  "cleanUrls": true,
+  "trailingSlash": false,
 
-  "buildCommand": "echo 'No build required - using static HTML files'",
-  "outputDirectory": "public",
-  "installCommand": "npm ci",
-  "devCommand": "npx http-server public -p 3000",
+  "buildCommand": "echo 'Using static HTML files - no build required'",
+  "outputDirectory": ".",
+  "installCommand": "echo 'No install required'",
 
   "rewrites": [
     {
       "source": "/",
-      "destination": "/dashboard.html"
+      "destination": "/index.html"
     },
     {
       "source": "/dashboard",
-      "destination": "/dashboard.html"
+      "destination": "/index.html"
     },
     {
       "source": "/channels",
@@ -32,6 +33,19 @@
 
   "headers": [
     {
+      "source": "/(.*).html",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/html; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, must-revalidate"
+        }
+      ]
+    },
+    {
       "source": "/(.*)",
       "headers": [
         {
@@ -45,53 +59,8 @@
         {
           "key": "X-XSS-Protection",
           "value": "1; mode=block"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
-        },
-        {
-          "key": "Permissions-Policy",
-          "value": "camera=(), microphone=(), geolocation=()"
-        }
-      ]
-    },
-    {
-      "source": "/:path*.(js|css|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|ico)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
         }
       ]
     }
-  ],
-
-  "redirects": [
-    {
-      "source": "/docs",
-      "destination": "https://github.com/yourusername/niche-empire-builder#readme",
-      "permanent": false
-    },
-    {
-      "source": "/github",
-      "destination": "https://github.com/yourusername/niche-empire-builder",
-      "permanent": false
-    }
-  ],
-
-  "cleanUrls": true,
-  "trailingSlash": false,
-
-  "env": {
-    "NODE_ENV": "production",
-    "API_VERSION": "1.0.0"
-  },
-
-  "github": {
-    "enabled": true,
-    "autoAlias": true,
-    "silent": false,
-    "autoJobCancelation": true
-  }
+  ]
 }

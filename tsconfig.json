@@ -1,27 +1,44 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "commonjs",
-    "lib": ["ES2020"],
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "strict": true,
-    "esModuleInterop": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "allowJs": true,
     "skipLibCheck": true,
+    "strict": false,
     "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "moduleResolution": "node",
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitReturns": false,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": false,
-    "strictNullChecks": false
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/agents/*": ["./src/agents/*"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/utils/*": ["./src/utils/*"]
+    }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "src/dashboard", "src/test-*.ts", "src/list-models.ts", "src/examples"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "examples",
+    "src/test-*.ts",
+    "src/list-models.ts",
+    "src/dashboard"
+  ]
 }
 
