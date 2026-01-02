@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Niche Empire Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gradient-purple-blue {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        input[type="text"], input[type="email"], input[type="password"], select, textarea {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: rgba(102, 126, 234, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        select option {
+            background: #1a1a2e;
+            color: white;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: 0.3s;
+            border-radius: 26px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        .nav-link {
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .tab-nav {
+            display: flex;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .avatar-upload {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar-upload:hover {
+            transform: scale(1.05);
+        }
+
+        .avatar-upload input {
+            display: none;
+        }
+
+        .avatar-upload img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .success-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(34, 197, 94, 0.9);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .success-toast.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .connection-card {
+            transition: all 0.3s ease;
+        }
+
+        .connection-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-connected {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .status-disconnected {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="glass border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-8">
+                    <a href="../index.html" class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl gradient-purple-blue flex items-center justify-center">
+                            <i class="fas fa-rocket text-white text-lg"></i>
+                        </div>
+                        <span class="font-bold text-xl">Niche Empire Builder</span>
+                    </a>
+                    <div class="hidden md:flex items-center gap-2">
+                        <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large mr-2"></i>Dashboard</a>
+                        <a href="generators.html" class="nav-link"><i class="fas fa-wand-magic-sparkles mr-2"></i>Generators</a>
+                        <a href="marketplace.html" class="nav-link"><i class="fas fa-store mr-2"></i>Marketplace</a>
+                        <a href="ai-services.html" class="nav-link"><i class="fas fa-brain mr-2"></i>AI Services</a>
+                        <a href="agents.html" class="nav-link"><i class="fas fa-robot mr-2"></i>Agents</a>
+                        <a href="products.html" class="nav-link"><i class="fas fa-box mr-2"></i>Products</a>
+                    </div>
+                </div>
+                <a href="settings.html" class="glass px-4 py-2 rounded-lg bg-white/10">
+                    <i class="fas fa-cog mr-2"></i>Settings
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Success Toast -->
+    <div id="success-toast" class="success-toast">
+        <i class="fas fa-check-circle mr-2"></i><span id="toast-message"></span>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold mb-2">Settings</h1>
+            <p class="text-white/70">Manage your account, integrations, and preferences</p>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-nav">
+            <button class="tab-button active" onclick="switchTab('profile')">
+                <i class="fas fa-user mr-2"></i>Profile
+            </button>
+            <button class="tab-button" onclick="switchTab('api')">
+                <i class="fas fa-key mr-2"></i>API Keys
+            </button>
+            <button class="tab-button" onclick="switchTab('channels')">
+                <i class="fas fa-share-alt mr-2"></i>Channels
+            </button>
+            <button class="tab-button" onclick="switchTab('automation')">
+                <i class="fas fa-robot mr-2"></i>Automation
+            </button>
+            <button class="tab-button" onclick="switchTab('notifications')">
+                <i class="fas fa-bell mr-2"></i>Notifications
+            </button>
+            <button class="tab-button" onclick="switchTab('preferences')">
+                <i class="fas fa-sliders-h mr-2"></i>Preferences
+            </button>
+        </div>
+
+        <!-- Profile Tab -->
+        <div id="profile-tab" class="tab-content active">
+            <div class="glass rounded-2xl p-8">
+                <h2 class="text-2xl font-bold mb-6">Profile Information</h2>
+
+                <div class="flex items-start gap-8 mb-8">
+                    <div>
+                        <label class="avatar-upload">
+                            <div id="avatar-preview">
+                                <i class="fas fa-camera text-white text-3xl"></i>
+                            </div>
+                            <input type="file" id="avatar-input" accept="image/*" onchange="handleAvatarUpload(event)">
+                        </label>
+                        <p class="text-xs text-white/50 text-center mt-2">Click to upload</p>
+                    </div>
+
+                    <div class="flex-1 space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm text-white/70 mb-2">Full Name</label>
+                                <input type="text" id="profile-name" placeholder="John Doe">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-white/70 mb-2">Email Address</label>
+                                <input type="email" id="profile-email" placeholder="your@email.com">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm text-white/70 mb-2">Business Name</label>
+                                <input type="text" id="profile-business" placeholder="Your Business">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-white/70 mb-2">Time Zone</label>
+                                <select id="profile-timezone">
+                                    <option value="UTC-5">UTC-5 (Eastern Time)</option>
+                                    <option value="UTC-6">UTC-6 (Central Time)</option>
+                                    <option value="UTC-7">UTC-7 (Mountain Time)</option>
+                                    <option value="UTC-8">UTC-8 (Pacific Time)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button onclick="saveProfile()" class="btn-primary">
+                            <i class="fas fa-save mr-2"></i>Save Profile
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- API Keys Tab -->
+        <div id="api-tab" class="tab-content">
+            <div class="space-y-6">
+                <div class="glass rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold mb-6">Marketplace API Keys</h2>
+                    <div class="space-y-4">
+                        <div class="glass rounded-xl p-4">
+                            <label class="block text-sm text-white/70 mb-2">Etsy API Key</label>
+                            <input type="password" id="etsy-api-key" placeholder="Enter your Etsy API key">
+                        </div>
+                        <div class="glass rounded-xl p-4">
+                            <label class="block text-sm text-white/70 mb-2">Gumroad Access Token</label>
+                            <input type="password" id="gumroad-api-key" placeholder="Enter your Gumroad token">
+                        </div>
+                        <div class="glass rounded-xl p-4">
+                            <label class="block text-sm text-white/70 mb-2">Shopify API Token</label>
+                            <input type="password" id="shopify-api-key" placeholder="Enter your Shopify token">
+                        </div>
+                        <div class="glass rounded-xl p-4">
+                            <label class="block text-sm text-white/70 mb-2">Printful API Key</label>
+                            <input type="password" id="printful-api-key" placeholder="Enter your Printful API key">
+                        </div>
+                        <button onclick="saveAPIKeys()" class="btn-primary">
+                            <i class="fas fa-save mr-2"></i>Save API Keys
+                        </button>
+                    </div>
+                </div>
+
+                <div class="glass rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold mb-6">AI Service API Keys</h2>
+                    <div class="space-y-4">
+                        <div class="glass rounded-xl p-4">
+                            <label class="block text-sm text-white/70 mb-2">NanoBanana API Key</label>
+                            <input type="password" id="nanobanana-api-key" placeholder="Enter NanoBanana API key">
+                        </div>
+                        <div class="glass rounded-xl p-4">
+                            <label class="block text-sm text-white/70 mb-2">Sora 2 API Key</label>
+                            <input type="password" id="sora2-api-key" placeholder="Enter Sora 2 API key">
+                        </div>
+                        <div class="glass rounded-xl p-4">
+                            <label class="block text-sm text-white/70 mb-2">Leonardo.ai API Key</label>
+                            <input type="password" id="leonardo-api-key" placeholder="Enter Leonardo.ai API key">
+                        </div>
+                        <div class="glass rounded-xl p-4">
+                            <label class="block text-sm text-white/70 mb-2">Ideogram API Key</label>
+                            <input type="password" id="ideogram-api-key" placeholder="Enter Ideogram API key">
+                        </div>
+                        <button onclick="saveAIKeys()" class="btn-primary">
+                            <i class="fas fa-save mr-2"></i>Save AI Keys
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Channels Tab -->
+        <div id="channels-tab" class="tab-content">
+            <div class="glass rounded-2xl p-8">
+                <h2 class="text-2xl font-bold mb-6">Social Media Channels</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- YouTube -->
+                    <div class="connection-card glass rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-xl bg-red-500 flex items-center justify-center">
+                                    <i class="fab fa-youtube text-white text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold">YouTube</h3>
+                                    <span id="youtube-status" class="status-badge status-disconnected">
+                                        <i class="fas fa-circle text-xs"></i> Disconnected
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="toggleChannel('youtube')" id="youtube-btn" class="btn-secondary w-full">
+                            <i class="fab fa-youtube mr-2"></i>Connect YouTube
+                        </button>
+                    </div>
+
+                    <!-- Instagram -->
+                    <div class="connection-card glass rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+                                    <i class="fab fa-instagram text-white text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold">Instagram</h3>
+                                    <span id="instagram-status" class="status-badge status-disconnected">
+                                        <i class="fas fa-circle text-xs"></i> Disconnected
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="toggleChannel('instagram')" id="instagram-btn" class="btn-secondary w-full">
+                            <i class="fab fa-instagram mr-2"></i>Connect Instagram
+                        </button>
+                    </div>
+
+                    <!-- TikTok -->
+                    <div class="connection-card glass rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
+                                    <i class="fab fa-tiktok text-white text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold">TikTok</h3>
+                                    <span id="tiktok-status" class="status-badge status-disconnected">
+                                        <i class="fas fa-circle text-xs"></i> Disconnected
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="toggleChannel('tiktok')" id="tiktok-btn" class="btn-secondary w-full">
+                            <i class="fab fa-tiktok mr-2"></i>Connect TikTok
+                        </button>
+                    </div>
+
+                    <!-- Pinterest -->
+                    <div class="connection-card glass rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-xl bg-red-600 flex items-center justify-center">
+                                    <i class="fab fa-pinterest text-white text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold">Pinterest</h3>
+                                    <span id="pinterest-status" class="status-badge status-disconnected">
+                                        <i class="fas fa-circle text-xs"></i> Disconnected
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="toggleChannel('pinterest')" id="pinterest-btn" class="btn-secondary w-full">
+                            <i class="fab fa-pinterest mr-2"></i>Connect Pinterest
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Automation Tab -->
+        <div id="automation-tab" class="tab-content">
+            <div class="glass rounded-2xl p-8">
+                <h2 class="text-2xl font-bold mb-6">Automation Settings</h2>
+
+                <div class="space-y-6">
+                    <div class="glass rounded-xl p-6">
+                        <h3 class="font-bold mb-4">Content Publishing</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm text-white/70 mb-2">Publishing Frequency</label>
+                                <select id="publish-frequency">
+                                    <option value="daily">Daily</option>
+                                    <option value="weekly">Weekly</option>
+                                    <option value="monthly">Monthly</option>
+                                    <option value="custom">Custom Schedule</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-white/70 mb-2">Preferred Publishing Time</label>
+                                <select id="publish-time">
+                                    <option value="morning">Morning (6AM - 12PM)</option>
+                                    <option value="afternoon">Afternoon (12PM - 6PM)</option>
+                                    <option value="evening">Evening (6PM - 12AM)</option>
+                                    <option value="night">Night (12AM - 6AM)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass rounded-xl p-6">
+                        <h3 class="font-bold mb-4">Auto-Generation</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-semibold">Enable Auto-Generation</p>
+                                    <p class="text-sm text-white/60">Automatically generate products based on trends</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="auto-generate" onchange="saveAutomation()">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-white/70 mb-2">Daily Generation Limit</label>
+                                <input type="number" id="generation-limit" value="10" min="1" max="100">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass rounded-xl p-6">
+                        <h3 class="font-bold mb-4">Auto-Publishing</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-semibold">Auto-Publish to Marketplaces</p>
+                                    <p class="text-sm text-white/60">Automatically list generated products</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="auto-publish" onchange="saveAutomation()">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-semibold">Auto-Share to Social Media</p>
+                                    <p class="text-sm text-white/60">Share new products on connected channels</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="auto-share" onchange="saveAutomation()">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="saveAutomation()" class="btn-primary">
+                        <i class="fas fa-save mr-2"></i>Save Automation Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications Tab -->
+        <div id="notifications-tab" class="tab-content">
+            <div class="glass rounded-2xl p-8">
+                <h2 class="text-2xl font-bold mb-6">Notification Preferences</h2>
+
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between glass rounded-xl p-4">
+                        <div>
+                            <p class="font-semibold">Email Notifications</p>
+                            <p class="text-sm text-white/60">Receive important updates via email</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="notif-email" checked onchange="saveNotifications()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="flex items-center justify-between glass rounded-xl p-4">
+                        <div>
+                            <p class="font-semibold">Sale Notifications</p>
+                            <p class="text-sm text-white/60">Get notified when you make a sale</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="notif-sales" checked onchange="saveNotifications()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="flex items-center justify-between glass rounded-xl p-4">
+                        <div>
+                            <p class="font-semibold">Weekly Reports</p>
+                            <p class="text-sm text-white/60">Receive weekly performance summaries</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="notif-reports" checked onchange="saveNotifications()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="flex items-center justify-between glass rounded-xl p-4">
+                        <div>
+                            <p class="font-semibold">Agent Activity Alerts</p>
+                            <p class="text-sm text-white/60">Alerts when agents complete tasks</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="notif-agents" onchange="saveNotifications()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="flex items-center justify-between glass rounded-xl p-4">
+                        <div>
+                            <p class="font-semibold">Marketing Updates</p>
+                            <p class="text-sm text-white/60">News about features and updates</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="notif-marketing" onchange="saveNotifications()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preferences Tab -->
+        <div id="preferences-tab" class="tab-content">
+            <div class="glass rounded-2xl p-8">
+                <h2 class="text-2xl font-bold mb-6">Application Preferences</h2>
+
+                <div class="space-y-6">
+                    <div class="glass rounded-xl p-6">
+                        <h3 class="font-bold mb-4">Appearance</h3>
+                        <div>
+                            <label class="block text-sm text-white/70 mb-2">Theme</label>
+                            <select id="theme-preference" onchange="savePreferences()">
+                                <option value="dark">Dark Mode (Default)</option>
+                                <option value="light">Light Mode</option>
+                                <option value="auto">Auto (System)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="glass rounded-xl p-6">
+                        <h3 class="font-bold mb-4">Language & Region</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm text-white/70 mb-2">Language</label>
+                                <select id="language-preference" onchange="savePreferences()">
+                                    <option value="en">English</option>
+                                    <option value="es">Spanish</option>
+                                    <option value="fr">French</option>
+                                    <option value="de">German</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-white/70 mb-2">Currency</label>
+                                <select id="currency-preference" onchange="savePreferences()">
+                                    <option value="usd">USD ($)</option>
+                                    <option value="eur">EUR (€)</option>
+                                    <option value="gbp">GBP (£)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass rounded-xl p-6">
+                        <h3 class="font-bold mb-4">Data & Privacy</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-semibold">Analytics Tracking</p>
+                                    <p class="text-sm text-white/60">Help improve the app with usage data</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="analytics-tracking" checked onchange="savePreferences()">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-semibold">Save Login History</p>
+                                    <p class="text-sm text-white/60">Keep track of account access</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="login-history" checked onchange="savePreferences()">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass rounded-xl p-6 border-2 border-red-500/30">
+                        <h3 class="font-bold mb-4 text-red-400">Danger Zone</h3>
+                        <div class="space-y-3">
+                            <button onclick="clearAllData()" class="btn-secondary w-full text-red-400">
+                                <i class="fas fa-trash-alt mr-2"></i>Clear All Data
+                            </button>
+                            <button onclick="deleteAccount()" class="btn-secondary w-full text-red-400">
+                                <i class="fas fa-user-slash mr-2"></i>Delete Account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const channels = { youtube: false, instagram: false, tiktok: false, pinterest: false };
+
+        // Initialize
+        function init() {
+            loadSettings();
+        }
+
+        // Load settings from localStorage
+        function loadSettings() {
+            const profileName = localStorage.getItem('user_name') || '';
+            const profileEmail = localStorage.getItem('user_email') || '';
+
+            if (profileName) document.getElementById('profile-name').value = profileName;
+            if (profileEmail) document.getElementById('profile-email').value = profileEmail;
+
+            // Load channel states
+            Object.keys(channels).forEach(channel => {
+                const connected = localStorage.getItem(`channel_${channel}`) === 'true';
+                channels[channel] = connected;
+                updateChannelUI(channel, connected);
+            });
+
+            // Load automation settings
+            const autoGenerate = localStorage.getItem('auto_generate') === 'true';
+            document.getElementById('auto-generate').checked = autoGenerate;
+
+            const autoPublish = localStorage.getItem('auto_publish') === 'true';
+            document.getElementById('auto-publish').checked = autoPublish;
+
+            const autoShare = localStorage.getItem('auto_share') === 'true';
+            document.getElementById('auto-share').checked = autoShare;
+        }
+
+        // Switch tabs
+        function switchTab(tab) {
+            const buttons = document.querySelectorAll('.tab-button');
+            const contents = document.querySelectorAll('.tab-content');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(`${tab}-tab`).classList.add('active');
+        }
+
+        // Handle avatar upload
+        function handleAvatarUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('avatar-preview');
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Avatar">`;
+                    localStorage.setItem('user_avatar', e.target.result);
+                    showToast('Avatar uploaded successfully');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Save profile
+        function saveProfile() {
+            const name = document.getElementById('profile-name').value;
+            const email = document.getElementById('profile-email').value;
+            const business = document.getElementById('profile-business').value;
+            const timezone = document.getElementById('profile-timezone').value;
+
+            localStorage.setItem('user_name', name);
+            localStorage.setItem('user_email', email);
+            localStorage.setItem('user_business', business);
+            localStorage.setItem('user_timezone', timezone);
+
+            showToast('Profile saved successfully');
+        }
+
+        // Save API keys
+        function saveAPIKeys() {
+            const keys = ['etsy', 'gumroad', 'shopify', 'printful'];
+            keys.forEach(key => {
+                const value = document.getElementById(`${key}-api-key`).value;
+                if (value) {
+                    localStorage.setItem(`${key}_api_key`, value);
+                }
+            });
+            showToast('Marketplace API keys saved');
+        }
+
+        // Save AI keys
+        function saveAIKeys() {
+            const keys = ['nanobanana', 'sora2', 'leonardo', 'ideogram'];
+            keys.forEach(key => {
+                const value = document.getElementById(`${key}-api-key`).value;
+                if (value) {
+                    localStorage.setItem(`${key}_api_key`, value);
+                }
+            });
+            showToast('AI service API keys saved');
+        }
+
+        // Toggle channel connection
+        function toggleChannel(channel) {
+            channels[channel] = !channels[channel];
+            localStorage.setItem(`channel_${channel}`, channels[channel]);
+            updateChannelUI(channel, channels[channel]);
+            showToast(`${channel.charAt(0).toUpperCase() + channel.slice(1)} ${channels[channel] ? 'connected' : 'disconnected'}`);
+        }
+
+        // Update channel UI
+        function updateChannelUI(channel, connected) {
+            const statusBadge = document.getElementById(`${channel}-status`);
+            const btn = document.getElementById(`${channel}-btn`);
+
+            if (connected) {
+                statusBadge.className = 'status-badge status-connected';
+                statusBadge.innerHTML = '<i class="fas fa-circle text-xs"></i> Connected';
+                btn.textContent = 'Disconnect';
+                btn.className = 'btn-secondary w-full text-red-400';
+            } else {
+                statusBadge.className = 'status-badge status-disconnected';
+                statusBadge.innerHTML = '<i class="fas fa-circle text-xs"></i> Disconnected';
+                btn.innerHTML = `<i class="fab fa-${channel} mr-2"></i>Connect ${channel.charAt(0).toUpperCase() + channel.slice(1)}`;
+                btn.className = 'btn-secondary w-full';
+            }
+        }
+
+        // Save automation settings
+        function saveAutomation() {
+            const autoGenerate = document.getElementById('auto-generate').checked;
+            const autoPublish = document.getElementById('auto-publish').checked;
+            const autoShare = document.getElementById('auto-share').checked;
+            const frequency = document.getElementById('publish-frequency').value;
+            const time = document.getElementById('publish-time').value;
+            const limit = document.getElementById('generation-limit').value;
+
+            localStorage.setItem('auto_generate', autoGenerate);
+            localStorage.setItem('auto_publish', autoPublish);
+            localStorage.setItem('auto_share', autoShare);
+            localStorage.setItem('publish_frequency', frequency);
+            localStorage.setItem('publish_time', time);
+            localStorage.setItem('generation_limit', limit);
+
+            showToast('Automation settings saved');
+        }
+
+        // Save notifications
+        function saveNotifications() {
+            const settings = ['email', 'sales', 'reports', 'agents', 'marketing'];
+            settings.forEach(setting => {
+                const checked = document.getElementById(`notif-${setting}`).checked;
+                localStorage.setItem(`notif_${setting}`, checked);
+            });
+            showToast('Notification preferences saved');
+        }
+
+        // Save preferences
+        function savePreferences() {
+            const theme = document.getElementById('theme-preference').value;
+            const language = document.getElementById('language-preference').value;
+            const currency = document.getElementById('currency-preference').value;
+            const analytics = document.getElementById('analytics-tracking').checked;
+            const loginHistory = document.getElementById('login-history').checked;
+
+            localStorage.setItem('theme', theme);
+            localStorage.setItem('language', language);
+            localStorage.setItem('currency', currency);
+            localStorage.setItem('analytics_tracking', analytics);
+            localStorage.setItem('login_history', loginHistory);
+
+            showToast('Preferences saved');
+        }
+
+        // Clear all data
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear all data? This action cannot be undone.')) {
+                localStorage.clear();
+                showToast('All data cleared');
+                setTimeout(() => window.location.reload(), 1500);
+            }
+        }
+
+        // Delete account
+        function deleteAccount() {
+            if (confirm('Are you sure you want to delete your account? This action is permanent and cannot be undone.')) {
+                if (confirm('This is your final warning. All your data will be permanently deleted. Continue?')) {
+                    localStorage.clear();
+                    showToast('Account deleted');
+                    setTimeout(() => window.location.href = '../index.html', 2000);
+                }
+            }
+        }
+
+        // Show success toast
+        function showToast(message) {
+            const toast = document.getElementById('success-toast');
+            const messageSpan = document.getElementById('toast-message');
+            messageSpan.textContent = message;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize on page load
+        init();
+    </script>
+</body>
+</html>

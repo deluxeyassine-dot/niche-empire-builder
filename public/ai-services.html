@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Services - Niche Empire Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gradient-purple-blue {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .service-card {
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-connected {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .status-disconnected {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .status-testing {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+
+        input[type="password"], input[type="text"] {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: rgba(102, 126, 234, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.1);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .log-entry {
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .nav-link {
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="glass border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-8">
+                    <a href="../index.html" class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl gradient-purple-blue flex items-center justify-center">
+                            <i class="fas fa-rocket text-white text-lg"></i>
+                        </div>
+                        <span class="font-bold text-xl">Niche Empire Builder</span>
+                    </a>
+                    <div class="hidden md:flex items-center gap-2">
+                        <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large mr-2"></i>Dashboard</a>
+                        <a href="generators.html" class="nav-link"><i class="fas fa-wand-magic-sparkles mr-2"></i>Generators</a>
+                        <a href="marketplace.html" class="nav-link"><i class="fas fa-store mr-2"></i>Marketplace</a>
+                        <a href="ai-services.html" class="nav-link bg-white/10"><i class="fas fa-brain mr-2"></i>AI Services</a>
+                        <a href="agents.html" class="nav-link"><i class="fas fa-robot mr-2"></i>Agents</a>
+                        <a href="products.html" class="nav-link"><i class="fas fa-box mr-2"></i>Products</a>
+                    </div>
+                </div>
+                <a href="settings.html" class="glass px-4 py-2 rounded-lg hover:bg-white/10 transition">
+                    <i class="fas fa-cog mr-2"></i>Settings
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold mb-2">AI Services</h1>
+            <p class="text-white/70">Configure your AI service API keys and monitor usage</p>
+        </div>
+
+        <!-- Usage Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-white/70 text-sm">Total Generations</span>
+                    <i class="fas fa-image text-purple-400"></i>
+                </div>
+                <p class="text-3xl font-bold" id="total-generations">0</p>
+                <p class="text-xs text-white/50 mt-1">+0 today</p>
+            </div>
+            <div class="stat-card">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-white/70 text-sm">Credits Used</span>
+                    <i class="fas fa-coins text-yellow-400"></i>
+                </div>
+                <p class="text-3xl font-bold" id="credits-used">0</p>
+                <p class="text-xs text-white/50 mt-1">of unlimited</p>
+            </div>
+            <div class="stat-card">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-white/70 text-sm">Active Services</span>
+                    <i class="fas fa-check-circle text-green-400"></i>
+                </div>
+                <p class="text-3xl font-bold" id="active-services">0</p>
+                <p class="text-xs text-white/50 mt-1">of 4 services</p>
+            </div>
+            <div class="stat-card">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-white/70 text-sm">Avg Response Time</span>
+                    <i class="fas fa-clock text-blue-400"></i>
+                </div>
+                <p class="text-3xl font-bold">2.3s</p>
+                <p class="text-xs text-white/50 mt-1">Last 24h</p>
+            </div>
+        </div>
+
+        <!-- AI Services Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- NanoBanana -->
+            <div class="service-card glass rounded-2xl p-6">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center gap-4">
+                        <div class="service-icon gradient-purple-blue">
+                            <i class="fas fa-palette text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">NanoBanana</h3>
+                            <p class="text-sm text-white/60">AI Image Generation</p>
+                        </div>
+                    </div>
+                    <span id="nanobanana-status" class="status-badge status-disconnected px-3 py-1 rounded-full text-xs font-semibold">
+                        <i class="fas fa-circle text-xs"></i> Disconnected
+                    </span>
+                </div>
+
+                <div class="space-y-4">
+                    <div id="nanobanana-connect-form">
+                        <label class="block text-sm text-white/70 mb-2">API Key</label>
+                        <input type="password" id="nanobanana-key" placeholder="Enter your NanoBanana API key" class="mb-3">
+                        <button onclick="connectService('nanobanana')" class="btn-primary w-full">
+                            <i class="fas fa-plug mr-2"></i>Connect Service
+                        </button>
+                    </div>
+
+                    <div id="nanobanana-dashboard" class="hidden space-y-4">
+                        <div class="glass rounded-xl p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm text-white/70">Images Generated</span>
+                                <span class="font-bold" id="nanobanana-count">0</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%" id="nanobanana-progress"></div>
+                            </div>
+                            <p class="text-xs text-white/50 mt-2">0 / 1,000 monthly limit</p>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button onclick="testConnection('nanobanana')" class="btn-secondary flex-1">
+                                <i class="fas fa-vial mr-2"></i>Test Connection
+                            </button>
+                            <button onclick="disconnectService('nanobanana')" class="btn-secondary flex-1 text-red-400">
+                                <i class="fas fa-plug-circle-xmark mr-2"></i>Disconnect
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sora 2 -->
+            <div class="service-card glass rounded-2xl p-6">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center gap-4">
+                        <div class="service-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                            <i class="fas fa-video text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">Sora 2</h3>
+                            <p class="text-sm text-white/60">AI Video Generation</p>
+                        </div>
+                    </div>
+                    <span id="sora2-status" class="status-badge status-disconnected px-3 py-1 rounded-full text-xs font-semibold">
+                        <i class="fas fa-circle text-xs"></i> Disconnected
+                    </span>
+                </div>
+
+                <div class="space-y-4">
+                    <div id="sora2-connect-form">
+                        <label class="block text-sm text-white/70 mb-2">API Key</label>
+                        <input type="password" id="sora2-key" placeholder="Enter your Sora 2 API key" class="mb-3">
+                        <button onclick="connectService('sora2')" class="btn-primary w-full">
+                            <i class="fas fa-plug mr-2"></i>Connect Service
+                        </button>
+                    </div>
+
+                    <div id="sora2-dashboard" class="hidden space-y-4">
+                        <div class="glass rounded-xl p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm text-white/70">Videos Generated</span>
+                                <span class="font-bold" id="sora2-count">0</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%" id="sora2-progress"></div>
+                            </div>
+                            <p class="text-xs text-white/50 mt-2">0 / 100 monthly limit</p>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button onclick="testConnection('sora2')" class="btn-secondary flex-1">
+                                <i class="fas fa-vial mr-2"></i>Test Connection
+                            </button>
+                            <button onclick="disconnectService('sora2')" class="btn-secondary flex-1 text-red-400">
+                                <i class="fas fa-plug-circle-xmark mr-2"></i>Disconnect
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leonardo.ai -->
+            <div class="service-card glass rounded-2xl p-6">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center gap-4">
+                        <div class="service-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                            <i class="fas fa-paintbrush text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">Leonardo.ai</h3>
+                            <p class="text-sm text-white/60">Advanced Image AI</p>
+                        </div>
+                    </div>
+                    <span id="leonardo-status" class="status-badge status-disconnected px-3 py-1 rounded-full text-xs font-semibold">
+                        <i class="fas fa-circle text-xs"></i> Disconnected
+                    </span>
+                </div>
+
+                <div class="space-y-4">
+                    <div id="leonardo-connect-form">
+                        <label class="block text-sm text-white/70 mb-2">API Key</label>
+                        <input type="password" id="leonardo-key" placeholder="Enter your Leonardo.ai API key" class="mb-3">
+                        <button onclick="connectService('leonardo')" class="btn-primary w-full">
+                            <i class="fas fa-plug mr-2"></i>Connect Service
+                        </button>
+                    </div>
+
+                    <div id="leonardo-dashboard" class="hidden space-y-4">
+                        <div class="glass rounded-xl p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm text-white/70">Images Generated</span>
+                                <span class="font-bold" id="leonardo-count">0</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%" id="leonardo-progress"></div>
+                            </div>
+                            <p class="text-xs text-white/50 mt-2">0 / 2,000 monthly limit</p>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button onclick="testConnection('leonardo')" class="btn-secondary flex-1">
+                                <i class="fas fa-vial mr-2"></i>Test Connection
+                            </button>
+                            <button onclick="disconnectService('leonardo')" class="btn-secondary flex-1 text-red-400">
+                                <i class="fas fa-plug-circle-xmark mr-2"></i>Disconnect
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ideogram -->
+            <div class="service-card glass rounded-2xl p-6">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center gap-4">
+                        <div class="service-icon" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
+                            <i class="fas fa-font text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">Ideogram</h3>
+                            <p class="text-sm text-white/60">Text & Logo AI</p>
+                        </div>
+                    </div>
+                    <span id="ideogram-status" class="status-badge status-disconnected px-3 py-1 rounded-full text-xs font-semibold">
+                        <i class="fas fa-circle text-xs"></i> Disconnected
+                    </span>
+                </div>
+
+                <div class="space-y-4">
+                    <div id="ideogram-connect-form">
+                        <label class="block text-sm text-white/70 mb-2">API Key</label>
+                        <input type="password" id="ideogram-key" placeholder="Enter your Ideogram API key" class="mb-3">
+                        <button onclick="connectService('ideogram')" class="btn-primary w-full">
+                            <i class="fas fa-plug mr-2"></i>Connect Service
+                        </button>
+                    </div>
+
+                    <div id="ideogram-dashboard" class="hidden space-y-4">
+                        <div class="glass rounded-xl p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm text-white/70">Designs Generated</span>
+                                <span class="font-bold" id="ideogram-count">0</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%" id="ideogram-progress"></div>
+                            </div>
+                            <p class="text-xs text-white/50 mt-2">0 / 1,500 monthly limit</p>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button onclick="testConnection('ideogram')" class="btn-secondary flex-1">
+                                <i class="fas fa-vial mr-2"></i>Test Connection
+                            </button>
+                            <button onclick="disconnectService('ideogram')" class="btn-secondary flex-1 text-red-400">
+                                <i class="fas fa-plug-circle-xmark mr-2"></i>Disconnect
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Logs -->
+        <div class="glass rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold">Recent Activity</h2>
+                <button onclick="clearLogs()" class="text-sm text-white/50 hover:text-white transition">
+                    <i class="fas fa-trash mr-1"></i>Clear Logs
+                </button>
+            </div>
+            <div id="activity-logs" class="space-y-2 max-h-96 overflow-y-auto">
+                <p class="text-white/50 text-center py-8">No activity yet</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Service state management
+        const serviceStates = {
+            nanobanana: { connected: false, count: 0, limit: 1000 },
+            sora2: { connected: false, count: 0, limit: 100 },
+            leonardo: { connected: false, count: 0, limit: 2000 },
+            ideogram: { connected: false, count: 0, limit: 1500 }
+        };
+
+        // Initialize page
+        function init() {
+            // Load saved states from localStorage
+            const savedStates = localStorage.getItem('ai_service_states');
+            if (savedStates) {
+                const parsed = JSON.parse(savedStates);
+                Object.assign(serviceStates, parsed);
+            }
+
+            // Update UI for each service
+            Object.keys(serviceStates).forEach(service => {
+                if (serviceStates[service].connected) {
+                    updateServiceUI(service, true);
+                    updateServiceStats(service);
+                }
+            });
+
+            updateOverallStats();
+            loadActivityLogs();
+        }
+
+        // Connect service
+        function connectService(serviceName) {
+            const keyInput = document.getElementById(`${serviceName}-key`);
+            const apiKey = keyInput.value.trim();
+
+            if (!apiKey) {
+                alert('Please enter an API key');
+                return;
+            }
+
+            if (apiKey.length < 20) {
+                alert('API key seems too short. Please check and try again.');
+                return;
+            }
+
+            // Save to localStorage
+            localStorage.setItem(`${serviceName}_api_key`, apiKey);
+            serviceStates[serviceName].connected = true;
+            saveStates();
+
+            // Update UI
+            updateServiceUI(serviceName, true);
+            addLog(`Connected to ${getServiceName(serviceName)}`, 'success');
+            updateOverallStats();
+        }
+
+        // Disconnect service
+        function disconnectService(serviceName) {
+            if (!confirm(`Are you sure you want to disconnect ${getServiceName(serviceName)}?`)) {
+                return;
+            }
+
+            localStorage.removeItem(`${serviceName}_api_key`);
+            serviceStates[serviceName].connected = false;
+            saveStates();
+
+            updateServiceUI(serviceName, false);
+            addLog(`Disconnected from ${getServiceName(serviceName)}`, 'error');
+            updateOverallStats();
+
+            // Clear the input field
+            document.getElementById(`${serviceName}-key`).value = '';
+        }
+
+        // Test connection
+        function testConnection(serviceName) {
+            const statusBadge = document.getElementById(`${serviceName}-status`);
+
+            // Show testing status
+            statusBadge.className = 'status-badge status-testing px-3 py-1 rounded-full text-xs font-semibold';
+            statusBadge.innerHTML = '<i class="fas fa-spinner fa-spin text-xs"></i> Testing...';
+
+            addLog(`Testing connection to ${getServiceName(serviceName)}...`, 'info');
+
+            // Simulate API test (2 second delay)
+            setTimeout(() => {
+                const success = Math.random() > 0.1; // 90% success rate
+
+                if (success) {
+                    statusBadge.className = 'status-badge status-connected px-3 py-1 rounded-full text-xs font-semibold';
+                    statusBadge.innerHTML = '<i class="fas fa-circle text-xs"></i> Connected';
+                    addLog(`${getServiceName(serviceName)} connection test successful`, 'success');
+                } else {
+                    statusBadge.className = 'status-badge status-disconnected px-3 py-1 rounded-full text-xs font-semibold';
+                    statusBadge.innerHTML = '<i class="fas fa-circle text-xs"></i> Connection Failed';
+                    addLog(`${getServiceName(serviceName)} connection test failed`, 'error');
+
+                    // Reset to connected after 3 seconds
+                    setTimeout(() => {
+                        statusBadge.className = 'status-badge status-connected px-3 py-1 rounded-full text-xs font-semibold';
+                        statusBadge.innerHTML = '<i class="fas fa-circle text-xs"></i> Connected';
+                    }, 3000);
+                }
+            }, 2000);
+        }
+
+        // Update service UI
+        function updateServiceUI(serviceName, connected) {
+            const statusBadge = document.getElementById(`${serviceName}-status`);
+            const connectForm = document.getElementById(`${serviceName}-connect-form`);
+            const dashboard = document.getElementById(`${serviceName}-dashboard`);
+
+            if (connected) {
+                statusBadge.className = 'status-badge status-connected px-3 py-1 rounded-full text-xs font-semibold';
+                statusBadge.innerHTML = '<i class="fas fa-circle text-xs"></i> Connected';
+                connectForm.classList.add('hidden');
+                dashboard.classList.remove('hidden');
+            } else {
+                statusBadge.className = 'status-badge status-disconnected px-3 py-1 rounded-full text-xs font-semibold';
+                statusBadge.innerHTML = '<i class="fas fa-circle text-xs"></i> Disconnected';
+                connectForm.classList.remove('hidden');
+                dashboard.classList.add('hidden');
+            }
+        }
+
+        // Update service statistics
+        function updateServiceStats(serviceName) {
+            const state = serviceStates[serviceName];
+            const countElement = document.getElementById(`${serviceName}-count`);
+            const progressElement = document.getElementById(`${serviceName}-progress`);
+
+            if (countElement) {
+                countElement.textContent = state.count;
+            }
+
+            if (progressElement) {
+                const percentage = (state.count / state.limit) * 100;
+                progressElement.style.width = `${Math.min(percentage, 100)}%`;
+            }
+        }
+
+        // Update overall statistics
+        function updateOverallStats() {
+            const activeCount = Object.values(serviceStates).filter(s => s.connected).length;
+            const totalGenerations = Object.values(serviceStates).reduce((sum, s) => sum + s.count, 0);
+            const totalCredits = Object.values(serviceStates).reduce((sum, s) => sum + s.count, 0);
+
+            document.getElementById('active-services').textContent = activeCount;
+            document.getElementById('total-generations').textContent = totalGenerations;
+            document.getElementById('credits-used').textContent = totalCredits;
+        }
+
+        // Add activity log
+        function addLog(message, type) {
+            const logsContainer = document.getElementById('activity-logs');
+            const timestamp = new Date().toLocaleTimeString();
+
+            const colors = {
+                success: 'text-green-400',
+                error: 'text-red-400',
+                info: 'text-blue-400',
+                warning: 'text-yellow-400'
+            };
+
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                info: 'fa-info-circle',
+                warning: 'fa-exclamation-triangle'
+            };
+
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry glass rounded-lg p-3 flex items-center gap-3';
+            logEntry.innerHTML = `
+                <i class="fas ${icons[type]} ${colors[type]}"></i>
+                <span class="text-xs text-gray-500">${timestamp}</span>
+                <span class="${colors[type]} text-sm flex-1">${message}</span>
+            `;
+
+            if (logsContainer.children[0]?.tagName === 'P') {
+                logsContainer.innerHTML = '';
+            }
+
+            logsContainer.insertBefore(logEntry, logsContainer.firstChild);
+
+            // Keep only last 50 logs
+            while (logsContainer.children.length > 50) {
+                logsContainer.removeChild(logsContainer.lastChild);
+            }
+
+            saveActivityLogs();
+        }
+
+        // Clear logs
+        function clearLogs() {
+            if (!confirm('Are you sure you want to clear all activity logs?')) {
+                return;
+            }
+
+            document.getElementById('activity-logs').innerHTML = '<p class="text-white/50 text-center py-8">No activity yet</p>';
+            localStorage.removeItem('ai_activity_logs');
+        }
+
+        // Save states to localStorage
+        function saveStates() {
+            localStorage.setItem('ai_service_states', JSON.stringify(serviceStates));
+        }
+
+        // Save activity logs to localStorage
+        function saveActivityLogs() {
+            const logsContainer = document.getElementById('activity-logs');
+            const logs = Array.from(logsContainer.children).map(log => log.outerHTML);
+            localStorage.setItem('ai_activity_logs', JSON.stringify(logs));
+        }
+
+        // Load activity logs from localStorage
+        function loadActivityLogs() {
+            const savedLogs = localStorage.getItem('ai_activity_logs');
+            if (savedLogs) {
+                const logs = JSON.parse(savedLogs);
+                const logsContainer = document.getElementById('activity-logs');
+                if (logs.length > 0) {
+                    logsContainer.innerHTML = logs.join('');
+                }
+            }
+        }
+
+        // Get service display name
+        function getServiceName(serviceName) {
+            const names = {
+                nanobanana: 'NanoBanana',
+                sora2: 'Sora 2',
+                leonardo: 'Leonardo.ai',
+                ideogram: 'Ideogram'
+            };
+            return names[serviceName] || serviceName;
+        }
+
+        // Initialize on page load
+        init();
+    </script>
+</body>
+</html>
