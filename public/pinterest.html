@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinterest Manager - Niche Empire Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 10px 20px; border-radius: 8px; border: none; color: white; font-weight: 600; cursor: pointer; }
+        .nav-link { padding: 8px 16px; border-radius: 8px; transition: all 0.3s; }
+        .nav-link:hover { background: rgba(255, 255, 255, 0.1); }
+    </style>
+</head>
+<body>
+    <nav class="glass border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-8">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-r from-red-500 to-red-700 flex items-center justify-center"><i class="fas fa-rocket"></i></div>
+                    <span class="font-bold text-xl">Niche Empire Builder</span>
+                </a>
+                <div class="hidden md:flex gap-2">
+                    <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large mr-2"></i>Dashboard</a>
+                    <a href="youtube.html" class="nav-link"><i class="fab fa-youtube mr-2"></i>YouTube</a>
+                    <a href="instagram.html" class="nav-link"><i class="fab fa-instagram mr-2"></i>Instagram</a>
+                    <a href="tiktok.html" class="nav-link"><i class="fab fa-tiktok mr-2"></i>TikTok</a>
+                    <a href="pinterest.html" class="nav-link bg-white/10"><i class="fab fa-pinterest mr-2"></i>Pinterest</a>
+                </div>
+            </div>
+            <a href="settings.html" class="glass px-4 py-2 rounded-lg"><i class="fas fa-cog mr-2"></i>Settings</a>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="flex justify-between mb-8">
+            <div>
+                <h1 class="text-4xl font-bold mb-2">Pinterest Manager</h1>
+                <p class="text-white/70">Create pins and manage boards</p>
+            </div>
+            <button onclick="createPin()" class="btn-primary"><i class="fas fa-thumbtack mr-2"></i>Create Pin</button>
+        </div>
+
+        <div class="grid grid-cols-4 gap-6 mb-8">
+            <div class="glass rounded-2xl p-6">
+                <div class="flex justify-between mb-2"><span class="text-white/70 text-sm">Followers</span><i class="fab fa-pinterest text-red-500"></i></div>
+                <p class="text-3xl font-bold">22.4K</p>
+            </div>
+            <div class="glass rounded-2xl p-6">
+                <div class="flex justify-between mb-2"><span class="text-white/70 text-sm">Pins</span><i class="fas fa-thumbtack"></i></div>
+                <p class="text-3xl font-bold" id="pins-count">0</p>
+            </div>
+            <div class="glass rounded-2xl p-6">
+                <div class="flex justify-between mb-2"><span class="text-white/70 text-sm">Boards</span><i class="fas fa-th"></i></div>
+                <p class="text-3xl font-bold">12</p>
+            </div>
+            <div class="glass rounded-2xl p-6">
+                <div class="flex justify-between mb-2"><span class="text-white/70 text-sm">Monthly Views</span><i class="fas fa-eye"></i></div>
+                <p class="text-3xl font-bold">156K</p>
+            </div>
+        </div>
+
+        <div class="glass rounded-2xl p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Your Boards</h2>
+            <div class="grid grid-cols-4 gap-4">
+                <div class="glass rounded-lg p-4 text-center">
+                    <div class="w-full aspect-square bg-gradient-to-br from-red-500/20 to-pink-500/20 rounded-lg mb-3 flex items-center justify-center">
+                        <i class="fas fa-palette text-3xl"></i>
+                    </div>
+                    <p class="font-semibold">Design Ideas</p>
+                    <p class="text-sm text-white/60">42 pins</p>
+                </div>
+                <div class="glass rounded-lg p-4 text-center">
+                    <div class="w-full aspect-square bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg mb-3 flex items-center justify-center">
+                        <i class="fas fa-lightbulb text-3xl"></i>
+                    </div>
+                    <p class="font-semibold">Inspiration</p>
+                    <p class="text-sm text-white/60">38 pins</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass rounded-2xl p-6">
+            <h2 class="text-2xl font-bold mb-4">Recent Pins</h2>
+            <div id="pins-grid" class="grid grid-cols-5 gap-4">
+                <div class="text-center py-12 text-white/50 col-span-5">
+                    <i class="fas fa-thumbtack text-4xl mb-4"></i>
+                    <p>No pins yet. Create your first pin!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let pins = JSON.parse(localStorage.getItem('pinterest_pins') || '[]');
+        function init() { document.getElementById('pins-count').textContent = pins.length; }
+        function createPin() {
+            const title = prompt('Pin title:');
+            if (title) {
+                pins.unshift({ id: Date.now(), title, date: new Date().toLocaleDateString() });
+                localStorage.setItem('pinterest_pins', JSON.stringify(pins));
+                alert('Pin created!');
+                init();
+            }
+        }
+        init();
+    </script>
+</body>
+</html>
