@@ -85,10 +85,10 @@
                         <i class="fas fa-image text-white text-2xl"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-2">Wall Art Generator</h3>
-                    <p class="text-sm text-gray-400 mb-4">Create print-ready wall art • 300 DPI • 14 sizes</p>
+                    <p class="text-sm text-gray-400 mb-4">Print-ready wall art • 7 sizes • 3 formats • 5 color options</p>
                     <div class="flex items-center gap-2 text-xs text-green-400">
                         <i class="fas fa-check-circle"></i>
-                        <span>8 Artistic Styles</span>
+                        <span>JPG/PNG/PDF • 300 DPI</span>
                     </div>
                 </div>
 
@@ -98,10 +98,10 @@
                         <i class="fas fa-palette text-white text-2xl"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-2">Clipart Generator</h3>
-                    <p class="text-sm text-gray-400 mb-4">Transparent PNG clipart • High-res • Color variations</p>
+                    <p class="text-sm text-gray-400 mb-4">PNG/SVG/EPS/PDF • 4 sizes • Bulk packs up to 100 items</p>
                     <div class="flex items-center gap-2 text-xs text-green-400">
                         <i class="fas fa-check-circle"></i>
-                        <span>2000px-6000px Resolution</span>
+                        <span>500px-5000px Resolution</span>
                     </div>
                 </div>
 
@@ -111,10 +111,10 @@
                         <i class="fas fa-book-open text-white text-2xl"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-2">Coloring Book</h3>
-                    <p class="text-sm text-gray-400 mb-4">KDP-ready coloring books • PDF output</p>
+                    <p class="text-sm text-gray-400 mb-4">KDP-ready • 3 sizes • 1-100 pages • PDF output</p>
                     <div class="flex items-center gap-2 text-xs text-green-400">
                         <i class="fas fa-check-circle"></i>
-                        <span>30/50/100 Page Options</span>
+                        <span>8.5x11, A4, A5 Sizes</span>
                     </div>
                 </div>
 
@@ -124,10 +124,10 @@
                         <i class="fas fa-book text-white text-2xl"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-2">KDP Interior</h3>
-                    <p class="text-sm text-gray-400 mb-4">Book interiors • Planners, journals, notebooks</p>
+                    <p class="text-sm text-gray-400 mb-4">4 trim sizes • 100-200 pages • 6 book types</p>
                     <div class="flex items-center gap-2 text-xs text-green-400">
                         <i class="fas fa-check-circle"></i>
-                        <span>6 Book Types Available</span>
+                        <span>Planners, Journals & More</span>
                     </div>
                 </div>
 
@@ -137,10 +137,10 @@
                         <i class="fas fa-book-open text-white text-2xl"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-2">KDP Cover</h3>
-                    <p class="text-sm text-gray-400 mb-4">Full book covers • Spine calculator • Bleed zones</p>
+                    <p class="text-sm text-gray-400 mb-4">4 trim sizes • Auto spine calculator • Bleed zones</p>
                     <div class="flex items-center gap-2 text-xs text-green-400">
                         <i class="fas fa-check-circle"></i>
-                        <span>6 Trim Sizes Supported</span>
+                        <span>Front + Spine + Back Cover</span>
                     </div>
                 </div>
 
@@ -206,21 +206,30 @@
                             <option>5x7"</option>
                             <option>8x10"</option>
                             <option>11x14"</option>
+                            <option>12x16"</option>
                             <option>16x20"</option>
                             <option>18x24"</option>
                             <option>24x36"</option>
-                            <option>30x40"</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-2">Color Palette</label>
+                        <label class="block text-sm font-medium mb-2">Format</label>
+                        <select id="wallart-format" class="w-full px-4 py-2 rounded-lg">
+                            <option>JPG 300 DPI</option>
+                            <option>PNG Transparent</option>
+                            <option>PDF Print-Ready</option>
+                            <option>All Formats (JPG + PNG + PDF)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Color Options</label>
                         <select id="wallart-colors" class="w-full px-4 py-2 rounded-lg">
-                            <option>Neutral (Beige, White, Gray)</option>
-                            <option>Warm (Red, Orange, Yellow)</option>
-                            <option>Cool (Blue, Green, Purple)</option>
-                            <option>Monochrome</option>
-                            <option>Vibrant</option>
+                            <option>Original</option>
+                            <option>Black & White</option>
+                            <option>Sepia</option>
                             <option>Pastel</option>
+                            <option>Bold</option>
+                            <option>All Color Variations</option>
                         </select>
                     </div>
                 </div>
@@ -275,16 +284,33 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-2">Resolution</label>
-                        <select id="clipart-resolution" class="w-full px-4 py-2 rounded-lg">
-                            <option>2000px (Standard)</option>
-                            <option>4000px (High)</option>
-                            <option>6000px (Ultra)</option>
+                        <label class="block text-sm font-medium mb-2">Format</label>
+                        <select id="clipart-format" class="w-full px-4 py-2 rounded-lg">
+                            <option>PNG Transparent</option>
+                            <option>SVG Vector</option>
+                            <option>EPS Vector</option>
+                            <option>PDF Print-Ready</option>
+                            <option>All Formats (PNG+SVG+EPS+PDF)</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-2">Quantity</label>
-                        <input type="number" id="clipart-qty" value="1" min="1" max="50" class="w-full px-4 py-2 rounded-lg">
+                        <label class="block text-sm font-medium mb-2">Size</label>
+                        <select id="clipart-resolution" class="w-full px-4 py-2 rounded-lg">
+                            <option>500px</option>
+                            <option>1000px</option>
+                            <option>3000px</option>
+                            <option>5000px</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Bulk Pack</label>
+                        <select id="clipart-qty" class="w-full px-4 py-2 rounded-lg">
+                            <option value="1">Single Item</option>
+                            <option value="10">10 Items Pack</option>
+                            <option value="25">25 Items Pack</option>
+                            <option value="50">50 Items Pack</option>
+                            <option value="100">100 Items Pack</option>
+                        </select>
                     </div>
                     <div class="flex items-center gap-3">
                         <input type="checkbox" id="clipart-transparent" checked class="w-5 h-5 rounded">
@@ -338,6 +364,8 @@
                         <div>
                             <label class="block text-sm font-medium mb-2">Number of Pages</label>
                             <select id="coloring-pages" class="w-full px-4 py-2 rounded-lg">
+                                <option value="1">1 Page</option>
+                                <option value="10">10 Pages</option>
                                 <option value="30">30 Pages</option>
                                 <option value="50">50 Pages</option>
                                 <option value="100">100 Pages</option>
@@ -369,9 +397,9 @@
                         <div>
                             <label class="block text-sm font-medium mb-2">Book Size</label>
                             <select id="coloring-size" class="w-full px-4 py-2 rounded-lg">
-                                <option>8.5" x 11" (Standard)</option>
-                                <option>8" x 10"</option>
-                                <option>6" x 9"</option>
+                                <option>8.5" x 11" (Letter)</option>
+                                <option>A4 (8.27" x 11.69")</option>
+                                <option>A5 (5.83" x 8.27")</option>
                             </select>
                         </div>
                         <div class="flex items-center gap-3">
@@ -449,16 +477,26 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-2">Number of Pages</label>
-                        <input type="number" id="kdp-pages" value="120" min="24" max="828" class="w-full px-4 py-2 rounded-lg">
+                        <select id="kdp-pages" class="w-full px-4 py-2 rounded-lg">
+                            <option value="100">100 Pages</option>
+                            <option value="120" selected>120 Pages</option>
+                            <option value="150">150 Pages</option>
+                            <option value="200">200 Pages</option>
+                            <option value="custom">Custom (24-828 pages)</option>
+                        </select>
+                    </div>
+                    <div id="kdp-custom-pages" class="hidden">
+                        <label class="block text-sm font-medium mb-2">Custom Page Count</label>
+                        <input type="number" id="kdp-pages-custom" value="120" min="24" max="828" class="w-full px-4 py-2 rounded-lg">
                         <p class="text-xs text-gray-400 mt-1">KDP allows 24-828 pages</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-2">Trim Size</label>
                         <select id="kdp-trim" class="w-full px-4 py-2 rounded-lg">
                             <option>6" x 9"</option>
-                            <option>8" x 10"</option>
                             <option>8.5" x 11"</option>
                             <option>5" x 8"</option>
+                            <option>8" x 10"</option>
                             <option>5.5" x 8.5"</option>
                             <option>7" x 10"</option>
                         </select>
@@ -522,13 +560,25 @@
                         <label class="block text-sm font-medium mb-2">Trim Size</label>
                         <select id="cover-trim" class="w-full px-4 py-2 rounded-lg" onchange="calculateSpine()">
                             <option>6" x 9"</option>
-                            <option>8" x 10"</option>
                             <option>8.5" x 11"</option>
+                            <option>5" x 8"</option>
+                            <option>8" x 10"</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-2">Page Count</label>
-                        <input type="number" id="cover-pages" value="120" min="24" max="828" class="w-full px-4 py-2 rounded-lg" oninput="calculateSpine()">
+                        <select id="cover-pages" class="w-full px-4 py-2 rounded-lg" onchange="calculateSpine()">
+                            <option value="100">100 Pages</option>
+                            <option value="120" selected>120 Pages</option>
+                            <option value="150">150 Pages</option>
+                            <option value="200">200 Pages</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+                    <div id="cover-custom-pages" class="hidden">
+                        <label class="block text-sm font-medium mb-2">Custom Page Count</label>
+                        <input type="number" id="cover-pages-custom" value="120" min="24" max="828" class="w-full px-4 py-2 rounded-lg" oninput="calculateSpine()">
+                        <p class="text-xs text-gray-400 mt-1">KDP allows 24-828 pages</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-2">Paper Type</label>
@@ -664,6 +714,7 @@
             const theme = document.getElementById('wallart-theme').value;
             const style = document.getElementById('wallart-style').value;
             const size = document.getElementById('wallart-size').value;
+            const format = document.getElementById('wallart-format').value;
             const colors = document.getElementById('wallart-colors').value;
 
             if (!theme) {
@@ -676,7 +727,7 @@
                 const product = {
                     type: 'Wall Art',
                     name: theme.substring(0, 50),
-                    details: `${style} • ${size} • ${colors}`,
+                    details: `${style} • ${size} • ${format} • ${colors}`,
                     date: new Date().toLocaleString()
                 };
                 addToRecent(product);
@@ -689,6 +740,8 @@
         function generateClipart() {
             const subject = document.getElementById('clipart-subject').value;
             const style = document.getElementById('clipart-style').value;
+            const format = document.getElementById('clipart-format').value;
+            const resolution = document.getElementById('clipart-resolution').value;
             const qty = document.getElementById('clipart-qty').value;
             const transparent = document.getElementById('clipart-transparent').checked;
 
@@ -702,7 +755,7 @@
                 const product = {
                     type: 'Clipart Bundle',
                     name: subject.substring(0, 50),
-                    details: `${qty} items • ${style}${transparent ? ' • Transparent' : ''}`,
+                    details: `${qty} items • ${format} • ${resolution} • ${style}`,
                     date: new Date().toLocaleString()
                 };
                 addToRecent(product);
@@ -743,6 +796,16 @@
             document.getElementById('coloring-estimate-pages').textContent = this.value;
         });
 
+        // Toggle custom page count for KDP
+        document.getElementById('kdp-pages')?.addEventListener('change', function() {
+            const customDiv = document.getElementById('kdp-custom-pages');
+            if (this.value === 'custom') {
+                customDiv.classList.remove('hidden');
+            } else {
+                customDiv.classList.add('hidden');
+            }
+        });
+
         // KDP Interior Generator
         function updateKDPLayouts() {
             const type = document.getElementById('kdp-type').value;
@@ -776,9 +839,28 @@
             closeModal('kdpinterior');
         }
 
+        // Toggle custom page count for KDP Cover
+        document.getElementById('cover-pages')?.addEventListener('change', function() {
+            const customDiv = document.getElementById('cover-custom-pages');
+            if (this.value === 'custom') {
+                customDiv.classList.remove('hidden');
+            } else {
+                customDiv.classList.add('hidden');
+            }
+            calculateSpine();
+        });
+
         // KDP Cover Generator with Spine Calculator
         function calculateSpine() {
-            const pages = parseInt(document.getElementById('cover-pages').value) || 120;
+            const pagesSelect = document.getElementById('cover-pages');
+            let pages = 120;
+
+            if (pagesSelect.value === 'custom') {
+                pages = parseInt(document.getElementById('cover-pages-custom').value) || 120;
+            } else {
+                pages = parseInt(pagesSelect.value) || 120;
+            }
+
             const paper = document.getElementById('cover-paper').value;
             const trim = document.getElementById('cover-trim').value;
 
@@ -786,7 +868,12 @@
             const ppi = paper === 'Cream Paper' ? 0.0025 : 0.002252;
             const spineWidth = (pages * ppi).toFixed(3);
 
-            const trimWidths = { '6" x 9"': 6, '8" x 10"': 8, '8.5" x 11"': 8.5 };
+            const trimWidths = {
+                '6" x 9"': 6,
+                '8" x 10"': 8,
+                '8.5" x 11"': 8.5,
+                '5" x 8"': 5
+            };
             const width = trimWidths[trim] || 6;
             const totalWidth = (width * 2 + parseFloat(spineWidth) + 0.25).toFixed(3); // +0.25 for bleed
 

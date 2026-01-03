@@ -45,22 +45,44 @@ export class GeminiService {
 
     // Format prompt with helper
     const prompt = AIHelper.formatPrompt(
-      `Generate a creative brand name for a ${sanitizedNiche} business.
+      `You are an expert brand strategist and naming consultant who has created names for Fortune 500 companies.
+
+Generate a memorable, marketable brand name for a ${sanitizedNiche} business.
+
+BRAND NAME CRITERIA:
+- Easy to spell and pronounce
+- Memorable and distinctive
+- Suggests the benefit or niche (but not too literal)
+- Available as a domain (.com preferred)
+- Works across platforms (social media handles)
+- Scalable for future growth
+- Evokes positive emotions
+- No trademark conflicts (avoid obvious copies)
+
+Style: ${options.style || 'modern and professional'}
+Length: ${options.length || 'medium'} (short: 1-2 syllables, medium: 2-3 syllables, long: 3+ syllables)
+Target Audience: ${options.targetAudience || 'general consumers'}
 
 Please provide:
-1. One primary brand name
-2. 5 alternative names
-3. Brief reasoning for the primary name
+1. PRIMARY BRAND NAME: Your best recommendation with strong commercial appeal
+2. ALTERNATIVES: 5 different creative options, each with unique positioning
+3. REASONING: Strategic explanation of why the primary name will succeed in the market
+
+Consider:
+- Brandable invented words (like Kodak, Spotify)
+- Descriptive compounds (like Instagram, Netflix)
+- Metaphors or evocative words (like Amazon, Apple)
+- Abbreviations or acronyms (only if meaningful)
 
 Format your response as JSON:
 {
   "name": "Primary Brand Name",
   "alternatives": ["Alt1", "Alt2", "Alt3", "Alt4", "Alt5"],
-  "reasoning": "Explanation of why this name works"
+  "reasoning": "Strategic explanation of why this name will succeed: brand positioning, memorability, market differentiation, and growth potential"
 }`,
       {
-        context: `Style: ${options.style || 'modern'}, Length: ${options.length || 'medium'}, Target Audience: ${options.targetAudience || 'general consumers'}`,
-        temperature: 0.8
+        context: `Niche: ${sanitizedNiche}, Style: ${options.style || 'modern'}, Length: ${options.length || 'medium'}, Target: ${options.targetAudience || 'general consumers'}`,
+        temperature: 0.9
       }
     );
 
@@ -132,12 +154,49 @@ Format your response as JSON:
     const startTime = Date.now();
     const sanitizedTopic = AIHelper.sanitizeInput(options.topic);
 
-    const prompt = AIHelper.formatPrompt(
-      `Create ${options.type} content about: ${sanitizedTopic}
+    const contentGuidelines = {
+      blog: 'SEO-optimized long-form content with H2/H3 subheadings, actionable tips, personal anecdotes, and internal linking opportunities',
+      article: 'Well-researched, authoritative content with data/statistics, expert quotes, clear structure, and credible sources',
+      email: 'Personalized, conversational tone with compelling subject line, clear CTA, mobile-optimized short paragraphs, and urgency/scarcity',
+      social: 'Platform-optimized, highly engaging micro-content with hooks, value bombs, and shareability',
+      ad: 'Conversion-focused copy with attention-grabbing headline, problem-solution framework, social proof, and strong CTA'
+    };
 
-Please write engaging, high-quality content that is informative and compelling.`,
+    const guideline = contentGuidelines[options.type] || 'High-quality, engaging content';
+
+    const prompt = AIHelper.formatPrompt(
+      `You are a professional content writer and marketing copywriter with 10+ years of experience creating high-converting content.
+
+Create exceptional ${options.type} content about: ${sanitizedTopic}
+
+CONTENT TYPE REQUIREMENTS: ${guideline}
+
+WRITING GUIDELINES:
+- Start with a compelling hook that grabs attention immediately
+- Use the AIDA framework (Attention, Interest, Desire, Action)
+- Write in active voice with strong, specific verbs
+- Break up text with short paragraphs (2-3 sentences max)
+- Include relevant examples, case studies, or stories
+- Address the reader directly ("you" language)
+- Optimize for skimmability with bullet points and lists
+- End with a clear, actionable call-to-action
+${options.keywords ? `- Naturally incorporate these SEO keywords: ${options.keywords.join(', ')}` : ''}
+
+TARGET METRICS:
+- Tone: ${options.tone || 'professional yet approachable'}
+- Length: ${options.length || 500} words (±10%)
+- Reading Level: 8th-grade (accessible to broad audience)
+- Engagement Goal: High shareability and conversion potential
+
+FORMAT:
+- Include a compelling headline/subject line
+- Use subheadings for structure (if applicable)
+- Add strategic formatting (bold, italics) for emphasis
+- End with strong CTA
+
+Write content that educates, engages, and converts.`,
       {
-        context: `Tone: ${options.tone || 'professional'}, Target Length: ${options.length || 500} words${options.keywords ? `, Keywords: ${options.keywords.join(', ')}` : ''}`,
+        context: `Type: ${options.type}, Tone: ${options.tone || 'professional'}, Length: ${options.length || 500} words, Keywords: ${options.keywords?.join(', ') || 'none'}`,
         temperature: 0.7
       }
     );
@@ -279,26 +338,41 @@ Format your response as JSON:
     longDescription: string;
     bulletPoints: string[];
   }> {
-    const prompt = `Create a compelling product description for: ${options.productName}
+    const prompt = `You are a world-class copywriter specializing in high-converting product descriptions for Etsy, Amazon, and digital marketplaces.
+
+Create a compelling, sales-focused product description for: ${options.productName}
 
 Category: ${options.category}
-Features: ${options.features.join(', ')}
-Benefits: ${options.benefits.join(', ')}
-Tone: ${options.tone || 'persuasive'}
+Key Features: ${options.features.join(', ')}
+Customer Benefits: ${options.benefits.join(', ')}
+Tone: ${options.tone || 'persuasive and professional'}
 Length: ${options.length || 'medium'}
 
+IMPORTANT GUIDELINES:
+- Focus on BENEFITS and emotional outcomes, not just features
+- Use power words that trigger action and desire
+- Include sensory language and vivid descriptions
+- Address pain points and show the transformation
+- Create urgency and exclusivity where appropriate
+- Use short, punchy sentences mixed with longer descriptive ones
+- Optimize for SEO with natural keyword integration
+
 Provide:
-1. Attention-grabbing headline
-2. Short description (2-3 sentences)
-3. Long description (2-3 paragraphs)
-4. 5 compelling bullet points
+1. HEADLINE: Powerful, benefit-driven headline (max 10 words) that stops the scroll
+2. SHORT DESCRIPTION: Compelling 2-3 sentence hook that creates desire and curiosity
+3. LONG DESCRIPTION: Detailed 3-4 paragraph story-based description that:
+   - Opens with the problem/desire
+   - Shows the solution (the product)
+   - Describes the experience and transformation
+   - Closes with a call to action
+4. BULLET POINTS: 5 benefit-focused bullet points (not feature lists) that show value
 
 Format as JSON:
 {
   "headline": "Headline text",
   "shortDescription": "Short description",
   "longDescription": "Long description",
-  "bulletPoints": ["point1", "point2", "point3", "point4", "point5"]
+  "bulletPoints": ["benefit point 1", "benefit point 2", "benefit point 3", "benefit point 4", "benefit point 5"]
 }`;
 
     try {
@@ -405,19 +479,50 @@ Format as JSON:
     caption: string;
     hashtags: string[];
   }> {
-    const prompt = `Create a ${options.platform} post about: ${options.topic}
+    const platformGuidelines = {
+      instagram: 'Visual storytelling, authentic voice, use 3-5 emojis strategically, 2200 char limit',
+      tiktok: 'Trend-driven, casual conversational, hook in first 3 seconds, max 150 chars',
+      twitter: 'Concise & witty, news-worthy angle, max 280 characters, 1-2 hashtags max',
+      facebook: 'Community-focused, longer form ok, ask questions, create conversations',
+      linkedin: 'Professional insights, thought leadership, value-driven, business context',
+      pinterest: 'SEO-optimized, descriptive, keyword-rich, includes call-to-action'
+    };
 
-Tone: ${options.tone || 'friendly'}
-${options.includeEmojis !== false ? 'Include relevant emojis' : ''}
-${options.includeHashtags !== false ? 'Include hashtags' : ''}
+    const platformGuide = platformGuidelines[options.platform.toLowerCase() as keyof typeof platformGuidelines] || 'Engaging, platform-appropriate content';
+
+    const prompt = `You are a viral social media content creator with millions of followers across platforms.
+
+Create a high-engagement ${options.platform} post about: ${options.topic}
+
+PLATFORM GUIDELINES: ${platformGuide}
+Tone: ${options.tone || 'authentic and engaging'}
+${options.includeEmojis !== false ? 'Use emojis strategically (not overdone)' : 'No emojis'}
+${options.includeHashtags !== false ? 'Include researched hashtags' : 'No hashtags'}
 Max length: ${options.maxLength || 280} characters
 
-Create an engaging post that drives engagement.
+POST MUST INCLUDE:
+- Attention-grabbing hook in first line
+- Value proposition or emotional trigger
+- Clear call-to-action or engagement prompt
+- Platform-specific optimization
+
+ENGAGEMENT BOOSTERS:
+- Ask questions
+- Create curiosity gaps
+- Use pattern interrupts
+- Include social proof when relevant
+- Make it shareable
+- Use active voice
+
+HASHTAG STRATEGY (if enabled):
+- Mix of popular (100K+) and niche (10K-50K) hashtags
+- Relevant to content and trending topics
+- 5-10 hashtags for Instagram, 1-3 for Twitter, 3-5 for others
 
 Format as JSON:
 {
-  "caption": "Post caption text",
-  "hashtags": ["hashtag1", "hashtag2", "hashtag3"]
+  "caption": "Compelling post caption with hook, value, and CTA",
+  "hashtags": ["researched hashtag1", "hashtag2", "hashtag3", "trending hashtag4", "niche hashtag5"]
 }`;
 
     try {
