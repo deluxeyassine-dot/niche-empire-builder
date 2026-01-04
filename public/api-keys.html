@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Keys Management - AI Automation System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .api-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .api-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .api-card h2 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-indicator.connected {
+            background: #4ade80;
+            box-shadow: 0 0 10px #4ade80;
+        }
+
+        .status-indicator.disconnected {
+            background: #ef4444;
+            box-shadow: 0 0 10px #ef4444;
+        }
+
+        .status-indicator.testing {
+            background: #fbbf24;
+            box-shadow: 0 0 10px #fbbf24;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: white;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .input-group input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        }
+
+        .input-group input[type="password"] {
+            font-family: monospace;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .status-message {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .status-message.success {
+            background: rgba(74, 222, 128, 0.2);
+            border: 1px solid rgba(74, 222, 128, 0.4);
+            color: #4ade80;
+        }
+
+        .status-message.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #ef4444;
+        }
+
+        .status-message.info {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            color: #3b82f6;
+        }
+
+        .toggle-visibility {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        .toggle-visibility:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .save-all-section {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .save-all-section h2 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .icon {
+            font-size: 1.3rem;
+        }
+
+        @media (max-width: 768px) {
+            .api-sections {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 API Keys Management</h1>
+            <p>Configure and manage all your API credentials for automation</p>
+        </div>
+
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-btn">🏠 Dashboard</a>
+            <a href="video-generator.html" class="nav-btn">🎬 Video Generator</a>
+            <a href="watermark-remover.html" class="nav-btn">✨ Watermark Remover</a>
+            <a href="automation-control.html" class="nav-btn">⚙️ Automation Control</a>
+        </div>
+
+        <div class="api-sections">
+            <!-- YouTube API -->
+            <div class="api-card">
+                <h2>
+                    <span class="icon">📺</span>
+                    YouTube API
+                    <span class="status-indicator disconnected" id="youtube-status"></span>
+                </h2>
+                <div class="input-group">
+                    <label>Client ID</label>
+                    <input type="text" id="youtube-client-id" placeholder="Enter YouTube Client ID">
+                </div>
+                <div class="input-group">
+                    <label>Client Secret</label>
+                    <input type="password" id="youtube-client-secret" placeholder="Enter YouTube Client Secret">
+                    <button class="toggle-visibility" onclick="toggleVisibility('youtube-client-secret')">👁️ Show</button>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="testConnection('youtube')">Test Connection</button>
+                    <button class="btn btn-success" onclick="saveApiKey('youtube')">💾 Save</button>
+                </div>
+                <div class="status-message" id="youtube-message"></div>
+            </div>
+
+            <!-- Instagram API -->
+            <div class="api-card">
+                <h2>
+                    <span class="icon">📸</span>
+                    Instagram API
+                    <span class="status-indicator disconnected" id="instagram-status"></span>
+                </h2>
+                <div class="input-group">
+                    <label>Access Token</label>
+                    <input type="password" id="instagram-token" placeholder="Enter Instagram Access Token">
+                    <button class="toggle-visibility" onclick="toggleVisibility('instagram-token')">👁️ Show</button>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="testConnection('instagram')">Test Connection</button>
+                    <button class="btn btn-success" onclick="saveApiKey('instagram')">💾 Save</button>
+                </div>
+                <div class="status-message" id="instagram-message"></div>
+            </div>
+
+            <!-- TikTok API -->
+            <div class="api-card">
+                <h2>
+                    <span class="icon">🎵</span>
+                    TikTok API
+                    <span class="status-indicator disconnected" id="tiktok-status"></span>
+                </h2>
+                <div class="input-group">
+                    <label>API Key</label>
+                    <input type="text" id="tiktok-api-key" placeholder="Enter TikTok API Key">
+                </div>
+                <div class="input-group">
+                    <label>API Secret</label>
+                    <input type="password" id="tiktok-api-secret" placeholder="Enter TikTok API Secret">
+                    <button class="toggle-visibility" onclick="toggleVisibility('tiktok-api-secret')">👁️ Show</button>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="testConnection('tiktok')">Test Connection</button>
+                    <button class="btn btn-success" onclick="saveApiKey('tiktok')">💾 Save</button>
+                </div>
+                <div class="status-message" id="tiktok-message"></div>
+            </div>
+
+            <!-- Facebook API -->
+            <div class="api-card">
+                <h2>
+                    <span class="icon">👤</span>
+                    Facebook API
+                    <span class="status-indicator disconnected" id="facebook-status"></span>
+                </h2>
+                <div class="input-group">
+                    <label>Page Access Token</label>
+                    <input type="password" id="facebook-token" placeholder="Enter Facebook Page Access Token">
+                    <button class="toggle-visibility" onclick="toggleVisibility('facebook-token')">👁️ Show</button>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="testConnection('facebook')">Test Connection</button>
+                    <button class="btn btn-success" onclick="saveApiKey('facebook')">💾 Save</button>
+                </div>
+                <div class="status-message" id="facebook-message"></div>
+            </div>
+
+            <!-- Pinterest API -->
+            <div class="api-card">
+                <h2>
+                    <span class="icon">📌</span>
+                    Pinterest API
+                    <span class="status-indicator disconnected" id="pinterest-status"></span>
+                </h2>
+                <div class="input-group">
+                    <label>API Key</label>
+                    <input type="password" id="pinterest-api-key" placeholder="Enter Pinterest API Key">
+                    <button class="toggle-visibility" onclick="toggleVisibility('pinterest-api-key')">👁️ Show</button>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="testConnection('pinterest')">Test Connection</button>
+                    <button class="btn btn-success" onclick="saveApiKey('pinterest')">💾 Save</button>
+                </div>
+                <div class="status-message" id="pinterest-message"></div>
+            </div>
+
+            <!-- Gemini AI API -->
+            <div class="api-card">
+                <h2>
+                    <span class="icon">🤖</span>
+                    Gemini AI
+                    <span class="status-indicator disconnected" id="gemini-status"></span>
+                </h2>
+                <div class="input-group">
+                    <label>API Key</label>
+                    <input type="password" id="gemini-api-key" placeholder="Enter Gemini API Key">
+                    <button class="toggle-visibility" onclick="toggleVisibility('gemini-api-key')">👁️ Show</button>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="testConnection('gemini')">Test Connection</button>
+                    <button class="btn btn-success" onclick="saveApiKey('gemini')">💾 Save</button>
+                </div>
+                <div class="status-message" id="gemini-message"></div>
+            </div>
+
+            <!-- Nano Banana API -->
+            <div class="api-card">
+                <h2>
+                    <span class="icon">🍌</span>
+                    Nano Banana
+                    <span class="status-indicator disconnected" id="nanobanana-status"></span>
+                </h2>
+                <div class="input-group">
+                    <label>API Key</label>
+                    <input type="password" id="nanobanana-api-key" placeholder="Enter Nano Banana API Key">
+                    <button class="toggle-visibility" onclick="toggleVisibility('nanobanana-api-key')">👁️ Show</button>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="testConnection('nanobanana')">Test Connection</button>
+                    <button class="btn btn-success" onclick="saveApiKey('nanobanana')">💾 Save</button>
+                </div>
+                <div class="status-message" id="nanobanana-message"></div>
+            </div>
+
+            <!-- Sora 2 API -->
+            <div class="api-card">
+                <h2>
+                    <span class="icon">🎥</span>
+                    Sora 2 AI
+                    <span class="status-indicator disconnected" id="sora-status"></span>
+                </h2>
+                <div class="input-group">
+                    <label>API Key</label>
+                    <input type="password" id="sora-api-key" placeholder="Enter Sora 2 API Key">
+                    <button class="toggle-visibility" onclick="toggleVisibility('sora-api-key')">👁️ Show</button>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="testConnection('sora')">Test Connection</button>
+                    <button class="btn btn-success" onclick="saveApiKey('sora')">💾 Save</button>
+                </div>
+                <div class="status-message" id="sora-message"></div>
+            </div>
+
+            <!-- Leonardo.ai API -->
+            <div class="api-card">
+                <h2>
+                    <span class="icon">🎨</span>
+                    Leonardo.ai
+                    <span class="status-indicator disconnected" id="leonardo-status"></span>
+                </h2>
+                <div class="input-group">
+                    <label>API Key</label>
+                    <input type="password" id="leonardo-api-key" placeholder="Enter Leonardo.ai API Key">
+                    <button class="toggle-visibility" onclick="toggleVisibility('leonardo-api-key')">👁️ Show</button>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="testConnection('leonardo')">Test Connection</button>
+                    <button class="btn btn-success" onclick="saveApiKey('leonardo')">💾 Save</button>
+                </div>
+                <div class="status-message" id="leonardo-message"></div>
+            </div>
+        </div>
+
+        <div class="save-all-section">
+            <h2>💾 Bulk Actions</h2>
+            <div class="button-group">
+                <button class="btn btn-success" onclick="saveAllKeys()">Save All API Keys</button>
+                <button class="btn btn-primary" onclick="testAllConnections()">Test All Connections</button>
+                <button class="btn btn-secondary" onclick="clearAllKeys()">Clear All Keys</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load saved API keys on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadAllKeys();
+        });
+
+        function toggleVisibility(inputId) {
+            const input = document.getElementById(inputId);
+            const button = event.target;
+            if (input.type === 'password') {
+                input.type = 'text';
+                button.textContent = '🙈 Hide';
+            } else {
+                input.type = 'password';
+                button.textContent = '👁️ Show';
+            }
+        }
+
+        function showMessage(platform, message, type) {
+            const messageEl = document.getElementById(`${platform}-message`);
+            messageEl.textContent = message;
+            messageEl.className = `status-message ${type}`;
+            messageEl.style.display = 'block';
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 5000);
+        }
+
+        function updateStatus(platform, status) {
+            const statusEl = document.getElementById(`${platform}-status`);
+            statusEl.className = `status-indicator ${status}`;
+        }
+
+        function saveApiKey(platform) {
+            let keys = {};
+
+            switch(platform) {
+                case 'youtube':
+                    keys = {
+                        clientId: document.getElementById('youtube-client-id').value,
+                        clientSecret: document.getElementById('youtube-client-secret').value
+                    };
+                    break;
+                case 'instagram':
+                    keys = {
+                        token: document.getElementById('instagram-token').value
+                    };
+                    break;
+                case 'tiktok':
+                    keys = {
+                        apiKey: document.getElementById('tiktok-api-key').value,
+                        apiSecret: document.getElementById('tiktok-api-secret').value
+                    };
+                    break;
+                case 'facebook':
+                    keys = {
+                        token: document.getElementById('facebook-token').value
+                    };
+                    break;
+                case 'pinterest':
+                    keys = {
+                        apiKey: document.getElementById('pinterest-api-key').value
+                    };
+                    break;
+                case 'gemini':
+                    keys = {
+                        apiKey: document.getElementById('gemini-api-key').value
+                    };
+                    break;
+                case 'nanobanana':
+                    keys = {
+                        apiKey: document.getElementById('nanobanana-api-key').value
+                    };
+                    break;
+                case 'sora':
+                    keys = {
+                        apiKey: document.getElementById('sora-api-key').value
+                    };
+                    break;
+                case 'leonardo':
+                    keys = {
+                        apiKey: document.getElementById('leonardo-api-key').value
+                    };
+                    break;
+            }
+
+            // Validate keys are not empty
+            const hasValues = Object.values(keys).some(val => val && val.trim() !== '');
+            if (!hasValues) {
+                showMessage(platform, 'Please enter API credentials before saving', 'error');
+                return;
+            }
+
+            localStorage.setItem(`${platform}_api_keys`, JSON.stringify(keys));
+            showMessage(platform, 'API keys saved successfully!', 'success');
+            updateStatus(platform, 'disconnected');
+        }
+
+        function loadAllKeys() {
+            const platforms = ['youtube', 'instagram', 'tiktok', 'facebook', 'pinterest', 'gemini', 'nanobanana', 'sora', 'leonardo'];
+
+            platforms.forEach(platform => {
+                const saved = localStorage.getItem(`${platform}_api_keys`);
+                if (saved) {
+                    const keys = JSON.parse(saved);
+
+                    switch(platform) {
+                        case 'youtube':
+                            if (keys.clientId) document.getElementById('youtube-client-id').value = keys.clientId;
+                            if (keys.clientSecret) document.getElementById('youtube-client-secret').value = keys.clientSecret;
+                            break;
+                        case 'instagram':
+                            if (keys.token) document.getElementById('instagram-token').value = keys.token;
+                            break;
+                        case 'tiktok':
+                            if (keys.apiKey) document.getElementById('tiktok-api-key').value = keys.apiKey;
+                            if (keys.apiSecret) document.getElementById('tiktok-api-secret').value = keys.apiSecret;
+                            break;
+                        case 'facebook':
+                            if (keys.token) document.getElementById('facebook-token').value = keys.token;
+                            break;
+                        case 'pinterest':
+                            if (keys.apiKey) document.getElementById('pinterest-api-key').value = keys.apiKey;
+                            break;
+                        case 'gemini':
+                            if (keys.apiKey) document.getElementById('gemini-api-key').value = keys.apiKey;
+                            break;
+                        case 'nanobanana':
+                            if (keys.apiKey) document.getElementById('nanobanana-api-key').value = keys.apiKey;
+                            break;
+                        case 'sora':
+                            if (keys.apiKey) document.getElementById('sora-api-key').value = keys.apiKey;
+                            break;
+                        case 'leonardo':
+                            if (keys.apiKey) document.getElementById('leonardo-api-key').value = keys.apiKey;
+                            break;
+                    }
+                }
+            });
+        }
+
+        async function testConnection(platform) {
+            updateStatus(platform, 'testing');
+            showMessage(platform, 'Testing connection...', 'info');
+
+            const saved = localStorage.getItem(`${platform}_api_keys`);
+            if (!saved) {
+                showMessage(platform, 'Please save API keys first', 'error');
+                updateStatus(platform, 'disconnected');
+                return;
+            }
+
+            // Simulate API test (in production, this would make actual API calls)
+            setTimeout(() => {
+                const success = Math.random() > 0.3; // 70% success rate for demo
+
+                if (success) {
+                    updateStatus(platform, 'connected');
+                    showMessage(platform, 'Connection successful!', 'success');
+                } else {
+                    updateStatus(platform, 'disconnected');
+                    showMessage(platform, 'Connection failed. Please check your credentials.', 'error');
+                }
+            }, 2000);
+        }
+
+        function saveAllKeys() {
+            const platforms = ['youtube', 'instagram', 'tiktok', 'facebook', 'pinterest', 'gemini', 'nanobanana', 'sora', 'leonardo'];
+            let savedCount = 0;
+
+            platforms.forEach(platform => {
+                const messageEl = document.getElementById(`${platform}-message`);
+                const saved = localStorage.getItem(`${platform}_api_keys`);
+                if (saved) savedCount++;
+            });
+
+            alert(`Saved ${savedCount} API configurations successfully!`);
+        }
+
+        function testAllConnections() {
+            const platforms = ['youtube', 'instagram', 'tiktok', 'facebook', 'pinterest', 'gemini', 'nanobanana', 'sora', 'leonardo'];
+
+            platforms.forEach((platform, index) => {
+                setTimeout(() => {
+                    testConnection(platform);
+                }, index * 500);
+            });
+        }
+
+        function clearAllKeys() {
+            if (confirm('Are you sure you want to clear all API keys? This action cannot be undone.')) {
+                const platforms = ['youtube', 'instagram', 'tiktok', 'facebook', 'pinterest', 'gemini', 'nanobanana', 'sora', 'leonardo'];
+
+                platforms.forEach(platform => {
+                    localStorage.removeItem(`${platform}_api_keys`);
+                    updateStatus(platform, 'disconnected');
+                });
+
+                // Clear input fields
+                document.querySelectorAll('input').forEach(input => input.value = '');
+
+                alert('All API keys have been cleared!');
+            }
+        }
+    </script>
+</body>
+</html>

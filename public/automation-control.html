@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automation Control - AI Automation System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .master-control {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            text-align: center;
+        }
+
+        .master-control h2 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .master-switch-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .master-switch {
+            position: relative;
+            width: 120px;
+            height: 60px;
+        }
+
+        .master-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(239, 68, 68, 0.3);
+            border: 2px solid #ef4444;
+            transition: 0.4s;
+            border-radius: 60px;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 46px;
+            width: 46px;
+            left: 4px;
+            bottom: 4px;
+            background: white;
+            transition: 0.4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        input:checked + .slider {
+            background: rgba(74, 222, 128, 0.3);
+            border-color: #4ade80;
+            box-shadow: 0 0 30px rgba(74, 222, 128, 0.7);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(60px);
+        }
+
+        .status-text {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .status-text.active {
+            color: #4ade80;
+        }
+
+        .status-text.inactive {
+            color: #ef4444;
+        }
+
+        .automation-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .value {
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+        }
+
+        .automation-modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .module-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .module-card h3 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .module-card p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .module-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .module-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+
+        .module-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .module-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: 0.3s;
+            border-radius: 30px;
+        }
+
+        .module-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .module-slider {
+            background: rgba(74, 222, 128, 0.3);
+            border-color: #4ade80;
+        }
+
+        input:checked + .module-slider:before {
+            transform: translateX(30px);
+        }
+
+        .module-status {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .module-status.active {
+            color: #4ade80;
+        }
+
+        .frequency-selector {
+            margin-bottom: 15px;
+        }
+
+        .frequency-selector label {
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .frequency-selector select {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .frequency-selector select option {
+            background: #764ba2;
+            color: white;
+        }
+
+        .module-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric .value {
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .metric .label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.8rem;
+        }
+
+        .activity-log {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .activity-log h2 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .log-entries {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .log-entry {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .log-entry .icon {
+            font-size: 1.5rem;
+        }
+
+        .log-entry .content {
+            flex: 1;
+        }
+
+        .log-entry .title {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .log-entry .details {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+        }
+
+        .log-entry .time {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 1024px) {
+            .automation-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .automation-modules {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .master-control h2 {
+                font-size: 1.5rem;
+            }
+
+            .automation-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .master-switch-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚙️ Automation Control Center</h1>
+            <p>Manage and monitor all automation processes from one place</p>
+        </div>
+
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-btn">🏠 Dashboard</a>
+            <a href="api-keys.html" class="nav-btn">🔐 API Keys</a>
+            <a href="video-generator.html" class="nav-btn">🎬 Video Generator</a>
+            <a href="watermark-remover.html" class="nav-btn">✨ Watermark Remover</a>
+        </div>
+
+        <!-- Master Control -->
+        <div class="master-control">
+            <h2>🎛️ Master Automation Switch</h2>
+            <div class="master-switch-container">
+                <span class="status-text inactive" id="status-text">AUTOMATION DISABLED</span>
+                <label class="master-switch">
+                    <input type="checkbox" id="master-toggle" onchange="toggleMasterAutomation()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="automation-stats">
+                <div class="stat-card">
+                    <div class="icon">🤖</div>
+                    <div class="value" id="active-modules">0</div>
+                    <div class="label">Active Modules</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon">📊</div>
+                    <div class="value" id="total-actions">2,847</div>
+                    <div class="label">Total Actions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon">⏱️</div>
+                    <div class="value" id="uptime">0h 0m</div>
+                    <div class="label">Uptime Today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon">💰</div>
+                    <div class="value" id="revenue">$0</div>
+                    <div class="label">Revenue Today</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Automation Modules -->
+        <div class="automation-modules">
+            <!-- Content Discovery -->
+            <div class="module-card">
+                <h3><span>🔍</span> Content Discovery</h3>
+                <p>Auto-discover trending topics and keywords using AI agents</p>
+                <div class="module-controls">
+                    <span class="module-status" id="status-discovery">Inactive</span>
+                    <label class="module-switch">
+                        <input type="checkbox" id="toggle-discovery" onchange="toggleModule('discovery')">
+                        <span class="module-slider"></span>
+                    </label>
+                </div>
+                <div class="frequency-selector">
+                    <label>Scan Frequency</label>
+                    <select id="freq-discovery">
+                        <option value="hourly">Every Hour</option>
+                        <option value="4hours" selected>Every 4 Hours</option>
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                    </select>
+                </div>
+                <div class="module-metrics">
+                    <div class="metric">
+                        <div class="value">156</div>
+                        <div class="label">Topics Found</div>
+                    </div>
+                    <div class="metric">
+                        <div class="value">23</div>
+                        <div class="label">High Priority</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Generation -->
+            <div class="module-card">
+                <h3><span>🎬</span> Auto Video Generation</h3>
+                <p>Generate and publish videos automatically based on trending content</p>
+                <div class="module-controls">
+                    <span class="module-status" id="status-video">Inactive</span>
+                    <label class="module-switch">
+                        <input type="checkbox" id="toggle-video" onchange="toggleModule('video')">
+                        <span class="module-slider"></span>
+                    </label>
+                </div>
+                <div class="frequency-selector">
+                    <label>Generation Frequency</label>
+                    <select id="freq-video">
+                        <option value="hourly">Every Hour</option>
+                        <option value="4hours">Every 4 Hours</option>
+                        <option value="daily" selected>Daily</option>
+                        <option value="weekly">Weekly</option>
+                    </select>
+                </div>
+                <div class="module-metrics">
+                    <div class="metric">
+                        <div class="value">42</div>
+                        <div class="label">Videos Created</div>
+                    </div>
+                    <div class="metric">
+                        <div class="value">38</div>
+                        <div class="label">Published</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Media Posting -->
+            <div class="module-card">
+                <h3><span>📱</span> Social Media Auto-Post</h3>
+                <p>Automatically post content across all connected platforms</p>
+                <div class="module-controls">
+                    <span class="module-status" id="status-social">Inactive</span>
+                    <label class="module-switch">
+                        <input type="checkbox" id="toggle-social" onchange="toggleModule('social')">
+                        <span class="module-slider"></span>
+                    </label>
+                </div>
+                <div class="frequency-selector">
+                    <label>Posting Frequency</label>
+                    <select id="freq-social">
+                        <option value="hourly">Every Hour</option>
+                        <option value="4hours" selected>Every 4 Hours</option>
+                        <option value="daily">Daily</option>
+                        <option value="custom">Custom Schedule</option>
+                    </select>
+                </div>
+                <div class="module-metrics">
+                    <div class="metric">
+                        <div class="value">127</div>
+                        <div class="label">Posts Today</div>
+                    </div>
+                    <div class="metric">
+                        <div class="value">8.2K</div>
+                        <div class="label">Engagement</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comment Management -->
+            <div class="module-card">
+                <h3><span>💬</span> Auto Comment Reply</h3>
+                <p>AI-powered automatic responses to comments and DMs</p>
+                <div class="module-controls">
+                    <span class="module-status" id="status-comments">Inactive</span>
+                    <label class="module-switch">
+                        <input type="checkbox" id="toggle-comments" onchange="toggleModule('comments')">
+                        <span class="module-slider"></span>
+                    </label>
+                </div>
+                <div class="frequency-selector">
+                    <label>Check Frequency</label>
+                    <select id="freq-comments">
+                        <option value="15min">Every 15 Minutes</option>
+                        <option value="30min" selected>Every 30 Minutes</option>
+                        <option value="hourly">Every Hour</option>
+                        <option value="4hours">Every 4 Hours</option>
+                    </select>
+                </div>
+                <div class="module-metrics">
+                    <div class="metric">
+                        <div class="value">89</div>
+                        <div class="label">Replies Sent</div>
+                    </div>
+                    <div class="metric">
+                        <div class="value">95%</div>
+                        <div class="label">Response Rate</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Tracking -->
+            <div class="module-card">
+                <h3><span>📊</span> Performance Analytics</h3>
+                <p>Real-time tracking and optimization of all content</p>
+                <div class="module-controls">
+                    <span class="module-status" id="status-analytics">Inactive</span>
+                    <label class="module-switch">
+                        <input type="checkbox" id="toggle-analytics" onchange="toggleModule('analytics')">
+                        <span class="module-slider"></span>
+                    </label>
+                </div>
+                <div class="frequency-selector">
+                    <label>Analysis Frequency</label>
+                    <select id="freq-analytics">
+                        <option value="hourly" selected>Every Hour</option>
+                        <option value="4hours">Every 4 Hours</option>
+                        <option value="daily">Daily</option>
+                    </select>
+                </div>
+                <div class="module-metrics">
+                    <div class="metric">
+                        <div class="value">1.2M</div>
+                        <div class="label">Total Views</div>
+                    </div>
+                    <div class="metric">
+                        <div class="value">+24%</div>
+                        <div class="label">Growth</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Marketing -->
+            <div class="module-card">
+                <h3><span>📧</span> Email Automation</h3>
+                <p>Automated email campaigns and subscriber management</p>
+                <div class="module-controls">
+                    <span class="module-status" id="status-email">Inactive</span>
+                    <label class="module-switch">
+                        <input type="checkbox" id="toggle-email" onchange="toggleModule('email')">
+                        <span class="module-slider"></span>
+                    </label>
+                </div>
+                <div class="frequency-selector">
+                    <label>Send Frequency</label>
+                    <select id="freq-email">
+                        <option value="daily">Daily</option>
+                        <option value="weekly" selected>Weekly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                </div>
+                <div class="module-metrics">
+                    <div class="metric">
+                        <div class="value">3,421</div>
+                        <div class="label">Subscribers</div>
+                    </div>
+                    <div class="metric">
+                        <div class="value">32%</div>
+                        <div class="label">Open Rate</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Log -->
+        <div class="activity-log">
+            <h2>📋 Recent Activity</h2>
+            <div class="log-entries" id="log-entries">
+                <div class="log-entry">
+                    <div class="icon">🎬</div>
+                    <div class="content">
+                        <div class="title">Video Generated Successfully</div>
+                        <div class="details">Created "Top 10 AI Tools 2026" for YouTube</div>
+                    </div>
+                    <div class="time">2m ago</div>
+                </div>
+                <div class="log-entry">
+                    <div class="icon">📱</div>
+                    <div class="content">
+                        <div class="title">Posted to Instagram</div>
+                        <div class="details">Published motivational quote image</div>
+                    </div>
+                    <div class="time">15m ago</div>
+                </div>
+                <div class="log-entry">
+                    <div class="icon">💬</div>
+                    <div class="content">
+                        <div class="title">Replied to 12 Comments</div>
+                        <div class="details">AI responses sent across all platforms</div>
+                    </div>
+                    <div class="time">23m ago</div>
+                </div>
+                <div class="log-entry">
+                    <div class="icon">🔍</div>
+                    <div class="content">
+                        <div class="title">Trending Topic Discovered</div>
+                        <div class="details">"AI Image Generation" - 12K searches/hour</div>
+                    </div>
+                    <div class="time">1h ago</div>
+                </div>
+                <div class="log-entry">
+                    <div class="icon">📊</div>
+                    <div class="content">
+                        <div class="title">Performance Report Generated</div>
+                        <div class="details">+32% engagement this week</div>
+                    </div>
+                    <div class="time">2h ago</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let masterEnabled = false;
+        let activeModules = 0;
+        let uptimeInterval = null;
+        let startTime = null;
+
+        function toggleMasterAutomation() {
+            masterEnabled = !masterEnabled;
+            const statusText = document.getElementById('status-text');
+            const masterToggle = document.getElementById('master-toggle');
+
+            if (masterEnabled) {
+                statusText.textContent = 'AUTOMATION ENABLED';
+                statusText.classList.remove('inactive');
+                statusText.classList.add('active');
+                startTime = Date.now();
+                startUptimeCounter();
+                addLogEntry('🎛️', 'Master Automation Enabled', 'All modules are now operational');
+            } else {
+                statusText.textContent = 'AUTOMATION DISABLED';
+                statusText.classList.remove('active');
+                statusText.classList.add('inactive');
+                stopUptimeCounter();
+                disableAllModules();
+                addLogEntry('🎛️', 'Master Automation Disabled', 'All modules have been stopped');
+            }
+
+            updateStats();
+        }
+
+        function toggleModule(moduleName) {
+            if (!masterEnabled && document.getElementById(`toggle-${moduleName}`).checked) {
+                alert('Please enable Master Automation first');
+                document.getElementById(`toggle-${moduleName}`).checked = false;
+                return;
+            }
+
+            const isActive = document.getElementById(`toggle-${moduleName}`).checked;
+            const statusEl = document.getElementById(`status-${moduleName}`);
+
+            if (isActive) {
+                statusEl.textContent = 'Active';
+                statusEl.classList.add('active');
+                activeModules++;
+                addLogEntry('✅', `${getModuleName(moduleName)} Enabled`, `Module is now running`);
+            } else {
+                statusEl.textContent = 'Inactive';
+                statusEl.classList.remove('active');
+                activeModules--;
+                addLogEntry('❌', `${getModuleName(moduleName)} Disabled`, `Module has been stopped`);
+            }
+
+            updateStats();
+        }
+
+        function getModuleName(moduleName) {
+            const names = {
+                discovery: 'Content Discovery',
+                video: 'Auto Video Generation',
+                social: 'Social Media Auto-Post',
+                comments: 'Auto Comment Reply',
+                analytics: 'Performance Analytics',
+                email: 'Email Automation'
+            };
+            return names[moduleName] || moduleName;
+        }
+
+        function disableAllModules() {
+            const modules = ['discovery', 'video', 'social', 'comments', 'analytics', 'email'];
+
+            modules.forEach(module => {
+                document.getElementById(`toggle-${module}`).checked = false;
+                document.getElementById(`status-${module}`).textContent = 'Inactive';
+                document.getElementById(`status-${module}`).classList.remove('active');
+            });
+
+            activeModules = 0;
+        }
+
+        function updateStats() {
+            document.getElementById('active-modules').textContent = activeModules;
+        }
+
+        function startUptimeCounter() {
+            uptimeInterval = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                const hours = Math.floor(elapsed / 3600000);
+                const minutes = Math.floor((elapsed % 3600000) / 60000);
+                document.getElementById('uptime').textContent = `${hours}h ${minutes}m`;
+            }, 1000);
+        }
+
+        function stopUptimeCounter() {
+            if (uptimeInterval) {
+                clearInterval(uptimeInterval);
+                uptimeInterval = null;
+            }
+            document.getElementById('uptime').textContent = '0h 0m';
+        }
+
+        function addLogEntry(icon, title, details) {
+            const logEntries = document.getElementById('log-entries');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `
+                <div class="icon">${icon}</div>
+                <div class="content">
+                    <div class="title">${title}</div>
+                    <div class="details">${details}</div>
+                </div>
+                <div class="time">Just now</div>
+            `;
+
+            logEntries.insertBefore(entry, logEntries.firstChild);
+
+            // Keep only last 20 entries
+            while (logEntries.children.length > 20) {
+                logEntries.removeChild(logEntries.lastChild);
+            }
+        }
+
+        // Load saved state from localStorage
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedState = localStorage.getItem('automation_state');
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                if (state.masterEnabled) {
+                    document.getElementById('master-toggle').checked = true;
+                    toggleMasterAutomation();
+
+                    // Restore module states
+                    Object.keys(state.modules || {}).forEach(module => {
+                        if (state.modules[module]) {
+                            document.getElementById(`toggle-${module}`).checked = true;
+                            toggleModule(module);
+                        }
+                    });
+                }
+            }
+        });
+
+        // Save state to localStorage
+        function saveState() {
+            const state = {
+                masterEnabled: masterEnabled,
+                modules: {
+                    discovery: document.getElementById('toggle-discovery').checked,
+                    video: document.getElementById('toggle-video').checked,
+                    social: document.getElementById('toggle-social').checked,
+                    comments: document.getElementById('toggle-comments').checked,
+                    analytics: document.getElementById('toggle-analytics').checked,
+                    email: document.getElementById('toggle-email').checked
+                }
+            };
+            localStorage.setItem('automation_state', JSON.stringify(state));
+        }
+
+        // Auto-save every 5 seconds
+        setInterval(saveState, 5000);
+
+        // Simulate activity
+        setInterval(() => {
+            if (masterEnabled && activeModules > 0) {
+                // Simulate revenue increase
+                const currentRevenue = parseFloat(document.getElementById('revenue').textContent.replace('$', ''));
+                const newRevenue = currentRevenue + (Math.random() * 10);
+                document.getElementById('revenue').textContent = '$' + newRevenue.toFixed(2);
+
+                // Simulate action count increase
+                const currentActions = parseInt(document.getElementById('total-actions').textContent.replace(',', ''));
+                document.getElementById('total-actions').textContent = (currentActions + Math.floor(Math.random() * 5)).toLocaleString();
+            }
+        }, 10000);
+    </script>
+</body>
+</html>
