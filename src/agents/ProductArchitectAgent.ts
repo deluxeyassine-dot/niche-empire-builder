@@ -58,7 +58,7 @@ export interface PricingModel {
   premiumPrice: number;
   strategy: 'value-based' | 'competition-based' | 'penetration' | 'premium';
   upsells: Upsell[];
-  bundle Opportunities: string[];
+  bundleOpportunities: string[];
 }
 
 export interface Upsell {

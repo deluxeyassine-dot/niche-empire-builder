@@ -173,7 +173,7 @@ async function testDefaultTemplate() {
       ],
       team: [
         {
-          name: 'John Smith',
+          name: 'Yassine',
           role: 'CEO & Founder',
           bio: '15 years of experience in IoT and home automation'
         },

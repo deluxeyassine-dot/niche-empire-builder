@@ -79,7 +79,7 @@ async function testEmailTemplate() {
         'Regular firmware updates'
       ],
       personalization: {
-        firstName: 'John'
+        firstName: 'Yassine'
       }
     });
 

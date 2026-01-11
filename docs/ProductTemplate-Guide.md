@@ -403,7 +403,7 @@ Add and manage customer reviews with automatic statistics calculation.
 ```typescript
 const reviews = template.addReviews(product.id, [
   {
-    author: 'John Smith',
+    author: 'Yassine',
     rating: 5,
     title: 'Excellent camera!',
     comment: 'Crystal clear video quality, easy to install.',

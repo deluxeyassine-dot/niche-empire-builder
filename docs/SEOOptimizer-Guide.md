@@ -63,7 +63,7 @@ const metaTags = await seo.generateMetaTags({
   url: 'https://example.com/smart-home-guide',
   image: 'https://example.com/og-image.jpg',
   keywords: ['smart home', 'security', 'IoT'],
-  author: 'John Doe',
+  author: 'Yassine',
   siteName: 'Security Hub',
   type: 'article'
 });
@@ -218,7 +218,7 @@ const articleSchema = seo.generateSchema('Article', {
   headline: 'Complete Guide to Smart Home Security',
   author: {
     '@type': 'Person',
-    name: 'John Smith'
+    name: 'Yassine'
   },
   publisher: {
     '@type': 'Organization',

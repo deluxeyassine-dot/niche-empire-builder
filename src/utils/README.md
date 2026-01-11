@@ -463,7 +463,7 @@ const bundle = template.createBundles({
 // Add reviews
 const reviews = template.addReviews(camera.id, [
   {
-    author: 'John Smith',
+    author: 'Yassine',
     rating: 5,
     title: 'Excellent camera!',
     comment: 'Crystal clear video quality',
@@ -697,7 +697,7 @@ const welcome = template.createWelcomeEmail({
       description: 'Complete your profile'
     }
   ],
-  personalization: { firstName: 'John' }
+  personalization: { firstName: 'Yassine' }
 });
 
 // Newsletter
@@ -743,7 +743,7 @@ const promo = template.buildPromotionalEmail({
 const order = template.createTransactional({
   type: 'order-confirmation',
   subject: 'Order #12345 Confirmed',
-  customerName: 'John',
+  customerName: 'Yassine',
   orderNumber: '12345',
   orderItems: [...],
   total: 199.99
@@ -810,12 +810,12 @@ Use square brackets in subject/content:
 {
   subject: 'Welcome [firstName]!',
   personalization: {
-    firstName: 'John',
-    email: 'john@example.com',
+    firstName: 'Yassine',
+    email: 'yassine@example.com',
     company: 'Acme Inc'
   }
 }
-// Result: "Welcome John!"
+// Result: "Welcome Yassine!"
 ```
 
 **Integration Examples:**

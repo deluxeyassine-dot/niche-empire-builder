@@ -182,7 +182,7 @@ property. Start with essential devices and expand your system as needed.
       headline: 'Complete Guide to Smart Home Security',
       author: {
         '@type': 'Person',
-        name: 'John Smith'
+        name: 'Yassine'
       },
       publisher: {
         '@type': 'Organization',

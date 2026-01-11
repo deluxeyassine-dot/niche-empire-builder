@@ -99,7 +99,7 @@ const welcomeEmail = template.createWelcomeEmail({
     'Advanced automation features'
   ],
   personalization: {
-    firstName: 'John'
+    firstName: 'Yassine'
   }
 });
 ```
@@ -399,9 +399,9 @@ Use square brackets to insert personalized data:
 
 ```typescript
 const email = template.createWelcomeEmail({
-  subject: 'Welcome [firstName]!',  // Becomes "Welcome John!"
+  subject: 'Welcome [firstName]!',  // Becomes "Welcome Yassine!"
   personalization: {
-    firstName: 'John'
+    firstName: 'Yassine'
   }
 });
 ```
@@ -680,7 +680,7 @@ const orderEmail = template.createTransactional({
   orderItems: [...],
   total: 299.99,
   personalization: {
-    firstName: 'John',
+    firstName: 'Yassine',
     orderNumber: '54321'
   }
 });
@@ -689,7 +689,7 @@ const orderEmail = template.createTransactional({
 const shippingEmail = template.createTransactional({
   type: 'shipping-notification',
   subject: 'Your order is on the way!',
-  customerName: 'John',
+  customerName: 'Yassine',
   trackingNumber: 'TRK789',
   trackingUrl: 'https://tracking.com/TRK789'
 });
@@ -697,7 +697,7 @@ const shippingEmail = template.createTransactional({
 // Abandoned cart (sent 1 hour after abandonment)
 const cartEmail = template.createAbandonedCart({
   subject: 'Complete your purchase',
-  customerName: 'John',
+  customerName: 'Yassine',
   cartItems: [...],
   cartTotal: 299.99,
   discountCode: 'SAVE10',

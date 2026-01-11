@@ -231,7 +231,7 @@ async function testProductTemplate() {
 
     const reviews = template.addReviews(physicalProduct.id, [
       {
-        author: 'John Smith',
+        author: 'Yassine',
         rating: 5,
         title: 'Excellent camera!',
         comment: 'Crystal clear video quality, easy to install, and the AI detection works perfectly. Highly recommend!',

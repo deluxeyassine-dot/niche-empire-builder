@@ -128,7 +128,7 @@ async function testContentTemplate() {
       const emailCopy = template.writeEmailCopy({
         subject: emailSpec.subject,
         purpose: emailSpec.purpose,
-        recipientName: 'John',
+        recipientName: 'Yassine',
         tone: emailSpec.purpose === 'welcome' ? 'friendly' : 'urgent',
         includePreheader: true,
         callToAction: 'Shop Now',
@@ -216,14 +216,14 @@ async function testContentTemplate() {
           label: 'Full Name',
           type: 'text',
           required: true,
-          placeholder: 'John Smith'
+          placeholder: 'Yassine'
         },
         {
           name: 'email',
           label: 'Email',
           type: 'email',
           required: true,
-          placeholder: 'john@example.com'
+          placeholder: 'yassine@example.com'
         },
         {
           name: 'phone',

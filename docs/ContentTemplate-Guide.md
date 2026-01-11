@@ -276,14 +276,14 @@ Write conversion-optimized email copy for various purposes.
 const emailCopy = template.writeEmailCopy({
   subject: 'Welcome to SmartHome Pro!',
   purpose: 'welcome',
-  recipientName: 'John',
+  recipientName: 'Yassine',
   tone: 'friendly',
   includePreheader: true,
   callToAction: 'Get Started',
   targetUrl: 'https://example.com/start',
   product: 'SmartGuard Pro Camera',
   personalization: {
-    firstName: 'John',
+    firstName: 'Yassine',
     company: 'Acme Inc'
   }
 });
@@ -299,7 +299,7 @@ console.log(emailCopy.design.template); // 'welcome-template'
   subject: 'Welcome to SmartHome Pro!',
   preheader: 'Thanks for joining us! Here\'s what to do next...',
   content: {
-    greeting: 'Hi John,',
+    greeting: 'Hi Yassine,',
     introduction: '...',
     body: [
       { type: 'text', content: '...' },

@@ -1784,14 +1784,14 @@ export class ContentTemplate {
         label: 'Full Name',
         type: 'text',
         required: true,
-        placeholder: 'John Smith'
+        placeholder: 'Yassine'
       },
       {
         name: 'email',
         label: 'Email Address',
         type: 'email',
         required: true,
-        placeholder: 'john@example.com'
+        placeholder: 'yassine@example.com'
       }
     ];
 
