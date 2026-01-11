@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Orchestrator Control Center - Niche Empire Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --dark: #1e1b4b;
+            --darker: #0f0e2a;
+            --card-bg: rgba(30, 27, 75, 0.8);
+            --border: rgba(99, 102, 241, 0.2);
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0e2a 0%, #1e1b4b 50%, #312e81 100%);
+            min-height: 100vh;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--info));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .logo-text h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .logo-text span {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-running {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .status-paused {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+
+        .status-stopped {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .pulse {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        /* Main Layout */
+        .main-container {
+            display: grid;
+            grid-template-columns: 280px 1fr 320px;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .control-panel {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+        }
+
+        .panel-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .control-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .control-btn {
+            padding: 0.875rem 1rem;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-start {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+        }
+
+        .btn-pause {
+            background: linear-gradient(135deg, var(--warning), #d97706);
+            color: white;
+        }
+
+        .btn-stop {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+        }
+
+        .btn-reset {
+            background: var(--dark);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Chain List */
+        .chain-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .chain-item {
+            padding: 0.75rem;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chain-item:hover, .chain-item.active {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary);
+        }
+
+        .chain-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .chain-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .chain-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .chain-status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .chain-status-dot.active { background: var(--success); }
+        .chain-status-dot.paused { background: var(--warning); }
+        .chain-status-dot.waiting { background: var(--info); animation: pulse 2s infinite; }
+        .chain-status-dot.stopped { background: var(--danger); }
+
+        /* Center Content - Flowchart */
+        .flowchart-container {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            overflow: auto;
+        }
+
+        .flowchart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .flowchart-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .view-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .view-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Chain Visualization */
+        .chain-visualization {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .chain-row {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .chain-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .chain-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--info));
+            font-size: 0.75rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .chain-line {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), transparent);
+        }
+
+        .agents-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            padding-left: 1rem;
+        }
+
+        .agent-node {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            min-width: 140px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .agent-node:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .agent-node.running {
+            border-color: var(--success);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .agent-node.completed {
+            border-color: var(--info);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .agent-node.error {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .agent-node.paused {
+            border-color: var(--warning);
+        }
+
+        .agent-node.waiting {
+            border-color: var(--warning);
+            animation: waitingPulse 2s infinite;
+        }
+
+        @keyframes waitingPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+        }
+
+        .agent-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .agent-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .agent-status {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .agent-queue-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--danger);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 50px;
+        }
+
+        .agent-actions {
+            display: none;
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--darker);
+            border-radius: 8px;
+            padding: 0.5rem;
+            gap: 0.5rem;
+            z-index: 10;
+        }
+
+        .agent-node:hover .agent-actions {
+            display: flex;
+        }
+
+        .agent-action-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .agent-action-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Arrow connectors */
+        .chain-connector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 0;
+        }
+
+        .connector-arrow {
+            width: 40px;
+            height: 40px;
+            background: rgba(99, 102, 241, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        /* Right Sidebar */
+        .right-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 1rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--info));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Queue Panel */
+        .queue-panel {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .queue-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .queue-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .queue-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .queue-item-priority {
+            width: 4px;
+            height: 40px;
+            border-radius: 2px;
+        }
+
+        .queue-item-priority.critical { background: var(--danger); }
+        .queue-item-priority.high { background: var(--warning); }
+        .queue-item-priority.medium { background: var(--info); }
+        .queue-item-priority.low { background: var(--text-muted); }
+
+        .queue-item-info {
+            flex: 1;
+        }
+
+        .queue-item-agent {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .queue-item-status {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* Alerts Panel */
+        .alerts-panel {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            max-height: 250px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .alert-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .alert-icon.critical { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+        .alert-icon.warning { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .alert-icon.info { background: rgba(59, 130, 246, 0.2); color: var(--info); }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-message {
+            font-size: 0.8rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .alert-time {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* Approval Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--dark);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.25rem;
+        }
+
+        .approval-content {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .approval-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .approval-item:last-child {
+            border-bottom: none;
+        }
+
+        .approval-label {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .approval-value {
+            font-weight: 600;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn.approve {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+        }
+
+        .modal-btn.reject {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        /* Bottleneck Indicator */
+        .bottleneck-panel {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(245, 158, 11, 0.1));
+            border: 1px solid var(--warning);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .bottleneck-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--warning);
+            margin-bottom: 0.75rem;
+        }
+
+        .bottleneck-agent {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Metrics Panel */
+        .metrics-panel {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .metric-value {
+            font-weight: 600;
+        }
+
+        .metric-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .metric-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .metric-fill.success { background: var(--success); }
+        .metric-fill.warning { background: var(--warning); }
+        .metric-fill.danger { background: var(--danger); }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .main-container {
+                grid-template-columns: 250px 1fr 280px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar, .right-sidebar {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .control-panel, .queue-panel, .alerts-panel {
+                flex: 1;
+                min-width: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-robot"></i>
+            </div>
+            <div class="logo-text">
+                <h1>Agent Orchestrator</h1>
+                <span>Niche Empire Builder Pro</span>
+            </div>
+        </div>
+        <div class="header-controls">
+            <div id="systemStatus" class="status-badge status-stopped">
+                <div class="pulse"></div>
+                <span>Stopped</span>
+            </div>
+            <div style="font-size: 0.875rem; color: var(--text-muted);">
+                Cycle: <span id="cycleCount">0</span> |
+                Uptime: <span id="uptime">00:00:00</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <!-- Master Controls -->
+            <div class="control-panel">
+                <div class="panel-title">Master Controls</div>
+                <div class="control-buttons">
+                    <button class="control-btn btn-start" onclick="startOrchestrator()">
+                        <i class="fas fa-play"></i>
+                        Start Production
+                    </button>
+                    <button class="control-btn btn-pause" onclick="pauseOrchestrator()">
+                        <i class="fas fa-pause"></i>
+                        Pause All
+                    </button>
+                    <button class="control-btn btn-stop" onclick="stopOrchestrator()">
+                        <i class="fas fa-stop"></i>
+                        Stop All
+                    </button>
+                    <button class="control-btn btn-reset" onclick="resetOrchestrator()">
+                        <i class="fas fa-redo"></i>
+                        Reset Cycle
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chain Navigator -->
+            <div class="control-panel" style="flex: 1; overflow: hidden;">
+                <div class="panel-title">Production Chains</div>
+                <div class="chain-list" id="chainList">
+                    <!-- Chains will be populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Bottlenecks -->
+            <div class="bottleneck-panel" id="bottleneckPanel" style="display: none;">
+                <div class="bottleneck-title">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Bottlenecks Detected
+                </div>
+                <div id="bottleneckList"></div>
+            </div>
+        </aside>
+
+        <!-- Center - Flowchart -->
+        <main class="flowchart-container">
+            <div class="flowchart-header">
+                <h2 class="flowchart-title">Production Chain Flow</h2>
+                <div class="view-controls">
+                    <button class="view-btn active" onclick="setView('detailed')">Detailed</button>
+                    <button class="view-btn" onclick="setView('compact')">Compact</button>
+                    <button class="view-btn" onclick="setView('list')">List</button>
+                </div>
+            </div>
+            <div class="chain-visualization" id="chainVisualization">
+                <!-- Chain visualization will be populated dynamically -->
+            </div>
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar">
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="activeAgents">0</div>
+                    <div class="stat-label">Active Agents</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="queueSize">0</div>
+                    <div class="stat-label">Queue Size</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="successRate">100%</div>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="throughput">0/hr</div>
+                    <div class="stat-label">Throughput</div>
+                </div>
+            </div>
+
+            <!-- Metrics Panel -->
+            <div class="metrics-panel">
+                <div class="panel-title">Performance Metrics</div>
+                <div class="metric-row">
+                    <span class="metric-label">CPU Usage</span>
+                    <span class="metric-value" id="cpuUsage">0%</span>
+                </div>
+                <div class="metric-bar">
+                    <div class="metric-fill success" id="cpuBar" style="width: 0%"></div>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Memory Usage</span>
+                    <span class="metric-value" id="memoryUsage">0%</span>
+                </div>
+                <div class="metric-bar">
+                    <div class="metric-fill success" id="memoryBar" style="width: 0%"></div>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Avg Response Time</span>
+                    <span class="metric-value" id="avgResponseTime">0ms</span>
+                </div>
+            </div>
+
+            <!-- Queue Panel -->
+            <div class="queue-panel">
+                <div class="queue-header">
+                    <div class="panel-title">Processing Queue</div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);" id="queueCount">0 items</span>
+                </div>
+                <div class="queue-list" id="queueList">
+                    <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                        <i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <p>Queue is empty</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alerts Panel -->
+            <div class="alerts-panel">
+                <div class="queue-header">
+                    <div class="panel-title">Recent Alerts</div>
+                    <button style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.75rem;" onclick="clearAlerts()">
+                        Clear All
+                    </button>
+                </div>
+                <div id="alertsList" style="overflow-y: auto; flex: 1;">
+                    <div style="text-align: center; padding: 1rem; color: var(--text-muted);">
+                        <i class="fas fa-check-circle" style="font-size: 1.5rem; color: var(--success); margin-bottom: 0.5rem;"></i>
+                        <p style="font-size: 0.8rem;">No alerts</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Approval Modal -->
+    <div class="modal-overlay" id="approvalModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-clipboard-check" style="color: var(--warning); margin-right: 0.5rem;"></i>
+                    Approval Required
+                </h3>
+                <button class="modal-close" onclick="closeApprovalModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="approval-content" id="approvalContent">
+                <!-- Approval details will be populated dynamically -->
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn reject" onclick="rejectApproval()">
+                    <i class="fas fa-times"></i> Reject
+                </button>
+                <button class="modal-btn approve" onclick="approveRequest()">
+                    <i class="fas fa-check"></i> Approve
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Chain Configuration
+        const chains = [
+            { id: 1, name: 'Content Discovery', agents: ['trend-scout', 'opportunity-validator', 'user-approval-gate'] },
+            { id: 2, name: 'Content Planning', agents: ['product-architecture', 'ai-prompt-generator', 'content-scheduler'] },
+            { id: 3, name: 'Content Creation', agents: ['ai-design-generator', 'video-creator', 'thumbnail-generator', 'watermark-remover', 'quality-control'] },
+            { id: 4, name: 'Content Packaging', agents: ['product-packager', 'seo-optimizer', 'multi-platform-adapter'] },
+            { id: 5, name: 'Distribution', agents: ['youtube-automation', 'instagram-automation', 'tiktok-automation', 'pinterest-automation', 'facebook-automation', 'multi-platform-publisher'] },
+            { id: 6, name: 'Marketplace', agents: ['etsy-publisher', 'gumroad-publisher', 'shopify-publisher', 'creative-market-publisher'] },
+            { id: 7, name: 'Marketing', agents: ['marketing-content', 'email-campaign', 'customer-hunter', 'comment-manager', 'dm-responder', 'social-engagement', 'influencer-outreach', 'cross-promotion'] },
+            { id: 8, name: 'Sales & Support', agents: ['lead-capture', 'upsell-agent', 'customer-service', 'delivery-agent', 'follow-up-agent', 'review-manager'] },
+            { id: 9, name: 'Analytics', agents: ['analytics-tracker', 'performance-monitor', 'ab-testing', 'roi-calculator', 'competitor-analyzer', 'trend-predictor', 'growth-advisor'] },
+            { id: 10, name: 'Operations', agents: ['inventory-manager', 'pricing-optimizer', 'legal-compliance', 'backup-agent', 'security-agent', 'report-generator', 'notification-agent'] }
+        ];
+
+        const agentIcons = {
+            'trend-scout': 'fa-chart-line',
+            'opportunity-validator': 'fa-check-double',
+            'user-approval-gate': 'fa-user-check',
+            'product-architecture': 'fa-sitemap',
+            'ai-prompt-generator': 'fa-magic',
+            'content-scheduler': 'fa-calendar-alt',
+            'ai-design-generator': 'fa-paint-brush',
+            'video-creator': 'fa-video',
+            'thumbnail-generator': 'fa-image',
+            'watermark-remover': 'fa-eraser',
+            'quality-control': 'fa-clipboard-check',
+            'product-packager': 'fa-box',
+            'seo-optimizer': 'fa-search',
+            'multi-platform-adapter': 'fa-share-alt',
+            'youtube-automation': 'fa-youtube',
+            'instagram-automation': 'fa-instagram',
+            'tiktok-automation': 'fa-music',
+            'pinterest-automation': 'fa-pinterest',
+            'facebook-automation': 'fa-facebook',
+            'multi-platform-publisher': 'fa-globe',
+            'etsy-publisher': 'fa-store',
+            'gumroad-publisher': 'fa-shopping-bag',
+            'shopify-publisher': 'fa-shopping-cart',
+            'creative-market-publisher': 'fa-palette',
+            'marketing-content': 'fa-bullhorn',
+            'email-campaign': 'fa-envelope',
+            'customer-hunter': 'fa-crosshairs',
+            'comment-manager': 'fa-comments',
+            'dm-responder': 'fa-comment-dots',
+            'social-engagement': 'fa-heart',
+            'influencer-outreach': 'fa-user-friends',
+            'cross-promotion': 'fa-retweet',
+            'lead-capture': 'fa-magnet',
+            'upsell-agent': 'fa-arrow-up',
+            'customer-service': 'fa-headset',
+            'delivery-agent': 'fa-truck',
+            'follow-up-agent': 'fa-redo',
+            'review-manager': 'fa-star',
+            'analytics-tracker': 'fa-chart-bar',
+            'performance-monitor': 'fa-tachometer-alt',
+            'ab-testing': 'fa-flask',
+            'roi-calculator': 'fa-calculator',
+            'competitor-analyzer': 'fa-binoculars',
+            'trend-predictor': 'fa-crystal-ball',
+            'growth-advisor': 'fa-lightbulb',
+            'inventory-manager': 'fa-warehouse',
+            'pricing-optimizer': 'fa-tags',
+            'legal-compliance': 'fa-gavel',
+            'backup-agent': 'fa-database',
+            'security-agent': 'fa-shield-alt',
+            'report-generator': 'fa-file-alt',
+            'notification-agent': 'fa-bell'
+        };
+
+        // State
+        let state = {
+            isRunning: false,
+            isPaused: false,
+            currentChain: 1,
+            currentAgent: null,
+            cycleCount: 0,
+            startTime: null,
+            agentStatuses: {},
+            queueItems: [],
+            alerts: [],
+            pendingApproval: null
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderChainList();
+            renderChainVisualization();
+            startStatusUpdates();
+        });
+
+        // Render chain list
+        function renderChainList() {
+            const container = document.getElementById('chainList');
+            container.innerHTML = chains.map(chain => `
+                <div class="chain-item ${state.currentChain === chain.id ? 'active' : ''}" onclick="selectChain(${chain.id})">
+                    <div class="chain-info">
+                        <div class="chain-number">${chain.id}</div>
+                        <div class="chain-name">${chain.name}</div>
+                    </div>
+                    <div class="chain-status-dot ${getChainStatus(chain.id)}"></div>
+                </div>
+            `).join('');
+        }
+
+        // Render chain visualization
+        function renderChainVisualization() {
+            const container = document.getElementById('chainVisualization');
+            container.innerHTML = chains.map((chain, index) => `
+                <div class="chain-row">
+                    <div class="chain-header">
+                        <div class="chain-badge">
+                            <i class="fas fa-link" style="margin-right: 0.5rem;"></i>
+                            Chain ${chain.id}: ${chain.name}
+                        </div>
+                        <div class="chain-line"></div>
+                    </div>
+                    <div class="agents-row">
+                        ${chain.agents.map(agent => renderAgentNode(agent, chain.id)).join('')}
+                    </div>
+                </div>
+                ${index < chains.length - 1 ? `
+                    <div class="chain-connector">
+                        <div class="connector-arrow">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                    </div>
+                ` : `
+                    <div class="chain-connector">
+                        <div class="connector-arrow" style="background: rgba(16, 185, 129, 0.2); color: var(--success);">
+                            <i class="fas fa-redo"></i>
+                        </div>
+                    </div>
+                `}
+            `).join('');
+        }
+
+        // Render agent node
+        function renderAgentNode(agentId, chainId) {
+            const status = state.agentStatuses[agentId] || 'idle';
+            const displayName = agentId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+            const icon = agentIcons[agentId] || 'fa-cog';
+            const queueCount = state.queueItems.filter(q => q.agentId === agentId).length;
+
+            return `
+                <div class="agent-node ${status}" data-agent="${agentId}" onclick="selectAgent('${agentId}')">
+                    ${queueCount > 0 ? `<div class="agent-queue-badge">${queueCount}</div>` : ''}
+                    <div class="agent-icon">
+                        <i class="fas ${icon}"></i>
+                    </div>
+                    <div class="agent-name">${displayName}</div>
+                    <div class="agent-status">${status.charAt(0).toUpperCase() + status.slice(1)}</div>
+                    <div class="agent-actions">
+                        <button class="agent-action-btn" style="background: var(--success);" onclick="event.stopPropagation(); runAgent('${agentId}')" title="Run">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button class="agent-action-btn" style="background: var(--warning);" onclick="event.stopPropagation(); pauseAgent('${agentId}')" title="Pause">
+                            <i class="fas fa-pause"></i>
+                        </button>
+                        <button class="agent-action-btn" style="background: var(--info);" onclick="event.stopPropagation(); skipAgent('${agentId}')" title="Skip">
+                            <i class="fas fa-forward"></i>
+                        </button>
+                        <button class="agent-action-btn" style="background: var(--danger);" onclick="event.stopPropagation(); retryAgent('${agentId}')" title="Retry">
+                            <i class="fas fa-redo"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Get chain status
+        function getChainStatus(chainId) {
+            if (!state.isRunning) return 'stopped';
+            if (state.currentChain === chainId) return 'active';
+            if (chainId < state.currentChain) return 'active';
+            return 'waiting';
+        }
+
+        // Control functions
+        async function startOrchestrator() {
+            try {
+                const response = await fetch('/api/orchestrator/start', { method: 'POST' });
+                const data = await response.json();
+                state.isRunning = true;
+                state.isPaused = false;
+                state.startTime = Date.now();
+                updateSystemStatus();
+                addAlert('info', 'Orchestrator started successfully');
+            } catch (error) {
+                // Simulate for demo
+                state.isRunning = true;
+                state.isPaused = false;
+                state.startTime = Date.now();
+                updateSystemStatus();
+                simulateExecution();
+                addAlert('info', 'Production chain started');
+            }
+        }
+
+        function pauseOrchestrator() {
+            state.isPaused = true;
+            updateSystemStatus();
+            addAlert('warning', 'Orchestrator paused');
+        }
+
+        function stopOrchestrator() {
+            state.isRunning = false;
+            state.isPaused = false;
+            state.currentChain = 1;
+            state.currentAgent = null;
+            updateSystemStatus();
+            renderChainVisualization();
+            addAlert('info', 'Orchestrator stopped');
+        }
+
+        function resetOrchestrator() {
+            state.cycleCount = 0;
+            state.currentChain = 1;
+            state.currentAgent = null;
+            state.agentStatuses = {};
+            document.getElementById('cycleCount').textContent = '0';
+            renderChainVisualization();
+            addAlert('info', 'Cycle reset');
+        }
+
+        // Agent controls
+        function runAgent(agentId) {
+            state.agentStatuses[agentId] = 'running';
+            renderChainVisualization();
+            addAlert('info', `Running agent: ${agentId}`);
+        }
+
+        function pauseAgent(agentId) {
+            state.agentStatuses[agentId] = 'paused';
+            renderChainVisualization();
+        }
+
+        function skipAgent(agentId) {
+            state.agentStatuses[agentId] = 'completed';
+            renderChainVisualization();
+            addAlert('info', `Skipped agent: ${agentId}`);
+        }
+
+        function retryAgent(agentId) {
+            state.agentStatuses[agentId] = 'running';
+            renderChainVisualization();
+            addAlert('info', `Retrying agent: ${agentId}`);
+        }
+
+        function selectChain(chainId) {
+            state.currentChain = chainId;
+            renderChainList();
+        }
+
+        function selectAgent(agentId) {
+            state.currentAgent = agentId;
+            // Could show agent details panel
+        }
+
+        // Update system status display
+        function updateSystemStatus() {
+            const statusEl = document.getElementById('systemStatus');
+            statusEl.className = 'status-badge';
+
+            if (!state.isRunning) {
+                statusEl.classList.add('status-stopped');
+                statusEl.innerHTML = '<div class="pulse"></div><span>Stopped</span>';
+            } else if (state.isPaused) {
+                statusEl.classList.add('status-paused');
+                statusEl.innerHTML = '<div class="pulse"></div><span>Paused</span>';
+            } else {
+                statusEl.classList.add('status-running');
+                statusEl.innerHTML = '<div class="pulse"></div><span>Running</span>';
+            }
+        }
+
+        // Update uptime
+        function updateUptime() {
+            if (!state.startTime || !state.isRunning) return;
+
+            const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+            const hours = Math.floor(elapsed / 3600).toString().padStart(2, '0');
+            const minutes = Math.floor((elapsed % 3600) / 60).toString().padStart(2, '0');
+            const seconds = (elapsed % 60).toString().padStart(2, '0');
+
+            document.getElementById('uptime').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        // Add alert
+        function addAlert(type, message) {
+            const alert = {
+                type,
+                message,
+                timestamp: Date.now()
+            };
+            state.alerts.unshift(alert);
+            if (state.alerts.length > 20) state.alerts.pop();
+            renderAlerts();
+        }
+
+        // Render alerts
+        function renderAlerts() {
+            const container = document.getElementById('alertsList');
+            if (state.alerts.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 1rem; color: var(--text-muted);">
+                        <i class="fas fa-check-circle" style="font-size: 1.5rem; color: var(--success); margin-bottom: 0.5rem;"></i>
+                        <p style="font-size: 0.8rem;">No alerts</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = state.alerts.map(alert => {
+                const icon = alert.type === 'critical' ? 'fa-exclamation-circle' :
+                            alert.type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle';
+                const timeAgo = getTimeAgo(alert.timestamp);
+
+                return `
+                    <div class="alert-item">
+                        <div class="alert-icon ${alert.type}">
+                            <i class="fas ${icon}"></i>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-message">${alert.message}</div>
+                            <div class="alert-time">${timeAgo}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function clearAlerts() {
+            state.alerts = [];
+            renderAlerts();
+        }
+
+        // Get time ago string
+        function getTimeAgo(timestamp) {
+            const seconds = Math.floor((Date.now() - timestamp) / 1000);
+            if (seconds < 60) return 'Just now';
+            if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+            return `${Math.floor(seconds / 3600)}h ago`;
+        }
+
+        // Approval modal
+        function showApprovalModal(data) {
+            state.pendingApproval = data;
+            const content = document.getElementById('approvalContent');
+            content.innerHTML = `
+                <div class="approval-item">
+                    <span class="approval-label">Agent</span>
+                    <span class="approval-value">${data.agentId}</span>
+                </div>
+                <div class="approval-item">
+                    <span class="approval-label">Opportunities Found</span>
+                    <span class="approval-value">${data.opportunities || 5}</span>
+                </div>
+                <div class="approval-item">
+                    <span class="approval-label">Estimated Revenue</span>
+                    <span class="approval-value">$${(data.revenue || 2500).toLocaleString()}</span>
+                </div>
+                <div class="approval-item">
+                    <span class="approval-label">Confidence Score</span>
+                    <span class="approval-value">${data.confidence || 85}%</span>
+                </div>
+            `;
+            document.getElementById('approvalModal').classList.add('active');
+        }
+
+        function closeApprovalModal() {
+            document.getElementById('approvalModal').classList.remove('active');
+            state.pendingApproval = null;
+        }
+
+        function approveRequest() {
+            if (state.pendingApproval) {
+                state.agentStatuses['user-approval-gate'] = 'completed';
+                renderChainVisualization();
+                addAlert('info', 'Approval granted - continuing production');
+            }
+            closeApprovalModal();
+        }
+
+        function rejectApproval() {
+            if (state.pendingApproval) {
+                state.agentStatuses['user-approval-gate'] = 'error';
+                renderChainVisualization();
+                addAlert('warning', 'Approval rejected - workflow paused');
+            }
+            closeApprovalModal();
+        }
+
+        // View controls
+        function setView(view) {
+            document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            // Implement different views if needed
+        }
+
+        // Simulate execution for demo
+        function simulateExecution() {
+            if (!state.isRunning || state.isPaused) return;
+
+            let agentIndex = 0;
+            let chainIndex = 0;
+
+            const interval = setInterval(() => {
+                if (!state.isRunning || state.isPaused) {
+                    clearInterval(interval);
+                    return;
+                }
+
+                const chain = chains[chainIndex];
+                const agentId = chain.agents[agentIndex];
+
+                // Set previous agent to completed
+                if (agentIndex > 0) {
+                    state.agentStatuses[chain.agents[agentIndex - 1]] = 'completed';
+                }
+
+                // Set current agent to running
+                state.agentStatuses[agentId] = 'running';
+                state.currentAgent = agentId;
+
+                // Check for approval gate
+                if (agentId === 'user-approval-gate') {
+                    state.isPaused = true;
+                    updateSystemStatus();
+                    showApprovalModal({ agentId, opportunities: 5, revenue: 2500, confidence: 87 });
+                    clearInterval(interval);
+                    return;
+                }
+
+                renderChainVisualization();
+
+                // Update stats
+                document.getElementById('activeAgents').textContent = Object.values(state.agentStatuses).filter(s => s === 'running').length;
+                document.getElementById('successRate').textContent = '98.5%';
+                document.getElementById('throughput').textContent = `${Math.floor(Math.random() * 50 + 20)}/hr`;
+
+                agentIndex++;
+                if (agentIndex >= chain.agents.length) {
+                    // Mark last agent as completed
+                    state.agentStatuses[chain.agents[agentIndex - 1]] = 'completed';
+
+                    agentIndex = 0;
+                    chainIndex++;
+                    state.currentChain = chainIndex + 1;
+                    renderChainList();
+
+                    if (chainIndex >= chains.length) {
+                        chainIndex = 0;
+                        state.cycleCount++;
+                        state.currentChain = 1;
+                        document.getElementById('cycleCount').textContent = state.cycleCount;
+                        // Reset agent statuses for new cycle
+                        state.agentStatuses = {};
+                        addAlert('info', `Cycle ${state.cycleCount} completed - starting new cycle`);
+                    }
+                }
+            }, 1500);
+        }
+
+        // Start status updates
+        function startStatusUpdates() {
+            setInterval(() => {
+                updateUptime();
+
+                // Simulate metrics
+                if (state.isRunning && !state.isPaused) {
+                    const cpu = Math.floor(Math.random() * 30 + 20);
+                    const memory = Math.floor(Math.random() * 20 + 40);
+
+                    document.getElementById('cpuUsage').textContent = `${cpu}%`;
+                    document.getElementById('cpuBar').style.width = `${cpu}%`;
+                    document.getElementById('cpuBar').className = `metric-fill ${cpu > 70 ? 'danger' : cpu > 50 ? 'warning' : 'success'}`;
+
+                    document.getElementById('memoryUsage').textContent = `${memory}%`;
+                    document.getElementById('memoryBar').style.width = `${memory}%`;
+                    document.getElementById('memoryBar').className = `metric-fill ${memory > 70 ? 'danger' : memory > 50 ? 'warning' : 'success'}`;
+
+                    document.getElementById('avgResponseTime').textContent = `${Math.floor(Math.random() * 500 + 200)}ms`;
+                }
+            }, 1000);
+        }
+
+        // WebSocket connection for real-time updates (production)
+        function connectWebSocket() {
+            try {
+                const ws = new WebSocket(`ws://${window.location.host}/ws/orchestrator`);
+
+                ws.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+                    handleWebSocketMessage(data);
+                };
+
+                ws.onclose = () => {
+                    setTimeout(connectWebSocket, 5000);
+                };
+            } catch (error) {
+                console.log('WebSocket not available, using simulation mode');
+            }
+        }
+
+        function handleWebSocketMessage(data) {
+            switch (data.type) {
+                case 'status_update':
+                    state.agentStatuses = data.agentStatuses;
+                    state.currentChain = data.currentChain;
+                    state.cycleCount = data.cycleCount;
+                    renderChainVisualization();
+                    break;
+                case 'approval_required':
+                    showApprovalModal(data);
+                    break;
+                case 'alert':
+                    addAlert(data.alertType, data.message);
+                    break;
+                case 'queue_update':
+                    state.queueItems = data.items;
+                    updateQueueDisplay();
+                    break;
+            }
+        }
+
+        function updateQueueDisplay() {
+            const container = document.getElementById('queueList');
+            document.getElementById('queueCount').textContent = `${state.queueItems.length} items`;
+            document.getElementById('queueSize').textContent = state.queueItems.length;
+
+            if (state.queueItems.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                        <i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <p>Queue is empty</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = state.queueItems.slice(0, 10).map(item => `
+                <div class="queue-item">
+                    <div class="queue-item-priority ${item.priority}"></div>
+                    <div class="queue-item-info">
+                        <div class="queue-item-agent">${item.agentId}</div>
+                        <div class="queue-item-status">${item.status} - Attempt ${item.attempts}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize WebSocket (will fall back to simulation if not available)
+        connectWebSocket();
+    </script>
+</body>
+</html>
