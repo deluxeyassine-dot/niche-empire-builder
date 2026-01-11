@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automation Agents - Niche Empire Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        body { background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%); background-attachment: fixed; }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
+        .glass-strong { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.15); }
+        .gradient-purple-blue { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .sidebar-item { position: relative; transition: all 0.3s ease; cursor: pointer; }
+        .sidebar-item::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 4px; height: 0; background: linear-gradient(180deg, #667eea, #764ba2); border-radius: 0 4px 4px 0; transition: height 0.3s ease; }
+        .sidebar-item:hover::before, .sidebar-item.active::before { height: 70%; }
+        .sidebar-item:hover { background: rgba(255, 255, 255, 0.08); padding-left: 24px; }
+        .sidebar-item.active { background: rgba(102, 126, 234, 0.15); padding-left: 24px; color: white; }
+        input, select, textarea { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #667eea; background: rgba(255, 255, 255, 0.08); }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 100; overflow-y: auto; padding: 2rem; }
+        .modal.show { display: flex; align-items: center; justify-content: center; }
+        .agent-card { transition: all 0.3s ease; }
+        .agent-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2); }
+
+        /* Toggle Switch */
+        .toggle-switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 255, 255, 0.1); transition: .3s; border-radius: 26px; }
+        .toggle-slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
+        input:checked + .toggle-slider { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        input:checked + .toggle-slider:before { transform: translateX(24px); }
+
+        .status-active { background: rgba(67, 233, 123, 0.2); color: #43e97b; border: 1px solid rgba(67, 233, 123, 0.3); }
+        .status-paused { background: rgba(254, 225, 64, 0.2); color: #fee140; border: 1px solid rgba(254, 225, 64, 0.3); }
+        .status-stopped { background: rgba(255, 107, 107, 0.2); color: #ff6b6b; border: 1px solid rgba(255, 107, 107, 0.3); }
+
+        .filter-btn { transition: all 0.3s ease; }
+        .filter-btn.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+
+        .log-entry { animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+    </style>
+</head>
+<body class="text-gray-100">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 glass-strong p-6 flex flex-col min-h-screen sticky top-0">
+            <div class="mb-8">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl gradient-purple-blue flex items-center justify-center">
+                        <i class="fas fa-crown text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">NicheEmpire</h1>
+                        <p class="text-xs text-gray-400">Premium Dashboard</p>
+                    </div>
+                </div>
+            </div>
+            <nav class="flex-1 space-y-2">
+                <a href="dashboard.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                    <i class="fas fa-home text-lg w-5"></i><span class="font-medium">Dashboard</span>
+                </a>
+                <div class="pt-4 mt-4 border-t border-gray-700">
+                    <a href="marketplace.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                        <i class="fas fa-store text-lg w-5"></i><span class="font-medium">Marketplaces</span>
+                    </a>
+                    <a href="generators.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                        <i class="fas fa-wand-magic-sparkles text-lg w-5"></i><span class="font-medium">Generators</span>
+                    </a>
+                    <a href="ai-services.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                        <i class="fas fa-robot text-lg w-5"></i><span class="font-medium">AI Tools</span>
+                    </a>
+                    <a href="agents.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-xl text-white">
+                        <i class="fas fa-cogs text-lg w-5"></i><span class="font-medium">Agents</span>
+                    </a>
+                    <a href="products.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                        <i class="fas fa-box-open text-lg w-5"></i><span class="font-medium">Products</span>
+                    </a>
+                    <a href="settings.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                        <i class="fas fa-cog text-lg w-5"></i><span class="font-medium">Settings</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <header class="mb-8">
+                <h2 class="text-3xl font-bold mb-2">Automation Agents</h2>
+                <p class="text-gray-400">Manage your 51 automation agents</p>
+            </header>
+
+            <!-- Control Bar -->
+            <div class="glass-strong rounded-2xl p-6 mb-6">
+                <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+                    <!-- Search -->
+                    <div class="flex-1 max-w-md">
+                        <div class="relative">
+                            <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            <input type="text" id="agent-search" placeholder="Search agents..." class="w-full pl-12 pr-4 py-3 rounded-xl">
+                        </div>
+                    </div>
+
+                    <!-- Bulk Actions -->
+                    <div class="flex gap-2">
+                        <button onclick="bulkAction('start')" class="px-4 py-2 glass rounded-lg hover:bg-white/10 transition text-sm">
+                            <i class="fas fa-play mr-2 text-green-400"></i>Start All
+                        </button>
+                        <button onclick="bulkAction('pause')" class="px-4 py-2 glass rounded-lg hover:bg-white/10 transition text-sm">
+                            <i class="fas fa-pause mr-2 text-yellow-400"></i>Pause All
+                        </button>
+                        <button onclick="bulkAction('stop')" class="px-4 py-2 glass rounded-lg hover:bg-white/10 transition text-sm">
+                            <i class="fas fa-stop mr-2 text-red-400"></i>Stop All
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="flex flex-wrap gap-2 mt-4">
+                    <button onclick="filterAgents('all')" class="filter-btn active px-4 py-2 glass rounded-lg text-sm">All (51)</button>
+                    <button onclick="filterAgents('running')" class="filter-btn px-4 py-2 glass rounded-lg text-sm">Running (<span id="count-running">0</span>)</button>
+                    <button onclick="filterAgents('stopped')" class="filter-btn px-4 py-2 glass rounded-lg text-sm">Stopped (<span id="count-stopped">51</span>)</button>
+                    <button onclick="filterAgents('core')" class="filter-btn px-4 py-2 glass rounded-lg text-sm">Core</button>
+                    <button onclick="filterAgents('automation')" class="filter-btn px-4 py-2 glass rounded-lg text-sm">Automation</button>
+                    <button onclick="filterAgents('business')" class="filter-btn px-4 py-2 glass rounded-lg text-sm">Business</button>
+                    <button onclick="filterAgents('marketing')" class="filter-btn px-4 py-2 glass rounded-lg text-sm">Marketing</button>
+                    <button onclick="filterAgents('customer')" class="filter-btn px-4 py-2 glass rounded-lg text-sm">Customer</button>
+                    <button onclick="filterAgents('optimization')" class="filter-btn px-4 py-2 glass rounded-lg text-sm">Optimization</button>
+                </div>
+            </div>
+
+            <!-- Agents Grid -->
+            <div id="agents-container">
+                <!-- Core Agents -->
+                <div class="mb-8 category-section" data-category="core">
+                    <h3 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        Core Agents (14)
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="core-agents"></div>
+                </div>
+
+                <!-- Automation -->
+                <div class="mb-8 category-section" data-category="automation">
+                    <h3 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                        <i class="fas fa-robot text-blue-400"></i>
+                        Automation Agents (10)
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="automation-agents"></div>
+                </div>
+
+                <!-- Business Intelligence -->
+                <div class="mb-8 category-section" data-category="business">
+                    <h3 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                        <i class="fas fa-chart-line text-green-400"></i>
+                        Business Intelligence (10)
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="business-agents"></div>
+                </div>
+
+                <!-- Marketing & Sales -->
+                <div class="mb-8 category-section" data-category="marketing">
+                    <h3 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                        <i class="fas fa-bullhorn text-orange-400"></i>
+                        Marketing & Sales (8)
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="marketing-agents"></div>
+                </div>
+
+                <!-- Customer Experience -->
+                <div class="mb-8 category-section" data-category="customer">
+                    <h3 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                        <i class="fas fa-users text-purple-400"></i>
+                        Customer Experience (6)
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="customer-agents"></div>
+                </div>
+
+                <!-- Optimization -->
+                <div class="mb-8 category-section" data-category="optimization">
+                    <h3 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                        <i class="fas fa-tachometer-alt text-pink-400"></i>
+                        Optimization (3)
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="optimization-agents"></div>
+                </div>
+            </div>
+
+            <!-- Activity Logs -->
+            <div class="glass-strong rounded-2xl p-6 mt-8">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-bold">Real-Time Activity Logs</h3>
+                    <button onclick="clearLogs()" class="px-4 py-2 glass rounded-lg hover:bg-white/10 text-sm">
+                        <i class="fas fa-trash mr-2"></i>Clear Logs
+                    </button>
+                </div>
+                <div id="activity-logs" class="space-y-2 max-h-96 overflow-y-auto">
+                    <p class="text-gray-400 text-center py-8">No activity yet. Start an agent to see logs.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Configure Modal -->
+    <div id="config-modal" class="modal">
+        <div class="glass-strong rounded-2xl p-8 max-w-2xl w-full">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold" id="modal-title">Configure Agent</h2>
+                <button onclick="closeConfigModal()" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div id="modal-content" class="space-y-4"></div>
+            <div class="flex gap-3 mt-6">
+                <button onclick="saveConfig()" class="flex-1 gradient-purple-blue px-6 py-3 rounded-xl font-semibold">
+                    <i class="fas fa-save mr-2"></i>Save Configuration
+                </button>
+                <button onclick="closeConfigModal()" class="px-6 py-3 glass rounded-xl hover:bg-white/10">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Agent definitions
+        const agents = {
+            core: [
+                {id: 'ai-design', name: 'AI Design Generator', description: 'Generate AI-powered designs and graphics', icon: 'wand-magic-sparkles'},
+                {id: 'blog-writer', name: 'Blog Post Writer', description: 'Write SEO-optimized blog posts', icon: 'pen'},
+                {id: 'content-template', name: 'Content Template Generator', description: 'Create reusable content templates', icon: 'file-alt'},
+                {id: 'ebook-writer', name: 'Ebook Writer', description: 'Write and format complete ebooks', icon: 'book'},
+                {id: 'prompt-generator', name: 'Prompt Generator', description: 'Generate AI prompts for various use cases', icon: 'lightbulb'},
+                {id: 'sales-page', name: 'Sales Page Builder', description: 'Build high-converting sales pages', icon: 'shopping-cart'},
+                {id: 'social-content', name: 'Social Media Content Generator', description: 'Create engaging social media posts', icon: 'share-alt'},
+                {id: 'thumbnail', name: 'Thumbnail Creator', description: 'Design eye-catching thumbnails', icon: 'image'},
+                {id: 'video-creator', name: 'Video Creator', description: 'Create and edit video content', icon: 'video'},
+                {id: 'tool-generator', name: 'Tool/Software Generator', description: 'Generate software tools and utilities', icon: 'wrench'},
+                {id: 'course-builder', name: 'Course Builder', description: 'Build online courses and curriculum', icon: 'graduation-cap'},
+                {id: 'product-packager', name: 'Product Packager', description: 'Package and bundle digital products', icon: 'box'},
+                {id: 'bundle-creator', name: 'Bundle Creator', description: 'Create product bundles and packages', icon: 'layer-group'},
+                {id: 'ad-copy', name: 'Ad Copy Generator', description: 'Write compelling ad copy', icon: 'ad'}
+            ],
+            automation: [
+                {id: 'email-automation', name: 'Email Automation', description: 'Automate email campaigns', icon: 'envelope'},
+                {id: 'email-sequence', name: 'Email Sequence Generator', description: 'Create automated email sequences', icon: 'envelopes-bulk'},
+                {id: 'multiplatform', name: 'Multi-Platform Publisher', description: 'Publish content across platforms', icon: 'network-wired'},
+                {id: 'social-manager', name: 'Social Media Manager', description: 'Manage all social media accounts', icon: 'users-cog'},
+                {id: 'cross-promoter', name: 'Platform Cross Promoter', description: 'Cross-promote across platforms', icon: 'share-nodes'},
+                {id: 'launch-manager', name: 'Launch Manager', description: 'Manage product launches', icon: 'rocket'},
+                {id: 'comment-manager', name: 'Comment Manager', description: 'Manage and respond to comments', icon: 'comments'},
+                {id: 'dm-responder', name: 'DM Responder', description: 'Auto-respond to direct messages', icon: 'message'},
+                {id: 'faq-bot', name: 'FAQ Bot', description: 'Answer frequently asked questions', icon: 'circle-question'},
+                {id: 'chatbot-sales', name: 'Chatbot Sales', description: 'Sales chatbot for conversions', icon: 'robot'}
+            ],
+            business: [
+                {id: 'audience-research', name: 'Audience Research', description: 'Research and analyze target audience', icon: 'magnifying-glass-chart'},
+                {id: 'competitor-analysis', name: 'Competitor Analysis', description: 'Analyze competitor strategies', icon: 'chess'},
+                {id: 'content-gap', name: 'Content Gap Finder', description: 'Find content opportunities', icon: 'puzzle-piece'},
+                {id: 'performance-analyzer', name: 'Content Performance Analyzer', description: 'Analyze content performance metrics', icon: 'chart-bar'},
+                {id: 'keyword-mining', name: 'Keyword Mining', description: 'Find profitable keywords', icon: 'key'},
+                {id: 'opportunity-validator', name: 'Opportunity Validator', description: 'Validate business opportunities', icon: 'check-double'},
+                {id: 'analytics', name: 'Performance Analytics', description: 'Track all performance metrics', icon: 'chart-line'},
+                {id: 'trend-scout', name: 'Trend Scout', description: 'Discover trending topics', icon: 'fire'},
+                {id: 'ab-testing', name: 'A/B Testing', description: 'Run and analyze A/B tests', icon: 'flask'},
+                {id: 'growth-advisor', name: 'Growth Advisor', description: 'Provide growth strategies', icon: 'arrow-trend-up'}
+            ],
+            marketing: [
+                {id: 'affiliate-promotion', name: 'Affiliate Promotion', description: 'Promote affiliate products', icon: 'handshake'},
+                {id: 'affiliate-recruiter', name: 'Affiliate Recruiter', description: 'Recruit affiliate partners', icon: 'user-plus'},
+                {id: 'cold-email', name: 'Cold Email Outreach', description: 'Send cold email campaigns', icon: 'paper-plane'},
+                {id: 'customer-hunter', name: 'Customer Hunter', description: 'Find and target potential customers', icon: 'crosshairs'},
+                {id: 'influencer-outreach', name: 'Influencer Outreach', description: 'Connect with influencers', icon: 'star'},
+                {id: 'paid-ads', name: 'Paid Ads Manager', description: 'Manage paid advertising campaigns', icon: 'dollar-sign'},
+                {id: 'seo-optimizer', name: 'SEO Optimizer', description: 'Optimize content for search engines', icon: 'search'},
+                {id: 'upsell', name: 'Upsell Agent', description: 'Create upsell and cross-sell offers', icon: 'arrow-up'}
+            ],
+            customer: [
+                {id: 'customer-support', name: 'Customer Support', description: 'Provide customer support', icon: 'headset'},
+                {id: 'onboarding', name: 'Onboarding Agent', description: 'Onboard new customers', icon: 'user-check'},
+                {id: 'review-manager', name: 'Review Manager', description: 'Manage customer reviews', icon: 'star-half-alt'},
+                {id: 'community-builder', name: 'Community Builder', description: 'Build and engage community', icon: 'people-group'},
+                {id: 'objection-handler', name: 'Objection Handler', description: 'Handle customer objections', icon: 'shield'},
+                {id: 'refund-prevention', name: 'Refund Prevention', description: 'Prevent refunds and chargebacks', icon: 'hand-holding-dollar'}
+            ],
+            optimization: [
+                {id: 'pricing-optimizer', name: 'Pricing Optimizer', description: 'Optimize product pricing', icon: 'tags'},
+                {id: 'quality-control', name: 'Quality Control', description: 'Ensure content quality', icon: 'badge-check'},
+                {id: 'retention-optimizer', name: 'Retention Optimizer', description: 'Optimize customer retention', icon: 'repeat'}
+            ]
+        };
+
+        let currentAgentId = null;
+        let agentStates = {};
+
+        // Initialize agents
+        function initializeAgents() {
+            Object.keys(agents).forEach(category => {
+                const container = document.getElementById(`${category}-agents`);
+                agents[category].forEach(agent => {
+                    agentStates[agent.id] = {status: 'stopped', category: category};
+                    container.innerHTML += createAgentCard(agent, category);
+                });
+            });
+            updateCounts();
+        }
+
+        // Create agent card HTML
+        function createAgentCard(agent, category) {
+            return `
+                <div class="agent-card glass-strong rounded-xl p-4 agent-item" data-id="${agent.id}" data-category="${category}" data-status="stopped">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg gradient-purple-blue flex items-center justify-center">
+                                <i class="fas fa-${agent.icon} text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-sm">${agent.name}</h4>
+                                <p class="text-xs text-gray-400">${agent.description}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="status-badge status-stopped px-2 py-1 rounded-full text-xs font-semibold" id="status-${agent.id}">
+                            <i class="fas fa-circle text-xs"></i> Stopped
+                        </span>
+                        <div class="flex items-center gap-2">
+                            <label class="toggle-switch">
+                                <input type="checkbox" onchange="toggleAgent('${agent.id}')" id="toggle-${agent.id}">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <button onclick="openConfigModal('${agent.id}', '${agent.name}')" class="px-3 py-1 glass rounded-lg hover:bg-white/10 text-xs">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Toggle agent
+        function toggleAgent(id) {
+            const checkbox = document.getElementById(`toggle-${id}`);
+            const statusBadge = document.getElementById(`status-${id}`);
+            const card = document.querySelector(`[data-id="${id}"]`);
+
+            if (checkbox.checked) {
+                agentStates[id].status = 'running';
+                statusBadge.className = 'status-badge status-active px-2 py-1 rounded-full text-xs font-semibold';
+                statusBadge.innerHTML = '<i class="fas fa-circle text-xs"></i> Running';
+                card.setAttribute('data-status', 'running');
+                addLog(`Started ${getAgentName(id)}`, 'success');
+            } else {
+                agentStates[id].status = 'stopped';
+                statusBadge.className = 'status-badge status-stopped px-2 py-1 rounded-full text-xs font-semibold';
+                statusBadge.innerHTML = '<i class="fas fa-circle text-xs"></i> Stopped';
+                card.setAttribute('data-status', 'stopped');
+                addLog(`Stopped ${getAgentName(id)}`, 'error');
+            }
+            updateCounts();
+        }
+
+        // Get agent name by ID
+        function getAgentName(id) {
+            for (let category in agents) {
+                const agent = agents[category].find(a => a.id === id);
+                if (agent) return agent.name;
+            }
+            return id;
+        }
+
+        // Bulk actions
+        function bulkAction(action) {
+            Object.keys(agentStates).forEach(id => {
+                const checkbox = document.getElementById(`toggle-${id}`);
+                if (action === 'start') {
+                    checkbox.checked = true;
+                    toggleAgent(id);
+                } else if (action === 'stop') {
+                    checkbox.checked = false;
+                    toggleAgent(id);
+                }
+            });
+            addLog(`Bulk action: ${action} all agents`, 'info');
+        }
+
+        // Filter agents
+        function filterAgents(filter) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const sections = document.querySelectorAll('.category-section');
+            const items = document.querySelectorAll('.agent-item');
+
+            if (filter === 'all') {
+                sections.forEach(s => s.style.display = 'block');
+                items.forEach(i => i.style.display = 'block');
+            } else if (filter === 'running' || filter === 'stopped') {
+                sections.forEach(s => s.style.display = 'block');
+                items.forEach(i => {
+                    i.style.display = i.getAttribute('data-status') === filter ? 'block' : 'none';
+                });
+            } else {
+                sections.forEach(s => {
+                    s.style.display = s.getAttribute('data-category') === filter ? 'block' : 'none';
+                });
+            }
+        }
+
+        // Search
+        document.getElementById('agent-search')?.addEventListener('input', function(e) {
+            const search = e.target.value.toLowerCase();
+            document.querySelectorAll('.agent-item').forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(search) ? 'block' : 'none';
+            });
+        });
+
+        // Config modal
+        function openConfigModal(id, name) {
+            currentAgentId = id;
+            document.getElementById('modal-title').textContent = `Configure ${name}`;
+            document.getElementById('modal-content').innerHTML = `
+                <div>
+                    <label class="block text-sm font-medium mb-2">Execution Frequency</label>
+                    <select class="w-full px-4 py-2 rounded-lg">
+                        <option>Every 5 minutes</option>
+                        <option>Every 15 minutes</option>
+                        <option>Every 30 minutes</option>
+                        <option>Every hour</option>
+                        <option>Every 6 hours</option>
+                        <option>Daily</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Max Concurrent Tasks</label>
+                    <input type="number" value="5" min="1" max="100" class="w-full px-4 py-2 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Priority Level</label>
+                    <select class="w-full px-4 py-2 rounded-lg">
+                        <option>High</option>
+                        <option selected>Medium</option>
+                        <option>Low</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-3">
+                    <input type="checkbox" class="w-5 h-5 rounded">
+                    <label class="text-sm">Enable notifications</label>
+                </div>
+                <div class="flex items-center gap-3">
+                    <input type="checkbox" checked class="w-5 h-5 rounded">
+                    <label class="text-sm">Auto-restart on failure</label>
+                </div>
+            `;
+            document.getElementById('config-modal').classList.add('show');
+        }
+
+        function closeConfigModal() {
+            document.getElementById('config-modal').classList.remove('show');
+        }
+
+        function saveConfig() {
+            addLog(`Updated configuration for ${getAgentName(currentAgentId)}`, 'info');
+            closeConfigModal();
+        }
+
+        // Activity logs
+        function addLog(message, type) {
+            const logs = document.getElementById('activity-logs');
+            const timestamp = new Date().toLocaleTimeString();
+            const colors = {
+                success: 'text-green-400',
+                error: 'text-red-400',
+                info: 'text-blue-400',
+                warning: 'text-yellow-400'
+            };
+
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry glass rounded-lg p-3 flex items-center gap-3';
+            logEntry.innerHTML = `
+                <span class="text-xs text-gray-500">${timestamp}</span>
+                <span class="${colors[type]} text-sm">${message}</span>
+            `;
+
+            if (logs.children[0]?.tagName === 'P') {
+                logs.innerHTML = '';
+            }
+            logs.insertBefore(logEntry, logs.firstChild);
+
+            // Keep only last 50 logs
+            while (logs.children.length > 50) {
+                logs.removeChild(logs.lastChild);
+            }
+        }
+
+        function clearLogs() {
+            document.getElementById('activity-logs').innerHTML = '<p class="text-gray-400 text-center py-8">No activity yet. Start an agent to see logs.</p>';
+        }
+
+        // Update counts
+        function updateCounts() {
+            const running = Object.values(agentStates).filter(s => s.status === 'running').length;
+            const stopped = Object.values(agentStates).filter(s => s.status === 'stopped').length;
+            document.getElementById('count-running').textContent = running;
+            document.getElementById('count-stopped').textContent = stopped;
+        }
+
+        // Initialize
+        window.onload = initializeAgents;
+    </script>
+</body>
+</html>

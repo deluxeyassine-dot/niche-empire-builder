@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Manager - Niche Empire Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .gradient-purple-blue { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3); }
+        .nav-link { transition: all 0.3s ease; padding: 8px 16px; border-radius: 8px; }
+        .nav-link:hover { background: rgba(255, 255, 255, 0.1); }
+        .video-card { transition: all 0.3s ease; cursor: pointer; }
+        .video-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.08); }
+        input[type="text"], textarea, select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            width: 100%;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+        .modal.show { display: flex; }
+    </style>
+</head>
+<body>
+    <nav class="glass border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-8">
+                    <a href="../index.html" class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl gradient-purple-blue flex items-center justify-center">
+                            <i class="fas fa-rocket text-white text-lg"></i>
+                        </div>
+                        <span class="font-bold text-xl">Niche Empire Builder</span>
+                    </a>
+                    <div class="hidden md:flex items-center gap-2">
+                        <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large mr-2"></i>Dashboard</a>
+                        <a href="youtube.html" class="nav-link bg-white/10"><i class="fab fa-youtube mr-2"></i>YouTube</a>
+                        <a href="instagram.html" class="nav-link"><i class="fab fa-instagram mr-2"></i>Instagram</a>
+                        <a href="tiktok.html" class="nav-link"><i class="fab fa-tiktok mr-2"></i>TikTok</a>
+                        <a href="pinterest.html" class="nav-link"><i class="fab fa-pinterest mr-2"></i>Pinterest</a>
+                    </div>
+                </div>
+                <a href="settings.html" class="glass px-4 py-2 rounded-lg hover:bg-white/10 transition">
+                    <i class="fas fa-cog mr-2"></i>Settings
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="text-4xl font-bold mb-2">YouTube Manager</h1>
+                <p class="text-white/70">Manage your YouTube channel, upload videos, and track analytics</p>
+            </div>
+            <button onclick="openUploadModal()" class="btn-primary flex items-center gap-2">
+                <i class="fas fa-upload"></i> Upload Video
+            </button>
+        </div>
+
+        <!-- Channel Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="glass rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-white/70 text-sm">Subscribers</span>
+                    <i class="fas fa-users text-red-400"></i>
+                </div>
+                <p class="text-3xl font-bold">12.5K</p>
+                <p class="text-xs text-green-400 mt-1">+245 this week</p>
+            </div>
+            <div class="glass rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-white/70 text-sm">Total Views</span>
+                    <i class="fas fa-eye text-blue-400"></i>
+                </div>
+                <p class="text-3xl font-bold">458K</p>
+                <p class="text-xs text-green-400 mt-1">+12K this week</p>
+            </div>
+            <div class="glass rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-white/70 text-sm">Videos</span>
+                    <i class="fas fa-video text-purple-400"></i>
+                </div>
+                <p class="text-3xl font-bold" id="video-count">0</p>
+            </div>
+            <div class="glass rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-white/70 text-sm">Watch Time</span>
+                    <i class="fas fa-clock text-yellow-400"></i>
+                </div>
+                <p class="text-3xl font-bold">1.2K</p>
+                <p class="text-xs text-white/50 mt-1">hours</p>
+            </div>
+        </div>
+
+        <!-- Video Grid -->
+        <div class="glass rounded-2xl p-6">
+            <h2 class="text-2xl font-bold mb-6">Your Videos</h2>
+            <div id="videos-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="text-center py-12 text-white/50">
+                    <i class="fas fa-video text-4xl mb-4"></i>
+                    <p>No videos uploaded yet. Click "Upload Video" to get started.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Modal -->
+    <div id="upload-modal" class="modal">
+        <div class="glass rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold">Upload Video</h2>
+                <button onclick="closeUploadModal()" class="text-white/50 hover:text-white text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form onsubmit="handleUpload(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm text-white/70 mb-2">Video File</label>
+                    <input type="file" accept="video/*" required class="cursor-pointer">
+                </div>
+                <div>
+                    <label class="block text-sm text-white/70 mb-2">Title</label>
+                    <input type="text" id="video-title" placeholder="Enter video title" required>
+                </div>
+                <div>
+                    <label class="block text-sm text-white/70 mb-2">Description</label>
+                    <textarea id="video-description" rows="4" placeholder="Video description..."></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm text-white/70 mb-2">Tags (comma separated)</label>
+                    <input type="text" id="video-tags" placeholder="tag1, tag2, tag3">
+                </div>
+                <div>
+                    <label class="block text-sm text-white/70 mb-2">Category</label>
+                    <select id="video-category" required>
+                        <option value="">Select category</option>
+                        <option value="Education">Education</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="How-to">How-to & Style</option>
+                        <option value="Gaming">Gaming</option>
+                        <option value="Music">Music</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary w-full"><i class="fas fa-upload mr-2"></i>Upload Video</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let videos = JSON.parse(localStorage.getItem('youtube_videos') || '[]');
+
+        function init() {
+            renderVideos();
+            document.getElementById('video-count').textContent = videos.length;
+        }
+
+        function renderVideos() {
+            const grid = document.getElementById('videos-grid');
+            if (videos.length === 0) return;
+
+            grid.innerHTML = videos.map(video => `
+                <div class="video-card glass rounded-xl p-4">
+                    <div class="aspect-video bg-gradient-to-br from-red-500/20 to-red-700/20 rounded-lg mb-4 flex items-center justify-center">
+                        <i class="fas fa-play text-4xl text-red-400"></i>
+                    </div>
+                    <h3 class="font-bold mb-2 line-clamp-2">${video.title}</h3>
+                    <p class="text-sm text-white/60 mb-3 line-clamp-2">${video.description}</p>
+                    <div class="flex items-center justify-between text-xs text-white/50">
+                        <span><i class="fas fa-eye mr-1"></i>0 views</span>
+                        <span>${video.date}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openUploadModal() { document.getElementById('upload-modal').classList.add('show'); }
+        function closeUploadModal() { document.getElementById('upload-modal').classList.remove('show'); }
+
+        function handleUpload(e) {
+            e.preventDefault();
+            const video = {
+                id: Date.now(),
+                title: document.getElementById('video-title').value,
+                description: document.getElementById('video-description').value,
+                tags: document.getElementById('video-tags').value,
+                category: document.getElementById('video-category').value,
+                date: new Date().toLocaleDateString()
+            };
+            videos.unshift(video);
+            localStorage.setItem('youtube_videos', JSON.stringify(videos));
+            renderVideos();
+            document.getElementById('video-count').textContent = videos.length;
+            closeUploadModal();
+            alert('Video uploaded successfully!');
+        }
+
+        init();
+    </script>
+</body>
+</html>

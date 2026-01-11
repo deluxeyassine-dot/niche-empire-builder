@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Video Generator - AI Automation System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 30px;
+        }
+
+        .settings-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            height: fit-content;
+        }
+
+        .preview-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        h2 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section h3 {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: white;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .input-group input::placeholder,
+        .input-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,
+        .input-group textarea:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        }
+
+        .input-group select {
+            cursor: pointer;
+        }
+
+        .input-group select option {
+            background: #764ba2;
+            color: white;
+        }
+
+        .slider-group {
+            margin-bottom: 15px;
+        }
+
+        .slider-group label {
+            display: flex;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .slider-group input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .slider-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .slider-group input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .checkbox-group {
+            margin-bottom: 15px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.6);
+        }
+
+        .preview-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .preview-placeholder {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .preview-placeholder .icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .preview-video {
+            width: 100%;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 30px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ade80 0%, #22c55e 100%);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-card .label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .value {
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .ai-model-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 AI Video Generator</h1>
+            <p>Create professional videos using advanced AI models</p>
+        </div>
+
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-btn">🏠 Dashboard</a>
+            <a href="api-keys.html" class="nav-btn">🔐 API Keys</a>
+            <a href="watermark-remover.html" class="nav-btn">✨ Watermark Remover</a>
+            <a href="automation-control.html" class="nav-btn">⚙️ Automation</a>
+        </div>
+
+        <div class="main-content">
+            <!-- Settings Panel -->
+            <div class="settings-panel">
+                <h2>⚙️ Video Settings</h2>
+
+                <div class="section">
+                    <h3>Content Details</h3>
+                    <div class="input-group">
+                        <label>Topic / Niche</label>
+                        <input type="text" id="topic" placeholder="e.g., Motivational Quotes, AI Technology, Cooking Tips">
+                    </div>
+                    <div class="input-group">
+                        <label>Detailed Description</label>
+                        <textarea id="description" placeholder="Describe what you want in the video..."></textarea>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>Video Specifications</h3>
+                    <div class="slider-group">
+                        <label>
+                            <span>Duration</span>
+                            <span id="duration-value">30 seconds</span>
+                        </label>
+                        <input type="range" id="duration" min="15" max="180" value="30" step="15" oninput="updateDurationLabel()">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Video Style</label>
+                        <select id="style">
+                            <option value="realistic">Realistic</option>
+                            <option value="animated">Animated</option>
+                            <option value="cinematic">Cinematic</option>
+                            <option value="documentary">Documentary</option>
+                            <option value="tutorial">Tutorial</option>
+                            <option value="vlog">Vlog Style</option>
+                            <option value="slideshow">Slideshow</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Target Platform</label>
+                        <select id="platform">
+                            <option value="youtube">YouTube (16:9)</option>
+                            <option value="youtube-short">YouTube Shorts (9:16)</option>
+                            <option value="instagram">Instagram Feed (1:1)</option>
+                            <option value="instagram-story">Instagram Story (9:16)</option>
+                            <option value="tiktok">TikTok (9:16)</option>
+                            <option value="facebook">Facebook (16:9)</option>
+                            <option value="twitter">Twitter (16:9)</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Resolution</label>
+                        <select id="resolution">
+                            <option value="720p">720p (HD)</option>
+                            <option value="1080p" selected>1080p (Full HD)</option>
+                            <option value="4k">4K (Ultra HD)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>AI Model</h3>
+                    <div class="input-group">
+                        <label>Select AI Model</label>
+                        <select id="ai-model">
+                            <option value="sora">Sora 2 - OpenAI (Premium)</option>
+                            <option value="leonardo">Leonardo.ai - Motion</option>
+                            <option value="nanobanana">Nano Banana - Fast</option>
+                            <option value="runway">Runway Gen-2</option>
+                            <option value="pika">Pika Labs</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>Audio Options</h3>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="add-music" checked>
+                            <label for="add-music">Add Background Music</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="add-voiceover">
+                            <label for="add-voiceover">Add AI Voiceover</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="add-sfx">
+                            <label for="add-sfx">Add Sound Effects</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>Post-Generation</h3>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="auto-post">
+                            <label for="auto-post">Auto-post to Platform</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="add-captions">
+                            <label for="add-captions">Auto-generate Captions</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="add-hashtags">
+                            <label for="add-hashtags">Generate Hashtags</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="generateVideo()">🎬 Generate Video</button>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="preview-panel">
+                <h2>📺 Preview & Download</h2>
+
+                <div class="progress-bar" id="progress-bar">
+                    <div class="progress-fill" id="progress-fill">0%</div>
+                </div>
+
+                <div class="loading-spinner" id="loading-spinner"></div>
+
+                <div class="preview-container" id="preview-container">
+                    <div class="preview-placeholder" id="placeholder">
+                        <div class="icon">🎬</div>
+                        <h3>No video generated yet</h3>
+                        <p>Configure settings and click "Generate Video" to start</p>
+                    </div>
+                    <video id="preview-video" class="preview-video" controls></video>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="label">Duration</div>
+                        <div class="value" id="stat-duration">--</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">File Size</div>
+                        <div class="value" id="stat-size">--</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Resolution</div>
+                        <div class="value" id="stat-resolution">--</div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-success" id="download-btn" disabled onclick="downloadVideo()">⬇️ Download</button>
+                    <button class="btn btn-primary" id="post-btn" disabled onclick="postVideo()">📤 Post Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let generatedVideoUrl = null;
+
+        function updateDurationLabel() {
+            const duration = document.getElementById('duration').value;
+            document.getElementById('duration-value').textContent = `${duration} seconds`;
+        }
+
+        async function generateVideo() {
+            const topic = document.getElementById('topic').value;
+            const description = document.getElementById('description').value;
+
+            if (!topic) {
+                alert('Please enter a topic or niche for your video');
+                return;
+            }
+
+            // Check if API keys are configured
+            const aiModel = document.getElementById('ai-model').value;
+            const apiKeys = localStorage.getItem(`${aiModel}_api_keys`);
+
+            if (!apiKeys) {
+                if (confirm(`${aiModel} API key not configured. Would you like to configure it now?`)) {
+                    window.location.href = 'api-keys.html';
+                    return;
+                }
+                return;
+            }
+
+            // Show loading state
+            const progressBar = document.getElementById('progress-bar');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const placeholder = document.getElementById('placeholder');
+            const downloadBtn = document.getElementById('download-btn');
+            const postBtn = document.getElementById('post-btn');
+
+            progressBar.style.display = 'block';
+            loadingSpinner.style.display = 'block';
+            placeholder.style.display = 'none';
+            downloadBtn.disabled = true;
+            postBtn.disabled = true;
+
+            // Simulate video generation process
+            const stages = [
+                { progress: 20, text: 'Analyzing content...' },
+                { progress: 40, text: 'Generating scenes...' },
+                { progress: 60, text: 'Rendering video...' },
+                { progress: 80, text: 'Adding audio...' },
+                { progress: 100, text: 'Finalizing...' }
+            ];
+
+            for (let stage of stages) {
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                updateProgress(stage.progress, stage.text);
+            }
+
+            // Complete generation
+            loadingSpinner.style.display = 'none';
+
+            // Show preview (using a placeholder video)
+            const previewVideo = document.getElementById('preview-video');
+            previewVideo.style.display = 'block';
+
+            // In production, this would be the actual generated video URL
+            generatedVideoUrl = 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4';
+            previewVideo.src = generatedVideoUrl;
+
+            // Update stats
+            const duration = document.getElementById('duration').value;
+            const resolution = document.getElementById('resolution').value;
+            document.getElementById('stat-duration').textContent = `${duration}s`;
+            document.getElementById('stat-size').textContent = '15.2 MB';
+            document.getElementById('stat-resolution').textContent = resolution;
+
+            // Enable action buttons
+            downloadBtn.disabled = false;
+            postBtn.disabled = false;
+
+            // Hide progress bar after a moment
+            setTimeout(() => {
+                progressBar.style.display = 'none';
+            }, 1000);
+        }
+
+        function updateProgress(percent, text) {
+            const progressFill = document.getElementById('progress-fill');
+            progressFill.style.width = percent + '%';
+            progressFill.textContent = text || `${percent}%`;
+        }
+
+        function downloadVideo() {
+            if (!generatedVideoUrl) {
+                alert('No video to download');
+                return;
+            }
+
+            // Create download link
+            const link = document.createElement('a');
+            link.href = generatedVideoUrl;
+            link.download = `ai-video-${Date.now()}.mp4`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            alert('Video download started!');
+        }
+
+        function postVideo() {
+            if (!generatedVideoUrl) {
+                alert('No video to post');
+                return;
+            }
+
+            const platform = document.getElementById('platform').value;
+            const autoPost = document.getElementById('auto-post').checked;
+
+            if (!autoPost) {
+                alert('Auto-post is disabled. Enable it in settings to post automatically.');
+                return;
+            }
+
+            // Check platform API keys
+            const platformKey = platform.includes('youtube') ? 'youtube' :
+                              platform.includes('instagram') ? 'instagram' :
+                              platform.includes('tiktok') ? 'tiktok' :
+                              platform.includes('facebook') ? 'facebook' : null;
+
+            if (platformKey) {
+                const apiKeys = localStorage.getItem(`${platformKey}_api_keys`);
+                if (!apiKeys) {
+                    if (confirm(`${platformKey} API key not configured. Would you like to configure it now?`)) {
+                        window.location.href = 'api-keys.html';
+                        return;
+                    }
+                    return;
+                }
+            }
+
+            // Simulate posting
+            alert(`Video scheduled for posting to ${platform}!`);
+        }
+
+        // Load saved settings
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('video_generator_settings');
+            if (saved) {
+                const settings = JSON.parse(saved);
+                // Restore settings if needed
+            }
+        });
+
+        // Auto-save settings
+        document.querySelectorAll('input, select, textarea').forEach(element => {
+            element.addEventListener('change', () => {
+                const settings = {
+                    topic: document.getElementById('topic').value,
+                    description: document.getElementById('description').value,
+                    duration: document.getElementById('duration').value,
+                    style: document.getElementById('style').value,
+                    platform: document.getElementById('platform').value,
+                    resolution: document.getElementById('resolution').value,
+                    aiModel: document.getElementById('ai-model').value
+                };
+                localStorage.setItem('video_generator_settings', JSON.stringify(settings));
+            });
+        });
+    </script>
+</body>
+</html>

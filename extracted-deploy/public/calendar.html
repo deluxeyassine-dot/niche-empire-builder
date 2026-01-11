@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Calendar - Niche Empire Builder</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Premium gradients */
+        .gradient-purple-blue {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .gradient-orange-pink {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .gradient-green-blue {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .gradient-teal {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        /* Calendar Grid */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .calendar-day {
+            min-height: 120px;
+            padding: 8px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .calendar-day.today {
+            background: rgba(102, 126, 234, 0.15);
+            border: 2px solid #667eea;
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.4;
+        }
+
+        /* Drag and Drop */
+        .calendar-day.drag-over {
+            background: rgba(102, 126, 234, 0.2);
+            border: 2px dashed #667eea;
+            transform: scale(1.02);
+        }
+
+        .post-item {
+            padding: 6px 10px;
+            border-radius: 8px;
+            margin-bottom: 4px;
+            font-size: 11px;
+            cursor: move;
+            transition: all 0.2s ease;
+            border-left: 3px solid;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .post-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .post-item.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+        /* Platform colors */
+        .post-youtube {
+            background: rgba(255, 0, 0, 0.2);
+            border-color: #FF0000;
+            color: #ff6b6b;
+        }
+
+        .post-instagram {
+            background: rgba(228, 64, 95, 0.2);
+            border-color: #E4405F;
+            color: #f093fb;
+        }
+
+        .post-tiktok {
+            background: rgba(0, 0, 0, 0.4);
+            border-color: #000000;
+            color: #ffffff;
+        }
+
+        .post-pinterest {
+            background: rgba(230, 0, 35, 0.2);
+            border-color: #E60023;
+            color: #ff6b6b;
+        }
+
+        /* Pulse animation */
+        @keyframes pulse-glow {
+            0%, 100% {
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(67, 233, 123, 0.7);
+            }
+            50% {
+                opacity: 0.8;
+                box-shadow: 0 0 0 10px rgba(67, 233, 123, 0);
+            }
+        }
+
+        .pulse-green {
+            animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Filter pills */
+        .filter-pill {
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .filter-pill:hover {
+            transform: translateY(-2px);
+        }
+
+        .filter-pill.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* View toggle */
+        .view-toggle {
+            display: flex;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px;
+            border-radius: 12px;
+        }
+
+        .view-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn.active {
+            background: rgba(102, 126, 234, 0.3);
+            color: #667eea;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.7);
+        }
+
+        /* Fade in */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        /* Week view */
+        .week-view {
+            display: none;
+        }
+
+        .week-view.active {
+            display: block;
+        }
+
+        .week-grid {
+            display: grid;
+            grid-template-columns: 80px repeat(7, 1fr);
+            gap: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .time-slot {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            min-height: 60px;
+            transition: all 0.2s ease;
+        }
+
+        .time-slot:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .time-label {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            color: #9ca3af;
+        }
+
+        /* Stats cards */
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+
+        /* Bulk upload area */
+        .upload-zone {
+            border: 2px dashed rgba(102, 126, 234, 0.4);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-zone:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .upload-zone.drag-active {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+            transform: scale(1.02);
+        }
+
+        /* Channel selector */
+        .channel-option {
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+
+        .channel-option:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .channel-option.selected {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+        }
+
+        /* Time picker */
+        input[type="time"],
+        input[type="date"],
+        input[type="datetime-local"] {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+            color: white;
+            font-size: 14px;
+        }
+
+        input[type="time"]:focus,
+        input[type="date"]:focus,
+        input[type="datetime-local"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-scheduled {
+            background: rgba(254, 225, 64, 0.2);
+            color: #fee140;
+        }
+
+        .badge-published {
+            background: rgba(67, 233, 123, 0.2);
+            color: #43e97b;
+        }
+
+        .badge-draft {
+            background: rgba(156, 163, 175, 0.2);
+            color: #9ca3af;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            font-size: 12px;
+            border-radius: 6px;
+            white-space: nowrap;
+            margin-bottom: 8px;
+            z-index: 100;
+        }
+    </style>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            500: '#667eea',
+                            600: '#5568d3',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-gray-100">
+
+    <!-- Header -->
+    <header class="glass-strong border-b border-gray-700 sticky top-0 z-40">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <a href="dashboard.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                        <div class="w-10 h-10 rounded-xl gradient-purple-blue flex items-center justify-center">
+                            <i class="fas fa-crown text-white"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-lg font-bold">NicheEmpire</h1>
+                            <p class="text-xs text-gray-400">Content Calendar</p>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <div class="glass px-4 py-2 rounded-xl flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-green-400 pulse-green"></div>
+                        <span class="text-sm font-medium">47 Scheduled</span>
+                    </div>
+
+                    <!-- View Toggle -->
+                    <div class="view-toggle">
+                        <button class="view-btn active" onclick="switchView('month')">
+                            <i class="fas fa-calendar-alt mr-2"></i>Month
+                        </button>
+                        <button class="view-btn" onclick="switchView('week')">
+                            <i class="fas fa-calendar-week mr-2"></i>Week
+                        </button>
+                    </div>
+
+                    <button onclick="openBulkModal()" class="glass px-4 py-2 rounded-xl font-medium hover:bg-white/10 transition-all">
+                        <i class="fas fa-upload mr-2"></i>Bulk Upload
+                    </button>
+
+                    <button onclick="openNewPostModal()" class="gradient-purple-blue px-6 py-2 rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all">
+                        <i class="fas fa-plus mr-2"></i>New Post
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8">
+
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 fade-in-up">
+            <div class="stat-card glass-strong rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="w-12 h-12 rounded-xl" style="background: #FF0000;">
+                        <i class="fab fa-youtube text-white text-xl flex items-center justify-center h-full"></i>
+                    </div>
+                    <span class="badge badge-scheduled">12</span>
+                </div>
+                <h3 class="text-gray-400 text-sm font-medium mb-1">YouTube</h3>
+                <p class="text-2xl font-bold">18 Posts</p>
+            </div>
+
+            <div class="stat-card glass-strong rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="w-12 h-12 rounded-xl" style="background: linear-gradient(45deg, #f09433, #dc2743, #bc1888);">
+                        <i class="fab fa-instagram text-white text-xl flex items-center justify-center h-full"></i>
+                    </div>
+                    <span class="badge badge-scheduled">8</span>
+                </div>
+                <h3 class="text-gray-400 text-sm font-medium mb-1">Instagram</h3>
+                <p class="text-2xl font-bold">15 Posts</p>
+            </div>
+
+            <div class="stat-card glass-strong rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="w-12 h-12 rounded-xl bg-black">
+                        <i class="fab fa-tiktok text-white text-xl flex items-center justify-center h-full"></i>
+                    </div>
+                    <span class="badge badge-scheduled">6</span>
+                </div>
+                <h3 class="text-gray-400 text-sm font-medium mb-1">TikTok</h3>
+                <p class="text-2xl font-bold">10 Posts</p>
+            </div>
+
+            <div class="stat-card glass-strong rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="w-12 h-12 rounded-xl" style="background: #E60023;">
+                        <i class="fab fa-pinterest text-white text-xl flex items-center justify-center h-full"></i>
+                    </div>
+                    <span class="badge badge-scheduled">4</span>
+                </div>
+                <h3 class="text-gray-400 text-sm font-medium mb-1">Pinterest</h3>
+                <p class="text-2xl font-bold">4 Posts</p>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="flex items-center justify-between mb-6 flex-wrap gap-4">
+            <div class="flex items-center gap-3 flex-wrap">
+                <span class="text-sm font-semibold text-gray-400">Filter:</span>
+                <button class="filter-pill glass active" onclick="filterPlatform('all')">
+                    <i class="fas fa-globe mr-2"></i>All
+                </button>
+                <button class="filter-pill glass" onclick="filterPlatform('youtube')">
+                    <i class="fab fa-youtube mr-2"></i>YouTube
+                </button>
+                <button class="filter-pill glass" onclick="filterPlatform('instagram')">
+                    <i class="fab fa-instagram mr-2"></i>Instagram
+                </button>
+                <button class="filter-pill glass" onclick="filterPlatform('tiktok')">
+                    <i class="fab fa-tiktok mr-2"></i>TikTok
+                </button>
+                <button class="filter-pill glass" onclick="filterPlatform('pinterest')">
+                    <i class="fab fa-pinterest mr-2"></i>Pinterest
+                </button>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <button onclick="previousMonth()" class="glass w-10 h-10 rounded-lg flex items-center justify-center hover:bg-white/10">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <h2 class="text-xl font-bold" id="current-month">December 2025</h2>
+                <button onclick="nextMonth()" class="glass w-10 h-10 rounded-lg flex items-center justify-center hover:bg-white/10">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <button onclick="goToToday()" class="glass px-4 py-2 rounded-lg font-medium hover:bg-white/10">
+                    Today
+                </button>
+            </div>
+        </div>
+
+        <!-- Month View -->
+        <div id="month-view" class="glass-strong rounded-2xl p-6 fade-in-up">
+            <!-- Day Headers -->
+            <div class="calendar-grid mb-2">
+                <div class="text-center font-semibold text-sm text-gray-400 py-3">Sun</div>
+                <div class="text-center font-semibold text-sm text-gray-400 py-3">Mon</div>
+                <div class="text-center font-semibold text-sm text-gray-400 py-3">Tue</div>
+                <div class="text-center font-semibold text-sm text-gray-400 py-3">Wed</div>
+                <div class="text-center font-semibold text-sm text-gray-400 py-3">Thu</div>
+                <div class="text-center font-semibold text-sm text-gray-400 py-3">Fri</div>
+                <div class="text-center font-semibold text-sm text-gray-400 py-3">Sat</div>
+            </div>
+
+            <!-- Calendar Grid -->
+            <div class="calendar-grid" id="calendar-grid">
+                <!-- Days will be dynamically generated -->
+            </div>
+        </div>
+
+        <!-- Week View -->
+        <div id="week-view" class="week-view glass-strong rounded-2xl p-6">
+            <div class="week-grid" id="week-grid">
+                <!-- Week view will be dynamically generated -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- New Post Modal -->
+    <div id="new-post-modal" class="modal-overlay">
+        <div class="modal-content glass-strong rounded-2xl p-8">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold">Schedule New Post</h2>
+                <button onclick="closeNewPostModal()" class="w-10 h-10 rounded-lg glass hover:bg-red-500/20 transition-all">
+                    <i class="fas fa-times text-gray-400"></i>
+                </button>
+            </div>
+
+            <form class="space-y-6" onsubmit="createPost(event)">
+                <!-- Platform Selection -->
+                <div>
+                    <label class="block text-sm font-medium mb-3">Platform</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="channel-option glass" onclick="selectPlatform('youtube', this)">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: #FF0000;">
+                                    <i class="fab fa-youtube text-white"></i>
+                                </div>
+                                <span class="font-semibold">YouTube</span>
+                            </div>
+                        </div>
+                        <div class="channel-option glass" onclick="selectPlatform('instagram', this)">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: linear-gradient(45deg, #f09433, #dc2743, #bc1888);">
+                                    <i class="fab fa-instagram text-white"></i>
+                                </div>
+                                <span class="font-semibold">Instagram</span>
+                            </div>
+                        </div>
+                        <div class="channel-option glass" onclick="selectPlatform('tiktok', this)">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg flex items-center justify-center bg-black">
+                                    <i class="fab fa-tiktok text-white"></i>
+                                </div>
+                                <span class="font-semibold">TikTok</span>
+                            </div>
+                        </div>
+                        <div class="channel-option glass" onclick="selectPlatform('pinterest', this)">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: #E60023;">
+                                    <i class="fab fa-pinterest text-white"></i>
+                                </div>
+                                <span class="font-semibold">Pinterest</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Channel Selection (for YouTube) -->
+                <div id="youtube-channels" style="display: none;">
+                    <label class="block text-sm font-medium mb-2">YouTube Channel</label>
+                    <select class="w-full glass px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <option>@newcuisinedeluxe - New Cuisine Deluxe</option>
+                        <option>@kivyustudio - KIVYU Studio</option>
+                        <option>@kivyurobotics - KIVYU Robotics</option>
+                        <option>@CatStandUp - Cat Stand Up</option>
+                        <option>@lumvxstudio - LUMVX Studio</option>
+                    </select>
+                </div>
+
+                <!-- Post Title -->
+                <div>
+                    <label class="block text-sm font-medium mb-2">Post Title</label>
+                    <input type="text" id="post-title" class="w-full glass px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Enter post title" required>
+                </div>
+
+                <!-- Post Description -->
+                <div>
+                    <label class="block text-sm font-medium mb-2">Description</label>
+                    <textarea id="post-description" rows="4" class="w-full glass px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Enter post description"></textarea>
+                </div>
+
+                <!-- Schedule Date & Time -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Date</label>
+                        <input type="date" id="post-date" class="w-full" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Time</label>
+                        <input type="time" id="post-time" class="w-full" required>
+                    </div>
+                </div>
+
+                <!-- Hashtags -->
+                <div>
+                    <label class="block text-sm font-medium mb-2">Hashtags (optional)</label>
+                    <input type="text" id="post-hashtags" class="w-full glass px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="#trending #viral #content">
+                </div>
+
+                <!-- Actions -->
+                <div class="flex gap-4">
+                    <button type="button" onclick="closeNewPostModal()" class="flex-1 glass px-6 py-3 rounded-xl font-semibold hover:bg-white/10 transition-all">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 gradient-purple-blue px-6 py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all">
+                        <i class="fas fa-calendar-plus mr-2"></i>Schedule Post
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Post Modal -->
+    <div id="edit-post-modal" class="modal-overlay">
+        <div class="modal-content glass-strong rounded-2xl p-8">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold">Edit Scheduled Post</h2>
+                <button onclick="closeEditModal()" class="w-10 h-10 rounded-lg glass hover:bg-red-500/20 transition-all">
+                    <i class="fas fa-times text-gray-400"></i>
+                </button>
+            </div>
+
+            <form class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Post Title</label>
+                    <input type="text" class="w-full glass px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500" value="Ultimate Robotics Tutorial - Part 6">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-2">Reschedule</label>
+                    <input type="datetime-local" class="w-full">
+                </div>
+
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeEditModal()" class="flex-1 glass px-6 py-3 rounded-xl font-semibold hover:bg-white/10 transition-all">
+                        Cancel
+                    </button>
+                    <button type="button" onclick="deletePost()" class="glass px-6 py-3 rounded-xl font-semibold hover:bg-red-500/20 text-red-400 transition-all">
+                        <i class="fas fa-trash mr-2"></i>Delete
+                    </button>
+                    <button type="submit" class="flex-1 gradient-purple-blue px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bulk Upload Modal -->
+    <div id="bulk-modal" class="modal-overlay">
+        <div class="modal-content glass-strong rounded-2xl p-8">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold">Bulk Upload Posts</h2>
+                <button onclick="closeBulkModal()" class="w-10 h-10 rounded-lg glass hover:bg-red-500/20 transition-all">
+                    <i class="fas fa-times text-gray-400"></i>
+                </button>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Upload Zone -->
+                <div class="upload-zone" id="upload-zone" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                    <i class="fas fa-cloud-upload-alt text-5xl text-purple-400 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Drag & Drop CSV File</h3>
+                    <p class="text-sm text-gray-400 mb-4">or click to browse</p>
+                    <button class="gradient-purple-blue px-6 py-3 rounded-xl font-semibold">
+                        Choose File
+                    </button>
+                    <input type="file" accept=".csv" style="display: none;">
+                </div>
+
+                <!-- CSV Format Guide -->
+                <div class="glass rounded-xl p-4">
+                    <h4 class="font-semibold mb-3 flex items-center gap-2">
+                        <i class="fas fa-info-circle text-purple-400"></i>
+                        CSV Format Guide
+                    </h4>
+                    <div class="text-sm text-gray-400 space-y-2">
+                        <p><code class="bg-black/30 px-2 py-1 rounded">platform, channel, title, description, date, time, hashtags</code></p>
+                        <p class="text-xs">Example: <code class="bg-black/30 px-2 py-1 rounded">youtube, @kivyurobotics, Tutorial Part 7, Description here, 2025-12-30, 15:00, #tech #robotics</code></p>
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <button onclick="closeBulkModal()" class="flex-1 glass px-6 py-3 rounded-xl font-semibold hover:bg-white/10 transition-all">
+                        Cancel
+                    </button>
+                    <button class="flex-1 gradient-purple-blue px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all">
+                        <i class="fas fa-upload mr-2"></i>Upload & Schedule
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentDate = new Date();
+        let currentView = 'month';
+        let selectedPlatform = 'all';
+        let selectedPlatformForPost = null;
+        let draggedPost = null;
+
+        // Sample scheduled posts
+        const scheduledPosts = [
+            { id: 1, platform: 'youtube', channel: '@kivyurobotics', title: 'Robotics Tutorial Part 6', date: '2025-12-29', time: '15:00' },
+            { id: 2, platform: 'youtube', channel: '@newcuisinedeluxe', title: 'Top 10 Recipes', date: '2025-12-29', time: '18:00' },
+            { id: 3, platform: 'instagram', channel: '@lifestylevibes', title: 'Morning Routine 2025', date: '2025-12-30', time: '09:00' },
+            { id: 4, platform: 'tiktok', channel: '@viralmoments', title: 'Trending Dance Challenge', date: '2025-12-30', time: '12:00' },
+            { id: 5, platform: 'pinterest', channel: '@ecommercehub', title: 'Product Showcase', date: '2025-12-30', time: '14:00' },
+            { id: 6, platform: 'youtube', channel: '@CatStandUp', title: 'Funny Cats #48', date: '2025-12-31', time: '10:00' },
+            { id: 7, platform: 'youtube', channel: '@lumvxstudio', title: 'Design Tips 2026', date: '2026-01-01', time: '18:00' },
+            { id: 8, platform: 'instagram', channel: '@lifestylevibes', title: 'New Year Goals', date: '2026-01-01', time: '08:00' },
+            { id: 9, platform: 'youtube', channel: '@kivyustudio', title: 'Creative Studio Tour', date: '2026-01-02', time: '16:00' },
+            { id: 10, platform: 'tiktok', channel: '@viralmoments', title: 'New Year Compilation', date: '2026-01-02', time: '13:00' },
+        ];
+
+        // Initialize calendar
+        function initCalendar() {
+            renderCalendar();
+        }
+
+        // Render calendar
+        function renderCalendar() {
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = '';
+
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            // Update month display
+            document.getElementById('current-month').textContent =
+                currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+            // Get first day of month
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const prevLastDay = new Date(year, month, 0);
+
+            const firstDayWeekday = firstDay.getDay();
+            const lastDateOfMonth = lastDay.getDate();
+            const prevLastDate = prevLastDay.getDate();
+
+            const today = new Date();
+
+            // Previous month days
+            for (let i = firstDayWeekday - 1; i >= 0; i--) {
+                const day = prevLastDate - i;
+                const dayDiv = createDayDiv(day, 'other-month', year, month - 1);
+                grid.appendChild(dayDiv);
+            }
+
+            // Current month days
+            for (let day = 1; day <= lastDateOfMonth; day++) {
+                const isToday = day === today.getDate() &&
+                               month === today.getMonth() &&
+                               year === today.getFullYear();
+                const dayDiv = createDayDiv(day, isToday ? 'today' : '', year, month);
+
+                // Add scheduled posts for this day
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const postsForDay = scheduledPosts.filter(p => p.date === dateStr);
+
+                if (selectedPlatform === 'all' || selectedPlatform === 'none') {
+                    postsForDay.forEach(post => {
+                        dayDiv.appendChild(createPostItem(post));
+                    });
+                } else {
+                    postsForDay.filter(p => p.platform === selectedPlatform).forEach(post => {
+                        dayDiv.appendChild(createPostItem(post));
+                    });
+                }
+
+                grid.appendChild(dayDiv);
+            }
+
+            // Next month days
+            const remainingDays = 42 - (firstDayWeekday + lastDateOfMonth);
+            for (let day = 1; day <= remainingDays; day++) {
+                const dayDiv = createDayDiv(day, 'other-month', year, month + 1);
+                grid.appendChild(dayDiv);
+            }
+        }
+
+        // Create day div
+        function createDayDiv(day, className, year, month) {
+            const div = document.createElement('div');
+            div.className = `calendar-day glass ${className}`;
+            div.innerHTML = `<div class="font-semibold text-sm mb-2">${day}</div>`;
+
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            div.dataset.date = dateStr;
+
+            // Drag and drop handlers
+            div.addEventListener('dragover', handleDayDragOver);
+            div.addEventListener('dragleave', handleDayDragLeave);
+            div.addEventListener('drop', handleDayDrop);
+            div.addEventListener('click', (e) => {
+                if (e.target === div || e.target.parentElement === div) {
+                    openNewPostModalWithDate(dateStr);
+                }
+            });
+
+            return div;
+        }
+
+        // Create post item
+        function createPostItem(post) {
+            const div = document.createElement('div');
+            div.className = `post-item post-${post.platform}`;
+            div.draggable = true;
+            div.dataset.postId = post.id;
+
+            const icon = {
+                youtube: 'fa-youtube',
+                instagram: 'fa-instagram',
+                tiktok: 'fa-tiktok',
+                pinterest: 'fa-pinterest'
+            }[post.platform];
+
+            div.innerHTML = `
+                <i class="fab ${icon}"></i>
+                <span class="flex-1 truncate">${post.title}</span>
+                <span class="text-xs opacity-75">${post.time}</span>
+            `;
+
+            div.addEventListener('dragstart', handlePostDragStart);
+            div.addEventListener('dragend', handlePostDragEnd);
+            div.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openEditModal(post);
+            });
+
+            return div;
+        }
+
+        // Drag handlers for posts
+        function handlePostDragStart(e) {
+            draggedPost = e.target;
+            e.target.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', e.target.innerHTML);
+        }
+
+        function handlePostDragEnd(e) {
+            e.target.classList.remove('dragging');
+        }
+
+        // Drag handlers for days
+        function handleDayDragOver(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            e.dataTransfer.dropEffect = 'move';
+            e.currentTarget.classList.add('drag-over');
+            return false;
+        }
+
+        function handleDayDragLeave(e) {
+            e.currentTarget.classList.remove('drag-over');
+        }
+
+        function handleDayDrop(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+            e.preventDefault();
+
+            e.currentTarget.classList.remove('drag-over');
+
+            if (draggedPost) {
+                const postId = parseInt(draggedPost.dataset.postId);
+                const newDate = e.currentTarget.dataset.date;
+
+                // Update post date
+                const post = scheduledPosts.find(p => p.id === postId);
+                if (post) {
+                    post.date = newDate;
+                    renderCalendar();
+                }
+            }
+
+            return false;
+        }
+
+        // Platform selection
+        function selectPlatform(platform, element) {
+            document.querySelectorAll('.channel-option').forEach(el => {
+                el.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedPlatformForPost = platform;
+
+            // Show YouTube channel selector
+            const youtubeChannels = document.getElementById('youtube-channels');
+            if (platform === 'youtube') {
+                youtubeChannels.style.display = 'block';
+            } else {
+                youtubeChannels.style.display = 'none';
+            }
+        }
+
+        // Filter platform
+        function filterPlatform(platform) {
+            selectedPlatform = platform;
+
+            const buttons = document.querySelectorAll('.filter-pill');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            renderCalendar();
+        }
+
+        // Switch view
+        function switchView(view) {
+            currentView = view;
+
+            const monthView = document.getElementById('month-view');
+            const weekView = document.getElementById('week-view');
+            const buttons = document.querySelectorAll('.view-btn');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (view === 'month') {
+                monthView.style.display = 'block';
+                weekView.classList.remove('active');
+                renderCalendar();
+            } else {
+                monthView.style.display = 'none';
+                weekView.classList.add('active');
+                renderWeekView();
+            }
+        }
+
+        // Render week view
+        function renderWeekView() {
+            const grid = document.getElementById('week-grid');
+            grid.innerHTML = '';
+
+            // Time labels
+            grid.appendChild(createTimeLabel(''));
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            days.forEach(day => {
+                const label = createTimeLabel(day);
+                label.style.fontWeight = '700';
+                label.style.fontSize = '14px';
+                grid.appendChild(label);
+            });
+
+            // Time slots (8am - 8pm)
+            for (let hour = 8; hour <= 20; hour++) {
+                grid.appendChild(createTimeLabel(`${hour}:00`));
+
+                for (let day = 0; day < 7; day++) {
+                    const slot = document.createElement('div');
+                    slot.className = 'time-slot glass';
+                    grid.appendChild(slot);
+                }
+            }
+        }
+
+        function createTimeLabel(text) {
+            const div = document.createElement('div');
+            div.className = 'time-label';
+            div.textContent = text;
+            return div;
+        }
+
+        // Navigation
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        }
+
+        function goToToday() {
+            currentDate = new Date();
+            renderCalendar();
+        }
+
+        // Modals
+        function openNewPostModal() {
+            document.getElementById('new-post-modal').classList.add('active');
+        }
+
+        function openNewPostModalWithDate(date) {
+            document.getElementById('new-post-modal').classList.add('active');
+            document.getElementById('post-date').value = date;
+        }
+
+        function closeNewPostModal() {
+            document.getElementById('new-post-modal').classList.remove('active');
+            document.querySelectorAll('.channel-option').forEach(el => {
+                el.classList.remove('selected');
+            });
+            selectedPlatformForPost = null;
+        }
+
+        function openEditModal(post) {
+            document.getElementById('edit-post-modal').classList.add('active');
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-post-modal').classList.remove('active');
+        }
+
+        function openBulkModal() {
+            document.getElementById('bulk-modal').classList.add('active');
+        }
+
+        function closeBulkModal() {
+            document.getElementById('bulk-modal').classList.remove('active');
+        }
+
+        function deletePost() {
+            if (confirm('Are you sure you want to delete this post?')) {
+                closeEditModal();
+                alert('Post deleted successfully!');
+            }
+        }
+
+        // Create post
+        function createPost(e) {
+            e.preventDefault();
+
+            if (!selectedPlatformForPost) {
+                alert('Please select a platform');
+                return;
+            }
+
+            const title = document.getElementById('post-title').value;
+            const date = document.getElementById('post-date').value;
+            const time = document.getElementById('post-time').value;
+
+            const newPost = {
+                id: scheduledPosts.length + 1,
+                platform: selectedPlatformForPost,
+                channel: '@channel',
+                title: title,
+                date: date,
+                time: time
+            };
+
+            scheduledPosts.push(newPost);
+            renderCalendar();
+            closeNewPostModal();
+
+            alert('Post scheduled successfully!');
+        }
+
+        // Bulk upload handlers
+        function handleDragOver(e) {
+            e.preventDefault();
+            document.getElementById('upload-zone').classList.add('drag-active');
+        }
+
+        function handleDragLeave(e) {
+            document.getElementById('upload-zone').classList.remove('drag-active');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            document.getElementById('upload-zone').classList.remove('drag-active');
+            alert('CSV file uploaded! Processing bulk schedule...');
+        }
+
+        // Close modals on backdrop click
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        });
+
+        // Initialize
+        initCalendar();
+    </script>
+
+</body>
+</html>

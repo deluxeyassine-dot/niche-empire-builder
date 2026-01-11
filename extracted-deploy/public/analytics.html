@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard - Niche Empire Builder</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Premium gradients */
+        .gradient-purple-blue {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .gradient-orange-pink {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .gradient-green-blue {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .gradient-teal {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .gradient-yellow {
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+        }
+
+        .gradient-red {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+        }
+
+        /* Animated gradients */
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .animated-gradient {
+            background: linear-gradient(270deg, #667eea, #764ba2, #f093fb, #667eea);
+            background-size: 400% 400%;
+            animation: gradient-shift 15s ease infinite;
+        }
+
+        /* Metric card animations */
+        .metric-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Pulse animation */
+        @keyframes pulse-glow {
+            0%, 100% {
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(67, 233, 123, 0.7);
+            }
+            50% {
+                opacity: 0.8;
+                box-shadow: 0 0 0 10px rgba(67, 233, 123, 0);
+            }
+        }
+
+        .pulse-green {
+            animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* Number counter animation */
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .counter {
+            animation: countUp 0.8s ease forwards;
+        }
+
+        /* Chart container */
+        .chart-container {
+            position: relative;
+            height: 350px;
+        }
+
+        .chart-container-large {
+            position: relative;
+            height: 450px;
+        }
+
+        /* Filter pills */
+        .filter-pill {
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-pill:hover {
+            transform: translateY(-2px);
+        }
+
+        .filter-pill.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Content card hover */
+        .content-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .content-card:hover {
+            transform: translateX(8px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Progress bars */
+        .progress-bar {
+            position: relative;
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        /* Badge styles */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-trending {
+            background: rgba(67, 233, 123, 0.2);
+            color: #43e97b;
+            border: 1px solid rgba(67, 233, 123, 0.3);
+        }
+
+        .badge-viral {
+            background: rgba(240, 147, 251, 0.2);
+            color: #f093fb;
+            border: 1px solid rgba(240, 147, 251, 0.3);
+        }
+
+        .badge-top {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.7);
+        }
+
+        /* Dropdown menu */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            min-width: 200px;
+            z-index: 50;
+        }
+
+        .dropdown-menu.active {
+            display: block;
+        }
+
+        /* Fade in animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* Platform icons */
+        .platform-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        /* Export button pulse */
+        @keyframes pulse-scale {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .export-btn:hover {
+            animation: pulse-scale 2s ease infinite;
+        }
+
+        /* Stat card shine effect */
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .stat-card:hover::before {
+            left: 100%;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            font-size: 12px;
+            border-radius: 6px;
+            white-space: nowrap;
+            margin-bottom: 8px;
+            z-index: 100;
+        }
+    </style>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            500: '#667eea',
+                            600: '#5568d3',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-gray-100">
+
+    <!-- Header -->
+    <header class="glass-strong border-b border-gray-700 sticky top-0 z-40">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <a href="dashboard.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                        <div class="w-10 h-10 rounded-xl gradient-purple-blue flex items-center justify-center">
+                            <i class="fas fa-crown text-white"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-lg font-bold">NicheEmpire</h1>
+                            <p class="text-xs text-gray-400">Analytics Dashboard</p>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <div class="glass px-4 py-2 rounded-xl flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-green-400 pulse-green"></div>
+                        <span class="text-sm font-medium">Live Data</span>
+                    </div>
+
+                    <!-- Date Range Selector -->
+                    <div class="relative">
+                        <button onclick="toggleDateMenu()" class="glass px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-white/10 transition-all">
+                            <i class="fas fa-calendar text-purple-400"></i>
+                            <span class="text-sm font-medium">Last 30 Days</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="date-menu" class="dropdown-menu glass-strong rounded-xl p-2">
+                            <a href="#" class="block px-4 py-2 rounded-lg hover:bg-white/10 transition-all text-sm">Last 7 Days</a>
+                            <a href="#" class="block px-4 py-2 rounded-lg hover:bg-white/10 transition-all text-sm">Last 30 Days</a>
+                            <a href="#" class="block px-4 py-2 rounded-lg hover:bg-white/10 transition-all text-sm">Last 90 Days</a>
+                            <a href="#" class="block px-4 py-2 rounded-lg hover:bg-white/10 transition-all text-sm">Last Year</a>
+                            <a href="#" class="block px-4 py-2 rounded-lg hover:bg-white/10 transition-all text-sm">Custom Range</a>
+                        </div>
+                    </div>
+
+                    <button onclick="exportData()" class="export-btn gradient-purple-blue px-6 py-2 rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all">
+                        <i class="fas fa-download mr-2"></i>Export
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8">
+
+        <!-- Key Metrics Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 fade-in-up">
+
+            <!-- Revenue Card -->
+            <div class="stat-card metric-card glass-strong rounded-2xl p-6 relative overflow-hidden">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="w-14 h-14 rounded-xl gradient-purple-blue flex items-center justify-center">
+                        <i class="fas fa-dollar-sign text-white text-2xl"></i>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-green-400 text-sm font-bold flex items-center gap-1">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+24.5%</span>
+                        </span>
+                        <p class="text-xs text-gray-500 mt-1">vs last month</p>
+                    </div>
+                </div>
+                <h3 class="text-gray-400 text-sm font-medium mb-2">Total Revenue</h3>
+                <p class="text-4xl font-bold counter mb-2">$127,842</p>
+                <div class="flex items-center gap-2 text-xs">
+                    <span class="text-gray-500">Monthly Target:</span>
+                    <span class="text-purple-400 font-semibold">$150,000</span>
+                </div>
+                <div class="progress-bar mt-3">
+                    <div class="progress-fill gradient-purple-blue" style="width: 85%;"></div>
+                </div>
+            </div>
+
+            <!-- Total Views Card -->
+            <div class="stat-card metric-card glass-strong rounded-2xl p-6 relative overflow-hidden">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="w-14 h-14 rounded-xl gradient-orange-pink flex items-center justify-center">
+                        <i class="fas fa-eye text-white text-2xl"></i>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-green-400 text-sm font-bold flex items-center gap-1">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+18.2%</span>
+                        </span>
+                        <p class="text-xs text-gray-500 mt-1">vs last month</p>
+                    </div>
+                </div>
+                <h3 class="text-gray-400 text-sm font-medium mb-2">Total Views</h3>
+                <p class="text-4xl font-bold counter mb-2">24.8M</p>
+                <div class="flex items-center gap-2 text-xs">
+                    <span class="text-gray-500">Daily Average:</span>
+                    <span class="text-orange-400 font-semibold">826K</span>
+                </div>
+                <div class="progress-bar mt-3">
+                    <div class="progress-fill gradient-orange-pink" style="width: 92%;"></div>
+                </div>
+            </div>
+
+            <!-- Engagement Rate Card -->
+            <div class="stat-card metric-card glass-strong rounded-2xl p-6 relative overflow-hidden">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="w-14 h-14 rounded-xl gradient-green-blue flex items-center justify-center">
+                        <i class="fas fa-heart text-white text-2xl"></i>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-green-400 text-sm font-bold flex items-center gap-1">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+3.8%</span>
+                        </span>
+                        <p class="text-xs text-gray-500 mt-1">vs last month</p>
+                    </div>
+                </div>
+                <h3 class="text-gray-400 text-sm font-medium mb-2">Engagement Rate</h3>
+                <p class="text-4xl font-bold counter mb-2">12.4%</p>
+                <div class="flex items-center gap-2 text-xs">
+                    <span class="text-gray-500">Industry Avg:</span>
+                    <span class="text-green-400 font-semibold">8.2%</span>
+                </div>
+                <div class="progress-bar mt-3">
+                    <div class="progress-fill gradient-green-blue" style="width: 78%;"></div>
+                </div>
+            </div>
+
+            <!-- Subscribers Card -->
+            <div class="stat-card metric-card glass-strong rounded-2xl p-6 relative overflow-hidden">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="w-14 h-14 rounded-xl gradient-teal flex items-center justify-center">
+                        <i class="fas fa-users text-white text-2xl"></i>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-green-400 text-sm font-bold flex items-center gap-1">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+12.7K</span>
+                        </span>
+                        <p class="text-xs text-gray-500 mt-1">this month</p>
+                    </div>
+                </div>
+                <h3 class="text-gray-400 text-sm font-medium mb-2">Total Subscribers</h3>
+                <p class="text-4xl font-bold counter mb-2">847K</p>
+                <div class="flex items-center gap-2 text-xs">
+                    <span class="text-gray-500">Next Milestone:</span>
+                    <span class="text-teal-400 font-semibold">1M</span>
+                </div>
+                <div class="progress-bar mt-3">
+                    <div class="progress-fill gradient-teal" style="width: 84.7%;"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Platform Filters -->
+        <div class="flex items-center gap-3 mb-8 flex-wrap fade-in-up">
+            <span class="text-sm font-semibold text-gray-400">Filter by Platform:</span>
+            <button class="filter-pill glass active" onclick="filterPlatform('all')">
+                <i class="fas fa-globe mr-2"></i>All Platforms
+            </button>
+            <button class="filter-pill glass" onclick="filterPlatform('youtube')">
+                <i class="fab fa-youtube mr-2"></i>YouTube
+            </button>
+            <button class="filter-pill glass" onclick="filterPlatform('instagram')">
+                <i class="fab fa-instagram mr-2"></i>Instagram
+            </button>
+            <button class="filter-pill glass" onclick="filterPlatform('tiktok')">
+                <i class="fab fa-tiktok mr-2"></i>TikTok
+            </button>
+            <button class="filter-pill glass" onclick="filterPlatform('pinterest')">
+                <i class="fab fa-pinterest mr-2"></i>Pinterest
+            </button>
+        </div>
+
+        <!-- Main Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+
+            <!-- Revenue Over Time -->
+            <div class="lg:col-span-2 glass-strong rounded-2xl p-6 fade-in-up">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-1">Revenue Analytics</h3>
+                        <p class="text-sm text-gray-400">Monthly revenue breakdown across platforms</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="px-4 py-2 rounded-lg bg-purple-500/20 text-purple-400 text-sm font-medium">Revenue</button>
+                        <button class="px-4 py-2 rounded-lg glass text-gray-300 text-sm font-medium hover:bg-white/10">Profit</button>
+                        <button class="px-4 py-2 rounded-lg glass text-gray-300 text-sm font-medium hover:bg-white/10">ROI</button>
+                    </div>
+                </div>
+                <div class="chart-container-large">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Platform Distribution -->
+            <div class="glass-strong rounded-2xl p-6 fade-in-up">
+                <h3 class="text-2xl font-bold mb-1">Revenue by Platform</h3>
+                <p class="text-sm text-gray-400 mb-6">Distribution across channels</p>
+                <div class="chart-container">
+                    <canvas id="platformChart"></canvas>
+                </div>
+                <div class="mt-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="platform-icon" style="background: #FF0000;">
+                                <i class="fab fa-youtube text-white"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold">YouTube</p>
+                                <p class="text-xs text-gray-400">5 channels</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-lg">$54,240</p>
+                            <p class="text-xs text-green-400">+22% ↑</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="platform-icon" style="background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);">
+                                <i class="fab fa-instagram text-white"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold">Instagram</p>
+                                <p class="text-xs text-gray-400">3 accounts</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-lg">$38,520</p>
+                            <p class="text-xs text-green-400">+18% ↑</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="platform-icon" style="background: #000000;">
+                                <i class="fab fa-tiktok text-white"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold">TikTok</p>
+                                <p class="text-xs text-gray-400">2 accounts</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-lg">$22,840</p>
+                            <p class="text-xs text-green-400">+34% ↑</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="platform-icon" style="background: #E60023;">
+                                <i class="fab fa-pinterest text-white"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold">Pinterest</p>
+                                <p class="text-xs text-gray-400">1 account</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-lg">$12,242</p>
+                            <p class="text-xs text-green-400">+28% ↑</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Subscriber Growth & Engagement -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+
+            <!-- Subscriber Growth -->
+            <div class="glass-strong rounded-2xl p-6 fade-in-up">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-1">Subscriber Growth</h3>
+                        <p class="text-sm text-gray-400">7-month trend across all platforms</p>
+                    </div>
+                    <div class="flex items-center gap-2 text-sm">
+                        <span class="text-gray-400">Growth Rate:</span>
+                        <span class="font-bold text-green-400">+2.8%/month</span>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="subscriberChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Engagement Metrics -->
+            <div class="glass-strong rounded-2xl p-6 fade-in-up">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-1">Engagement Breakdown</h3>
+                        <p class="text-sm text-gray-400">Interaction metrics by type</p>
+                    </div>
+                    <button class="glass px-4 py-2 rounded-lg text-sm font-medium hover:bg-white/10">
+                        <i class="fas fa-sync-alt mr-2"></i>Refresh
+                    </button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="engagementChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Top Performing Content & Real-time Stats -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+
+            <!-- Top Performing Content -->
+            <div class="lg:col-span-2 glass-strong rounded-2xl p-6 fade-in-up">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-1">Top Performing Content</h3>
+                        <p class="text-sm text-gray-400">Best videos from the last 30 days</p>
+                    </div>
+                    <button class="glass px-4 py-2 rounded-lg text-sm font-medium hover:bg-white/10">
+                        View All
+                    </button>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Content Item 1 -->
+                    <div class="content-card glass rounded-xl p-4 flex items-center gap-4">
+                        <div class="w-32 h-20 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-3xl">
+                            🔥
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="badge badge-viral">
+                                    <i class="fas fa-fire"></i>Viral
+                                </span>
+                                <span class="text-xs text-gray-400">
+                                    <i class="fab fa-youtube mr-1"></i>YouTube
+                                </span>
+                            </div>
+                            <h4 class="font-bold text-lg mb-1">Ultimate Robotics Tutorial - Complete Guide</h4>
+                            <p class="text-sm text-gray-400">@kivyurobotics • 2 days ago</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-bold text-purple-400">2.4M</p>
+                            <p class="text-xs text-gray-400">views</p>
+                            <p class="text-sm text-green-400 mt-2">↑ 847K today</p>
+                        </div>
+                    </div>
+
+                    <!-- Content Item 2 -->
+                    <div class="content-card glass rounded-xl p-4 flex items-center gap-4">
+                        <div class="w-32 h-20 rounded-lg bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-3xl">
+                            👨‍🍳
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="badge badge-trending">
+                                    <i class="fas fa-chart-line"></i>Trending
+                                </span>
+                                <span class="text-xs text-gray-400">
+                                    <i class="fab fa-youtube mr-1"></i>YouTube
+                                </span>
+                            </div>
+                            <h4 class="font-bold text-lg mb-1">5-Star Restaurant Recipes You Can Make at Home</h4>
+                            <p class="text-sm text-gray-400">@newcuisinedeluxe • 4 days ago</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-bold text-orange-400">1.8M</p>
+                            <p class="text-xs text-gray-400">views</p>
+                            <p class="text-sm text-green-400 mt-2">↑ 324K today</p>
+                        </div>
+                    </div>
+
+                    <!-- Content Item 3 -->
+                    <div class="content-card glass rounded-xl p-4 flex items-center gap-4">
+                        <div class="w-32 h-20 rounded-lg bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center text-3xl">
+                            😹
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="badge badge-top">
+                                    <i class="fas fa-crown"></i>Top 10
+                                </span>
+                                <span class="text-xs text-gray-400">
+                                    <i class="fab fa-youtube mr-1"></i>YouTube
+                                </span>
+                            </div>
+                            <h4 class="font-bold text-lg mb-1">Cats Being Hilariously Dramatic - Compilation</h4>
+                            <p class="text-sm text-gray-400">@CatStandUp • 1 week ago</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-bold text-yellow-400">1.2M</p>
+                            <p class="text-xs text-gray-400">views</p>
+                            <p class="text-sm text-green-400 mt-2">↑ 156K today</p>
+                        </div>
+                    </div>
+
+                    <!-- Content Item 4 -->
+                    <div class="content-card glass rounded-xl p-4 flex items-center gap-4">
+                        <div class="w-32 h-20 rounded-lg bg-gradient-to-br from-teal-500 to-green-500 flex items-center justify-center text-3xl">
+                            🎨
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="badge badge-trending">
+                                    <i class="fas fa-chart-line"></i>Trending
+                                </span>
+                                <span class="text-xs text-gray-400">
+                                    <i class="fab fa-youtube mr-1"></i>YouTube
+                                </span>
+                            </div>
+                            <h4 class="font-bold text-lg mb-1">Professional Design Tips for Beginners</h4>
+                            <p class="text-sm text-gray-400">@lumvxstudio • 3 days ago</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-bold text-teal-400">847K</p>
+                            <p class="text-xs text-gray-400">views</p>
+                            <p class="text-sm text-green-400 mt-2">↑ 98K today</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Real-time Stats -->
+            <div class="glass-strong rounded-2xl p-6 fade-in-up">
+                <h3 class="text-2xl font-bold mb-1">Real-Time Stats</h3>
+                <p class="text-sm text-gray-400 mb-6">Live performance metrics</p>
+
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm text-gray-400">Views (Today)</span>
+                            <span class="text-2xl font-bold text-purple-400">847K</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill gradient-purple-blue" style="width: 68%;"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Daily target: 1.2M views</p>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm text-gray-400">Revenue (Today)</span>
+                            <span class="text-2xl font-bold text-green-400">$4,247</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill gradient-teal" style="width: 85%;"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Daily target: $5,000</p>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm text-gray-400">New Subscribers</span>
+                            <span class="text-2xl font-bold text-orange-400">+2,847</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill gradient-orange-pink" style="width: 92%;"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Daily target: +3,000</p>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm text-gray-400">Engagement Rate</span>
+                            <span class="text-2xl font-bold text-blue-400">14.2%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill gradient-green-blue" style="width: 78%;"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Target: 18%</p>
+                    </div>
+
+                    <div class="glass rounded-xl p-4 mt-6">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-3 h-3 rounded-full bg-green-400 pulse-green"></div>
+                            <span class="text-sm font-semibold">Active Now</span>
+                        </div>
+                        <p class="text-3xl font-bold mb-1">24,847</p>
+                        <p class="text-xs text-gray-400">viewers across all platforms</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Comparison Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+
+            <!-- Performance Radar -->
+            <div class="glass-strong rounded-2xl p-6 fade-in-up">
+                <h3 class="text-2xl font-bold mb-1">Performance Metrics</h3>
+                <p class="text-sm text-gray-400 mb-6">Multi-dimensional analysis</p>
+                <div class="chart-container">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Channel Comparison -->
+            <div class="glass-strong rounded-2xl p-6 fade-in-up">
+                <h3 class="text-2xl font-bold mb-1">Channel Comparison</h3>
+                <p class="text-sm text-gray-400 mb-6">Performance across all channels</p>
+                <div class="chart-container">
+                    <canvas id="channelChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Additional Insights -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 fade-in-up">
+
+            <div class="glass-strong rounded-2xl p-6">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-xl gradient-purple-blue flex items-center justify-center">
+                        <i class="fas fa-clock text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-400">Avg Watch Time</p>
+                        <p class="text-2xl font-bold">8:42</p>
+                    </div>
+                </div>
+                <p class="text-sm text-green-400">↑ 12% from last month</p>
+            </div>
+
+            <div class="glass-strong rounded-2xl p-6">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-xl gradient-orange-pink flex items-center justify-center">
+                        <i class="fas fa-redo text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-400">Return Viewer Rate</p>
+                        <p class="text-2xl font-bold">68.4%</p>
+                    </div>
+                </div>
+                <p class="text-sm text-green-400">↑ 8% from last month</p>
+            </div>
+
+            <div class="glass-strong rounded-2xl p-6">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-xl gradient-teal flex items-center justify-center">
+                        <i class="fas fa-share-alt text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-400">Share Rate</p>
+                        <p class="text-2xl font-bold">4.2%</p>
+                    </div>
+                </div>
+                <p class="text-sm text-green-400">↑ 15% from last month</p>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        // Dropdown toggle
+        function toggleDateMenu() {
+            document.getElementById('date-menu').classList.toggle('active');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.relative')) {
+                document.getElementById('date-menu').classList.remove('active');
+            }
+        });
+
+        // Platform filter
+        function filterPlatform(platform) {
+            const buttons = document.querySelectorAll('.filter-pill');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            console.log('Filtering by:', platform);
+        }
+
+        // Export data
+        function exportData() {
+            alert('Exporting analytics data...\n\nFormats available:\n• PDF Report\n• Excel Spreadsheet\n• CSV Data\n• JSON API Export');
+        }
+
+        // Revenue Chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        const revenueChart = new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                datasets: [{
+                    label: 'Total Revenue',
+                    data: [78000, 85000, 92000, 98000, 105000, 115000, 127842],
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointBackgroundColor: '#667eea',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                }, {
+                    label: 'YouTube',
+                    data: [32000, 35000, 38000, 42000, 46000, 50000, 54240],
+                    borderColor: '#FF0000',
+                    backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.4,
+                    pointRadius: 4,
+                }, {
+                    label: 'Instagram',
+                    data: [24000, 26000, 28000, 30000, 32000, 35000, 38520],
+                    borderColor: '#E4405F',
+                    backgroundColor: 'rgba(228, 64, 95, 0.1)',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.4,
+                    pointRadius: 4,
+                }, {
+                    label: 'TikTok',
+                    data: [14000, 16000, 18000, 19000, 20000, 21000, 22840],
+                    borderColor: '#000000',
+                    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.4,
+                    pointRadius: 4,
+                }, {
+                    label: 'Pinterest',
+                    data: [8000, 8500, 9000, 9500, 10000, 11000, 12242],
+                    borderColor: '#E60023',
+                    backgroundColor: 'rgba(230, 0, 35, 0.1)',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.4,
+                    pointRadius: 4,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: '#9ca3af', padding: 20, font: { size: 12 } }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: '#667eea',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': $' + context.parsed.y.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: {
+                            color: '#9ca3af',
+                            callback: function(value) {
+                                return '$' + (value / 1000) + 'K';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#9ca3af' }
+                    }
+                }
+            }
+        });
+
+        // Platform Distribution Chart
+        const platformCtx = document.getElementById('platformChart').getContext('2d');
+        const platformChart = new Chart(platformCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['YouTube', 'Instagram', 'TikTok', 'Pinterest'],
+                datasets: [{
+                    data: [42.4, 30.1, 17.9, 9.6],
+                    backgroundColor: ['#FF0000', '#E4405F', '#000000', '#E60023'],
+                    borderWidth: 0,
+                    hoverOffset: 15
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + '%';
+                            }
+                        }
+                    }
+                },
+                cutout: '75%'
+            }
+        });
+
+        // Subscriber Growth Chart
+        const subscriberCtx = document.getElementById('subscriberChart').getContext('2d');
+        const subscriberChart = new Chart(subscriberCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                datasets: [{
+                    label: 'Subscribers',
+                    data: [720, 745, 770, 795, 820, 835, 847],
+                    borderColor: '#43e97b',
+                    backgroundColor: 'rgba(67, 233, 123, 0.2)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointBackgroundColor: '#43e97b',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + 'K subscribers';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: {
+                            color: '#9ca3af',
+                            callback: function(value) {
+                                return value + 'K';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#9ca3af' }
+                    }
+                }
+            }
+        });
+
+        // Engagement Chart
+        const engagementCtx = document.getElementById('engagementChart').getContext('2d');
+        const engagementChart = new Chart(engagementCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Likes', 'Comments', 'Shares', 'Saves', 'Clicks'],
+                datasets: [{
+                    label: 'Engagement',
+                    data: [847000, 124000, 89000, 156000, 234000],
+                    backgroundColor: [
+                        'rgba(102, 126, 234, 0.8)',
+                        'rgba(240, 147, 251, 0.8)',
+                        'rgba(79, 172, 254, 0.8)',
+                        'rgba(67, 233, 123, 0.8)',
+                        'rgba(255, 215, 0, 0.8)'
+                    ],
+                    borderRadius: 8,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y.toLocaleString() + ' interactions';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: {
+                            color: '#9ca3af',
+                            callback: function(value) {
+                                return (value / 1000) + 'K';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#9ca3af' }
+                    }
+                }
+            }
+        });
+
+        // Radar Chart
+        const radarCtx = document.getElementById('radarChart').getContext('2d');
+        const radarChart = new Chart(radarCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Reach', 'Engagement', 'Growth', 'Revenue', 'Retention', 'Virality'],
+                datasets: [{
+                    label: 'Current Month',
+                    data: [92, 85, 78, 88, 82, 75],
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#667eea',
+                    pointBorderColor: '#fff',
+                    pointRadius: 4,
+                }, {
+                    label: 'Last Month',
+                    data: [85, 78, 72, 80, 75, 68],
+                    borderColor: '#f093fb',
+                    backgroundColor: 'rgba(240, 147, 251, 0.2)',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#f093fb',
+                    pointBorderColor: '#fff',
+                    pointRadius: 4,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: '#9ca3af', padding: 20 }
+                    }
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { color: '#9ca3af', backdropColor: 'transparent' },
+                        pointLabels: { color: '#9ca3af' }
+                    }
+                }
+            }
+        });
+
+        // Channel Comparison Chart
+        const channelCtx = document.getElementById('channelChart').getContext('2d');
+        const channelChart = new Chart(channelCtx, {
+            type: 'bar',
+            data: {
+                labels: ['New Cuisine', 'KIVYU Studio', 'KIVYU Robotics', 'Cat Stand Up', 'LUMVX Studio'],
+                datasets: [{
+                    label: 'Subscribers (K)',
+                    data: [284, 156, 98, 187, 122],
+                    backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                    borderRadius: 8,
+                }, {
+                    label: 'Engagement Rate (%)',
+                    data: [12.8, 9.4, 11.2, 14.6, 10.1],
+                    backgroundColor: 'rgba(67, 233, 123, 0.8)',
+                    borderRadius: 8,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: '#9ca3af', padding: 20 }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: { color: '#9ca3af' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#9ca3af' }
+                    }
+                }
+            }
+        });
+
+        // Auto-update progress bars
+        setInterval(() => {
+            const progressBars = document.querySelectorAll('.progress-fill');
+            progressBars.forEach(bar => {
+                const currentWidth = parseInt(bar.style.width);
+                if (currentWidth < 100) {
+                    bar.style.width = Math.min(currentWidth + Math.random() * 2, 100) + '%';
+                }
+            });
+        }, 3000);
+    </script>
+
+</body>
+</html>

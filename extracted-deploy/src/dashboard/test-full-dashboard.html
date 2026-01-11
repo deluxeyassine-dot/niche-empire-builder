@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Niche Empire Builder - Full Dashboard</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- React & ReactDOM -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <!-- Babel Standalone for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    /* Custom animations */
+    @keyframes pulse-slow {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .5; }
+    }
+
+    .animate-pulse-slow {
+      animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- Component Code -->
+  <script type="text/babel" src="./components/EmpireCreator.tsx"></script>
+  <script type="text/babel" src="./components/EmpireManager.tsx"></script>
+
+  <!-- Full Dashboard Application -->
+  <script type="text/babel">
+    const { EmpireCreator } = window;
+    const { EmpireManager } = window;
+    const { useState } = React;
+
+    function FullDashboard() {
+      const [currentView, setCurrentView] = useState('manager'); // 'manager' | 'creator'
+      const [empires, setEmpires] = useState([
+        {
+          id: 'emp-001',
+          name: 'SmartHome Pro',
+          niche: 'Smart Home Products',
+          status: 'active',
+          createdAt: new Date('2024-01-15'),
+          updatedAt: new Date('2024-02-20'),
+          metrics: {
+            revenue: 45780,
+            customers: 342,
+            products: 12,
+            orders: 1256,
+            traffic: 15420,
+            conversionRate: 3.2
+          },
+          performance: {
+            health: 'excellent',
+            score: 92,
+            trend: 'up'
+          },
+          branding: {
+            primaryColor: '#2563eb',
+            icon: '🏠'
+          },
+          lastSync: new Date('2024-02-20T10:30:00'),
+          syncStatus: 'synced'
+        },
+        {
+          id: 'emp-002',
+          name: 'TaskFlow Pro',
+          niche: 'Project Management',
+          status: 'active',
+          createdAt: new Date('2024-01-20'),
+          updatedAt: new Date('2024-02-19'),
+          metrics: {
+            revenue: 28500,
+            customers: 156,
+            products: 3,
+            orders: 478,
+            traffic: 8920,
+            conversionRate: 4.1
+          },
+          performance: {
+            health: 'good',
+            score: 85,
+            trend: 'up'
+          },
+          branding: {
+            primaryColor: '#7c3aed',
+            icon: '📊'
+          },
+          lastSync: new Date('2024-02-19T15:45:00'),
+          syncStatus: 'synced'
+        },
+        {
+          id: 'emp-003',
+          name: 'FitLife Plus',
+          niche: 'Health & Fitness',
+          status: 'paused',
+          createdAt: new Date('2024-01-10'),
+          updatedAt: new Date('2024-02-15'),
+          metrics: {
+            revenue: 12350,
+            customers: 89,
+            products: 5,
+            orders: 234,
+            traffic: 4560,
+            conversionRate: 2.8
+          },
+          performance: {
+            health: 'fair',
+            score: 68,
+            trend: 'down'
+          },
+          branding: {
+            primaryColor: '#10b981',
+            icon: '💪'
+          },
+          lastSync: new Date('2024-02-15T08:20:00'),
+          syncStatus: 'synced'
+        }
+      ]);
+
+      // Empire Manager Handlers
+      const handleEmpireClick = (empire) => {
+        console.log('Empire clicked:', empire);
+        alert(`Viewing details for ${empire.name}\n\nRevenue: $${empire.metrics.revenue.toLocaleString()}\nCustomers: ${empire.metrics.customers}\nHealth: ${empire.performance.health}`);
+      };
+
+      const handleEmpireEdit = (empire) => {
+        console.log('Edit empire:', empire);
+        alert(`Editing ${empire.name} - This would open the edit form`);
+      };
+
+      const handleEmpireDelete = (empireId) => {
+        console.log('Delete empire:', empireId);
+        setEmpires(prev => prev.filter(e => e.id !== empireId));
+      };
+
+      const handleEmpirePause = (empireId) => {
+        console.log('Pause empire:', empireId);
+        setEmpires(prev => prev.map(e =>
+          e.id === empireId ? { ...e, status: 'paused', updatedAt: new Date() } : e
+        ));
+      };
+
+      const handleEmpireResume = (empireId) => {
+        console.log('Resume empire:', empireId);
+        setEmpires(prev => prev.map(e =>
+          e.id === empireId ? { ...e, status: 'active', updatedAt: new Date() } : e
+        ));
+      };
+
+      const handleEmpireSync = async (empireId) => {
+        console.log('Sync empire:', empireId);
+        // Simulate sync
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        setEmpires(prev => prev.map(e =>
+          e.id === empireId ? { ...e, lastSync: new Date(), syncStatus: 'synced' } : e
+        ));
+      };
+
+      const handleBulkAction = (action) => {
+        console.log('Bulk action:', action);
+
+        switch (action.type) {
+          case 'pause':
+            setEmpires(prev => prev.map(e =>
+              action.empireIds.includes(e.id) ? { ...e, status: 'paused', updatedAt: new Date() } : e
+            ));
+            break;
+          case 'resume':
+            setEmpires(prev => prev.map(e =>
+              action.empireIds.includes(e.id) ? { ...e, status: 'active', updatedAt: new Date() } : e
+            ));
+            break;
+          case 'archive':
+            setEmpires(prev => prev.map(e =>
+              action.empireIds.includes(e.id) ? { ...e, status: 'archived', updatedAt: new Date() } : e
+            ));
+            break;
+          case 'delete':
+            setEmpires(prev => prev.filter(e => !action.empireIds.includes(e.id)));
+            break;
+          case 'sync':
+            setEmpires(prev => prev.map(e =>
+              action.empireIds.includes(e.id) ? { ...e, lastSync: new Date(), syncStatus: 'synced' } : e
+            ));
+            break;
+        }
+      };
+
+      const handleCreateNew = () => {
+        console.log('Create new empire');
+        setCurrentView('creator');
+      };
+
+      // Empire Creator Handler (simulated completion)
+      const handleCreatorComplete = (config) => {
+        console.log('Empire created:', config);
+
+        // Generate a new empire from the config
+        const newEmpire = {
+          id: `emp-${Date.now()}`,
+          name: config.businessName,
+          niche: config.niche,
+          status: 'draft',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          metrics: {
+            revenue: 0,
+            customers: 0,
+            products: config.products.enabled ? config.products.count : 0,
+            orders: 0,
+            traffic: 0,
+            conversionRate: 0
+          },
+          performance: {
+            health: 'poor',
+            score: 25,
+            trend: 'stable'
+          },
+          branding: {
+            primaryColor: config.branding.primaryColor,
+            icon: '🆕'
+          },
+          lastSync: new Date(),
+          syncStatus: 'synced'
+        };
+
+        setEmpires(prev => [newEmpire, ...prev]);
+
+        // Show success message and return to manager
+        setTimeout(() => {
+          alert(`Successfully created ${config.businessName}! Returning to Empire Manager...`);
+          setCurrentView('manager');
+        }, 2000);
+      };
+
+      return (
+        <div>
+          {/* Navigation Header */}
+          <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h1 className="text-xl font-bold text-gray-900">Niche Empire Builder</h1>
+                    <p className="text-sm text-gray-500">Complete Dashboard</p>
+                  </div>
+                </div>
+
+                {/* View Toggle */}
+                <div className="flex items-center space-x-4">
+                  <nav className="flex space-x-2">
+                    <button
+                      onClick={() => setCurrentView('manager')}
+                      className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                        currentView === 'manager'
+                          ? 'bg-blue-600 text-white shadow-md'
+                          : 'text-gray-600 hover:bg-gray-100'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                        <span>Manager</span>
+                        <span className="bg-white bg-opacity-30 text-white text-xs px-2 py-0.5 rounded-full">
+                          {empires.length}
+                        </span>
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => setCurrentView('creator')}
+                      className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                        currentView === 'creator'
+                          ? 'bg-blue-600 text-white shadow-md'
+                          : 'text-gray-600 hover:bg-gray-100'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        </svg>
+                        <span>Creator</span>
+                      </div>
+                    </button>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          {/* Main Content */}
+          <main>
+            {currentView === 'manager' ? (
+              <EmpireManager
+                empires={empires}
+                onEmpireClick={handleEmpireClick}
+                onEmpireEdit={handleEmpireEdit}
+                onEmpireDelete={handleEmpireDelete}
+                onEmpirePause={handleEmpirePause}
+                onEmpireResume={handleEmpireResume}
+                onEmpireSync={handleEmpireSync}
+                onBulkAction={handleBulkAction}
+                onCreateNew={handleCreateNew}
+              />
+            ) : (
+              <div>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                  <button
+                    onClick={() => setCurrentView('manager')}
+                    className="mb-4 text-blue-600 hover:text-blue-700 flex items-center space-x-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    <span>Back to Manager</span>
+                  </button>
+                </div>
+                <EmpireCreator />
+              </div>
+            )}
+          </main>
+
+          {/* Footer */}
+          <footer className="bg-white border-t border-gray-200 mt-20">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              <div className="text-center text-sm text-gray-600">
+                <p>Niche Empire Builder - Full Dashboard Demo</p>
+                <p className="mt-2 text-gray-500">
+                  Create and manage complete niche businesses with AI-powered generation
+                </p>
+              </div>
+            </div>
+          </footer>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<FullDashboard />);
+  </script>
+</body>
+</html>

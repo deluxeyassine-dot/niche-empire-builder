@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Niche Empire Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gradient-purple-blue {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        input[type="email"], input[type="password"], input[type="text"] {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: rgba(102, 126, 234, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .input-error {
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-oauth {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-oauth:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 24px 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .divider span {
+            padding: 0 16px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 10px 24px;
+            border: none;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .form-container {
+            display: none;
+        }
+
+        .form-container.active {
+            display: block;
+        }
+
+        .success-message {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-100px) translateX(50px); }
+            50% { transform: translateY(-50px) translateX(-50px); }
+            75% { transform: translateY(-150px) translateX(100px); }
+        }
+
+        .link-text {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .link-text:hover {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Particles Background -->
+    <div class="floating-particles">
+        <div class="particle" style="width: 80px; height: 80px; left: 10%; top: 20%; animation-delay: 0s;"></div>
+        <div class="particle" style="width: 60px; height: 60px; left: 80%; top: 30%; animation-delay: 2s;"></div>
+        <div class="particle" style="width: 40px; height: 40px; left: 50%; top: 60%; animation-delay: 4s;"></div>
+        <div class="particle" style="width: 100px; height: 100px; left: 20%; top: 70%; animation-delay: 6s;"></div>
+        <div class="particle" style="width: 50px; height: 50px; left: 70%; top: 80%; animation-delay: 8s;"></div>
+    </div>
+
+    <!-- Login Container -->
+    <div class="glass rounded-3xl p-8 w-full max-w-md mx-4">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 rounded-2xl gradient-purple-blue flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-rocket text-white text-2xl"></i>
+            </div>
+            <h1 class="text-3xl font-bold mb-2">Niche Empire Builder</h1>
+            <p class="text-white/60">Build your digital empire with AI</p>
+        </div>
+
+        <!-- Tab Buttons -->
+        <div class="tab-buttons">
+            <button class="tab-button active" onclick="switchTab('login')">
+                <i class="fas fa-sign-in-alt mr-2"></i>Login
+            </button>
+            <button class="tab-button" onclick="switchTab('signup')">
+                <i class="fas fa-user-plus mr-2"></i>Sign Up
+            </button>
+        </div>
+
+        <!-- Success Message -->
+        <div id="success-message" class="success-message">
+            <i class="fas fa-check-circle mr-2"></i><span id="success-text"></span>
+        </div>
+
+        <!-- Login Form -->
+        <div id="login-form" class="form-container active">
+            <form onsubmit="handleLogin(event)">
+                <div class="space-y-4">
+                    <!-- Email -->
+                    <div>
+                        <label class="block text-sm text-white/70 mb-2">Email Address</label>
+                        <input
+                            type="email"
+                            id="login-email"
+                            placeholder="your@email.com"
+                            required
+                        >
+                        <div class="error-message" id="login-email-error"></div>
+                    </div>
+
+                    <!-- Password -->
+                    <div>
+                        <label class="block text-sm text-white/70 mb-2">Password</label>
+                        <div class="relative">
+                            <input
+                                type="password"
+                                id="login-password"
+                                placeholder="Enter your password"
+                                required
+                            >
+                            <button
+                                type="button"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white"
+                                onclick="togglePassword('login-password')"
+                            >
+                                <i class="fas fa-eye" id="login-password-icon"></i>
+                            </button>
+                        </div>
+                        <div class="error-message" id="login-password-error"></div>
+                    </div>
+
+                    <!-- Remember Me & Forgot Password -->
+                    <div class="flex items-center justify-between">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="remember-me">
+                            <label for="remember-me" class="text-sm text-white/70 cursor-pointer">Remember me</label>
+                        </div>
+                        <a href="#" class="text-sm link-text" onclick="showForgotPassword(); return false;">
+                            Forgot password?
+                        </a>
+                    </div>
+
+                    <!-- Login Button -->
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Sign In
+                    </button>
+                </div>
+            </form>
+
+            <!-- Divider -->
+            <div class="divider">
+                <span>or continue with</span>
+            </div>
+
+            <!-- OAuth Buttons -->
+            <div class="space-y-3">
+                <button class="btn-oauth" onclick="handleGoogleLogin()">
+                    <i class="fab fa-google text-xl"></i>
+                    <span>Continue with Google</span>
+                </button>
+                <button class="btn-oauth" onclick="handleGithubLogin()">
+                    <i class="fab fa-github text-xl"></i>
+                    <span>Continue with GitHub</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Sign Up Form -->
+        <div id="signup-form" class="form-container">
+            <form onsubmit="handleSignup(event)">
+                <div class="space-y-4">
+                    <!-- Full Name -->
+                    <div>
+                        <label class="block text-sm text-white/70 mb-2">Full Name</label>
+                        <input
+                            type="text"
+                            id="signup-name"
+                            placeholder="Yassine"
+                            required
+                        >
+                        <div class="error-message" id="signup-name-error"></div>
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label class="block text-sm text-white/70 mb-2">Email Address</label>
+                        <input
+                            type="email"
+                            id="signup-email"
+                            placeholder="your@email.com"
+                            required
+                        >
+                        <div class="error-message" id="signup-email-error"></div>
+                    </div>
+
+                    <!-- Password -->
+                    <div>
+                        <label class="block text-sm text-white/70 mb-2">Password</label>
+                        <div class="relative">
+                            <input
+                                type="password"
+                                id="signup-password"
+                                placeholder="Create a strong password"
+                                required
+                                minlength="8"
+                            >
+                            <button
+                                type="button"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white"
+                                onclick="togglePassword('signup-password')"
+                            >
+                                <i class="fas fa-eye" id="signup-password-icon"></i>
+                            </button>
+                        </div>
+                        <p class="text-xs text-white/50 mt-1">Must be at least 8 characters</p>
+                        <div class="error-message" id="signup-password-error"></div>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div>
+                        <label class="block text-sm text-white/70 mb-2">Confirm Password</label>
+                        <div class="relative">
+                            <input
+                                type="password"
+                                id="signup-confirm-password"
+                                placeholder="Re-enter your password"
+                                required
+                            >
+                            <button
+                                type="button"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white"
+                                onclick="togglePassword('signup-confirm-password')"
+                            >
+                                <i class="fas fa-eye" id="signup-confirm-password-icon"></i>
+                            </button>
+                        </div>
+                        <div class="error-message" id="signup-confirm-password-error"></div>
+                    </div>
+
+                    <!-- Terms & Conditions -->
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms" class="text-sm text-white/70 cursor-pointer">
+                            I agree to the <a href="#" class="link-text">Terms of Service</a> and <a href="#" class="link-text">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <!-- Sign Up Button -->
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-user-plus mr-2"></i>Create Account
+                    </button>
+                </div>
+            </form>
+
+            <!-- Divider -->
+            <div class="divider">
+                <span>or sign up with</span>
+            </div>
+
+            <!-- OAuth Buttons -->
+            <div class="space-y-3">
+                <button class="btn-oauth" onclick="handleGoogleLogin()">
+                    <i class="fab fa-google text-xl"></i>
+                    <span>Sign up with Google</span>
+                </button>
+                <button class="btn-oauth" onclick="handleGithubLogin()">
+                    <i class="fab fa-github text-xl"></i>
+                    <span>Sign up with GitHub</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Back to Home -->
+        <div class="text-center mt-6">
+            <a href="../index.html" class="text-sm link-text">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Home
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Switch between login and signup tabs
+        function switchTab(tab) {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const forms = document.querySelectorAll('.form-container');
+
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            forms.forEach(form => form.classList.remove('active'));
+
+            if (tab === 'login') {
+                tabButtons[0].classList.add('active');
+                document.getElementById('login-form').classList.add('active');
+            } else {
+                tabButtons[1].classList.add('active');
+                document.getElementById('signup-form').classList.add('active');
+            }
+
+            // Hide success message when switching tabs
+            document.getElementById('success-message').classList.remove('show');
+        }
+
+        // Toggle password visibility
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(`${inputId}-icon`);
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Validate email format
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Show error message
+        function showError(fieldId, message) {
+            const errorDiv = document.getElementById(`${fieldId}-error`);
+            const inputField = document.getElementById(fieldId);
+
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+            inputField.classList.add('input-error');
+        }
+
+        // Clear error message
+        function clearError(fieldId) {
+            const errorDiv = document.getElementById(`${fieldId}-error`);
+            const inputField = document.getElementById(fieldId);
+
+            errorDiv.classList.remove('show');
+            inputField.classList.remove('input-error');
+        }
+
+        // Clear all errors in a form
+        function clearAllErrors(formId) {
+            const form = document.getElementById(formId);
+            const errorDivs = form.querySelectorAll('.error-message');
+            const inputs = form.querySelectorAll('input');
+
+            errorDivs.forEach(div => div.classList.remove('show'));
+            inputs.forEach(input => input.classList.remove('input-error'));
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            const successDiv = document.getElementById('success-message');
+            const successText = document.getElementById('success-text');
+
+            successText.textContent = message;
+            successDiv.classList.add('show');
+
+            setTimeout(() => {
+                successDiv.classList.remove('show');
+            }, 5000);
+        }
+
+        // Handle login form submission
+        function handleLogin(event) {
+            event.preventDefault();
+            clearAllErrors('login-form');
+
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            const rememberMe = document.getElementById('remember-me').checked;
+
+            let hasError = false;
+
+            // Validate email
+            if (!validateEmail(email)) {
+                showError('login-email', 'Please enter a valid email address');
+                hasError = true;
+            }
+
+            // Validate password
+            if (password.length < 6) {
+                showError('login-password', 'Password must be at least 6 characters');
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            // Save credentials to localStorage (demo only)
+            localStorage.setItem('user_email', email);
+            if (rememberMe) {
+                localStorage.setItem('remember_me', 'true');
+            }
+
+            // Show success and redirect
+            showSuccess('Login successful! Redirecting to dashboard...');
+
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1500);
+        }
+
+        // Handle signup form submission
+        function handleSignup(event) {
+            event.preventDefault();
+            clearAllErrors('signup-form');
+
+            const name = document.getElementById('signup-name').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-confirm-password').value;
+
+            let hasError = false;
+
+            // Validate name
+            if (name.length < 2) {
+                showError('signup-name', 'Please enter your full name');
+                hasError = true;
+            }
+
+            // Validate email
+            if (!validateEmail(email)) {
+                showError('signup-email', 'Please enter a valid email address');
+                hasError = true;
+            }
+
+            // Validate password
+            if (password.length < 8) {
+                showError('signup-password', 'Password must be at least 8 characters');
+                hasError = true;
+            }
+
+            // Validate password match
+            if (password !== confirmPassword) {
+                showError('signup-confirm-password', 'Passwords do not match');
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            // Save user data to localStorage (demo only)
+            localStorage.setItem('user_name', name);
+            localStorage.setItem('user_email', email);
+
+            // Show success and redirect
+            showSuccess('Account created successfully! Redirecting to dashboard...');
+
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1500);
+        }
+
+        // Handle Google OAuth login
+        function handleGoogleLogin() {
+            // Simulate OAuth login
+            showSuccess('Connecting to Google... This is a demo.');
+
+            setTimeout(() => {
+                localStorage.setItem('user_email', 'demo@google.com');
+                localStorage.setItem('user_name', 'Google User');
+                window.location.href = 'dashboard.html';
+            }, 1500);
+        }
+
+        // Handle GitHub OAuth login
+        function handleGithubLogin() {
+            // Simulate OAuth login
+            showSuccess('Connecting to GitHub... This is a demo.');
+
+            setTimeout(() => {
+                localStorage.setItem('user_email', 'demo@github.com');
+                localStorage.setItem('user_name', 'GitHub User');
+                window.location.href = 'dashboard.html';
+            }, 1500);
+        }
+
+        // Show forgot password dialog
+        function showForgotPassword() {
+            const email = prompt('Enter your email address to reset your password:');
+
+            if (email && validateEmail(email)) {
+                showSuccess('Password reset link sent to ' + email);
+            } else if (email) {
+                alert('Please enter a valid email address');
+            }
+        }
+
+        // Check if user is already logged in
+        function checkAuth() {
+            const userEmail = localStorage.getItem('user_email');
+            const rememberMe = localStorage.getItem('remember_me');
+
+            if (userEmail && rememberMe === 'true') {
+                // Pre-fill email if remember me was checked
+                document.getElementById('login-email').value = userEmail;
+                document.getElementById('remember-me').checked = true;
+            }
+        }
+
+        // Initialize on page load
+        checkAuth();
+    </script>
+</body>
+</html>

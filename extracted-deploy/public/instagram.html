@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Manager - Niche Empire Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .gradient-purple-blue { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 10px 20px; border-radius: 8px; border: none; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .btn-primary:hover { transform: translateY(-2px); }
+        .nav-link { transition: all 0.3s ease; padding: 8px 16px; border-radius: 8px; }
+        .nav-link:hover { background: rgba(255, 255, 255, 0.1); }
+        input, textarea, select { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 12px 16px; border-radius: 8px; width: 100%; }
+        input:focus, textarea:focus { outline: none; border-color: rgba(102, 126, 234, 0.5); }
+        .tab-btn { padding: 10px 20px; background: transparent; color: rgba(255, 255, 255, 0.6); border: none; cursor: pointer; border-radius: 8px; }
+        .tab-btn.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    </style>
+</head>
+<body>
+    <nav class="glass border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-8">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl gradient-purple-blue flex items-center justify-center"><i class="fas fa-rocket"></i></div>
+                    <span class="font-bold text-xl">Niche Empire Builder</span>
+                </a>
+                <div class="hidden md:flex gap-2">
+                    <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large mr-2"></i>Dashboard</a>
+                    <a href="youtube.html" class="nav-link"><i class="fab fa-youtube mr-2"></i>YouTube</a>
+                    <a href="instagram.html" class="nav-link bg-white/10"><i class="fab fa-instagram mr-2"></i>Instagram</a>
+                    <a href="tiktok.html" class="nav-link"><i class="fab fa-tiktok mr-2"></i>TikTok</a>
+                    <a href="pinterest.html" class="nav-link"><i class="fab fa-pinterest mr-2"></i>Pinterest</a>
+                </div>
+            </div>
+            <a href="settings.html" class="glass px-4 py-2 rounded-lg"><i class="fas fa-cog mr-2"></i>Settings</a>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-4xl font-bold mb-2">Instagram Manager</h1>
+                <p class="text-white/70">Schedule posts, reels, and stories</p>
+            </div>
+            <button onclick="schedulePost()" class="btn-primary"><i class="fas fa-calendar-plus mr-2"></i>Schedule Post</button>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-4 gap-6 mb-8">
+            <div class="glass rounded-2xl p-6">
+                <div class="flex justify-between mb-2"><span class="text-white/70 text-sm">Followers</span><i class="fas fa-users text-pink-400"></i></div>
+                <p class="text-3xl font-bold">8.7K</p>
+                <p class="text-xs text-green-400 mt-1">+156 this week</p>
+            </div>
+            <div class="glass rounded-2xl p-6">
+                <div class="flex justify-between mb-2"><span class="text-white/70 text-sm">Posts</span><i class="fas fa-image text-purple-400"></i></div>
+                <p class="text-3xl font-bold" id="posts-count">0</p>
+            </div>
+            <div class="glass rounded-2xl p-6">
+                <div class="flex justify-between mb-2"><span class="text-white/70 text-sm">Engagement</span><i class="fas fa-heart text-red-400"></i></div>
+                <p class="text-3xl font-bold">4.2%</p>
+            </div>
+            <div class="glass rounded-2xl p-6">
+                <div class="flex justify-between mb-2"><span class="text-white/70 text-sm">Reach</span><i class="fas fa-chart-line text-blue-400"></i></div>
+                <p class="text-3xl font-bold">45K</p>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="glass rounded-xl p-2 mb-6 flex gap-2">
+            <button class="tab-btn active" onclick="switchTab('posts')">Posts</button>
+            <button class="tab-btn" onclick="switchTab('reels')">Reels</button>
+            <button class="tab-btn" onclick="switchTab('stories')">Stories</button>
+            <button class="tab-btn" onclick="switchTab('scheduled')">Scheduled</button>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="glass rounded-2xl p-6">
+            <div id="content-grid" class="grid grid-cols-3 gap-4">
+                <div class="text-center py-12 text-white/50 col-span-3">
+                    <i class="fas fa-images text-4xl mb-4"></i>
+                    <p>No content yet. Schedule your first post!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let posts = JSON.parse(localStorage.getItem('instagram_posts') || '[]');
+        function init() { document.getElementById('posts-count').textContent = posts.length; }
+        function schedulePost() {
+            const title = prompt('Post caption:');
+            if (title) {
+                posts.unshift({ id: Date.now(), caption: title, date: new Date().toLocaleDateString(), type: 'post' });
+                localStorage.setItem('instagram_posts', JSON.stringify(posts));
+                alert('Post scheduled!');
+                init();
+            }
+        }
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+        init();
+    </script>
+</body>
+</html>

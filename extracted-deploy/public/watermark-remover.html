@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watermark Remover - AI Automation System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .upload-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .preview-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        h2 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .drop-zone {
+            border: 3px dashed rgba(255, 255, 255, 0.4);
+            border-radius: 15px;
+            padding: 60px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .drop-zone:hover {
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .drop-zone.dragover {
+            border-color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+        }
+
+        .drop-zone .icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .drop-zone h3 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .drop-zone p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-list {
+            margin-bottom: 20px;
+        }
+
+        .file-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .file-info .icon {
+            font-size: 2rem;
+        }
+
+        .file-details {
+            flex: 1;
+        }
+
+        .file-name {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .file-size {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+        }
+
+        .file-status {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .file-status.pending {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+
+        .file-status.processing {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+
+        .file-status.complete {
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+        }
+
+        .file-status.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .remove-btn {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #ef4444;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .remove-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+
+        .detection-options {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .detection-options h3 {
+            color: white;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .option-group {
+            margin-bottom: 15px;
+        }
+
+        .option-group label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+        }
+
+        .option-group input[type="checkbox"],
+        .option-group input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.6);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6);
+        }
+
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .preview-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .preview-box h3 {
+            color: white;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .preview-video {
+            width: 100%;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .preview-video video {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-card .label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .value {
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 30px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ade80 0%, #22c55e 100%);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .batch-progress {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .batch-progress h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .batch-stats {
+            display: flex;
+            justify-content: space-around;
+            color: white;
+        }
+
+        .batch-stat {
+            text-align: center;
+        }
+
+        .batch-stat .number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .batch-stat .label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .comparison-container {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✨ Watermark Remover</h1>
+            <p>Remove watermarks from videos using advanced AI technology</p>
+        </div>
+
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-btn">🏠 Dashboard</a>
+            <a href="api-keys.html" class="nav-btn">🔐 API Keys</a>
+            <a href="video-generator.html" class="nav-btn">🎬 Video Generator</a>
+            <a href="automation-control.html" class="nav-btn">⚙️ Automation</a>
+        </div>
+
+        <div class="main-content">
+            <!-- Upload Section -->
+            <div class="upload-section">
+                <h2>📤 Upload Videos</h2>
+
+                <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+                    <div class="icon">🎬</div>
+                    <h3>Drop videos here or click to browse</h3>
+                    <p>Supports MP4, MOV, AVI, WebM (Max 500MB per file)</p>
+                </div>
+
+                <input type="file" id="file-input" class="file-input" accept="video/*" multiple onchange="handleFiles(this.files)">
+
+                <div class="file-list" id="file-list"></div>
+
+                <div class="detection-options">
+                    <h3>⚙️ Detection Settings</h3>
+
+                    <div class="option-group">
+                        <label>
+                            <input type="checkbox" id="auto-detect" checked>
+                            Auto-detect watermarks
+                        </label>
+                    </div>
+
+                    <div class="option-group">
+                        <label>
+                            <input type="checkbox" id="ai-enhance">
+                            AI enhancement after removal
+                        </label>
+                    </div>
+
+                    <div class="option-group">
+                        <label>
+                            <input type="checkbox" id="preserve-quality" checked>
+                            Preserve original quality
+                        </label>
+                    </div>
+
+                    <div class="option-group">
+                        <h4 style="color: rgba(255, 255, 255, 0.9); margin-bottom: 10px; font-size: 0.95rem;">Detection Mode:</h4>
+                        <label>
+                            <input type="radio" name="detection-mode" value="standard" checked>
+                            Standard (Fast)
+                        </label>
+                    </div>
+
+                    <div class="option-group">
+                        <label>
+                            <input type="radio" name="detection-mode" value="deep">
+                            Deep Scan (Accurate)
+                        </label>
+                    </div>
+
+                    <div class="option-group">
+                        <label>
+                            <input type="radio" name="detection-mode" value="custom">
+                            Custom Region
+                        </label>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" id="process-btn" onclick="processVideos()" disabled>🔄 Remove Watermarks</button>
+                <button class="btn btn-danger" onclick="clearAll()">🗑️ Clear All</button>
+            </div>
+
+            <!-- Preview Section -->
+            <div class="preview-section">
+                <h2>👁️ Preview & Download</h2>
+
+                <div class="batch-progress" id="batch-progress">
+                    <h3>Batch Processing</h3>
+                    <div class="batch-stats">
+                        <div class="batch-stat">
+                            <div class="number" id="processed-count">0</div>
+                            <div class="label">Processed</div>
+                        </div>
+                        <div class="batch-stat">
+                            <div class="number" id="total-count">0</div>
+                            <div class="label">Total</div>
+                        </div>
+                        <div class="batch-stat">
+                            <div class="number" id="success-rate">0%</div>
+                            <div class="label">Success</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-bar" id="progress-bar">
+                    <div class="progress-fill" id="progress-fill">0%</div>
+                </div>
+
+                <div class="comparison-container">
+                    <div class="preview-box">
+                        <h3>Before</h3>
+                        <div class="preview-video" id="before-preview">
+                            <span>Original video will appear here</span>
+                        </div>
+                    </div>
+
+                    <div class="preview-box">
+                        <h3>After</h3>
+                        <div class="preview-video" id="after-preview">
+                            <span>Processed video will appear here</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="label">Watermarks Detected</div>
+                        <div class="value" id="watermarks-detected">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Processing Time</div>
+                        <div class="value" id="processing-time">--</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Quality Score</div>
+                        <div class="value" id="quality-score">--</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">File Size</div>
+                        <div class="value" id="file-size">--</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-success" id="download-btn" onclick="downloadProcessed()" disabled>⬇️ Download Processed</button>
+                <button class="btn btn-success" id="download-all-btn" onclick="downloadAll()" disabled>📦 Download All (ZIP)</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let uploadedFiles = [];
+        let processedVideos = [];
+
+        // Drag and drop functionality
+        const dropZone = document.getElementById('drop-zone');
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        function handleFiles(files) {
+            for (let file of files) {
+                if (!file.type.startsWith('video/')) {
+                    alert(`${file.name} is not a video file`);
+                    continue;
+                }
+
+                if (file.size > 500 * 1024 * 1024) {
+                    alert(`${file.name} exceeds 500MB limit`);
+                    continue;
+                }
+
+                uploadedFiles.push({
+                    file: file,
+                    id: Date.now() + Math.random(),
+                    status: 'pending'
+                });
+            }
+
+            renderFileList();
+            document.getElementById('process-btn').disabled = uploadedFiles.length === 0;
+        }
+
+        function renderFileList() {
+            const fileList = document.getElementById('file-list');
+            fileList.innerHTML = '';
+
+            uploadedFiles.forEach((item, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <div class="file-info">
+                        <div class="icon">🎬</div>
+                        <div class="file-details">
+                            <div class="file-name">${item.file.name}</div>
+                            <div class="file-size">${formatFileSize(item.file.size)}</div>
+                        </div>
+                    </div>
+                    <div class="file-status ${item.status}">${item.status.toUpperCase()}</div>
+                    <button class="remove-btn" onclick="removeFile(${index})">✕</button>
+                `;
+                fileList.appendChild(fileItem);
+            });
+        }
+
+        function removeFile(index) {
+            uploadedFiles.splice(index, 1);
+            renderFileList();
+            document.getElementById('process-btn').disabled = uploadedFiles.length === 0;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+        }
+
+        async function processVideos() {
+            if (uploadedFiles.length === 0) {
+                alert('Please upload videos first');
+                return;
+            }
+
+            const processBtn = document.getElementById('process-btn');
+            const progressBar = document.getElementById('progress-bar');
+            const batchProgress = document.getElementById('batch-progress');
+
+            processBtn.disabled = true;
+            progressBar.style.display = 'block';
+            batchProgress.style.display = 'block';
+
+            document.getElementById('total-count').textContent = uploadedFiles.length;
+
+            let processed = 0;
+            let successful = 0;
+
+            for (let i = 0; i < uploadedFiles.length; i++) {
+                const item = uploadedFiles[i];
+                item.status = 'processing';
+                renderFileList();
+
+                // Simulate processing stages
+                await processVideo(item.file, (progress) => {
+                    updateProgress(progress);
+                });
+
+                // Randomly determine success (90% success rate for demo)
+                const success = Math.random() > 0.1;
+
+                if (success) {
+                    item.status = 'complete';
+                    successful++;
+                    processedVideos.push(item);
+                } else {
+                    item.status = 'error';
+                }
+
+                processed++;
+                document.getElementById('processed-count').textContent = processed;
+                document.getElementById('success-rate').textContent =
+                    Math.round((successful / processed) * 100) + '%';
+
+                renderFileList();
+            }
+
+            // Show first processed video
+            if (processedVideos.length > 0) {
+                showPreview(processedVideos[0]);
+                document.getElementById('download-btn').disabled = false;
+                document.getElementById('download-all-btn').disabled = false;
+            }
+
+            progressBar.style.display = 'none';
+            processBtn.disabled = false;
+            alert(`Processing complete! ${successful} of ${uploadedFiles.length} videos processed successfully.`);
+        }
+
+        async function processVideo(file, progressCallback) {
+            const stages = [20, 40, 60, 80, 100];
+
+            for (let stage of stages) {
+                await new Promise(resolve => setTimeout(resolve, 800));
+                progressCallback(stage);
+            }
+        }
+
+        function updateProgress(percent) {
+            const progressFill = document.getElementById('progress-fill');
+            progressFill.style.width = percent + '%';
+            progressFill.textContent = percent + '%';
+        }
+
+        function showPreview(item) {
+            // Update stats
+            document.getElementById('watermarks-detected').textContent = Math.floor(Math.random() * 3) + 1;
+            document.getElementById('processing-time').textContent = (Math.random() * 10 + 5).toFixed(1) + 's';
+            document.getElementById('quality-score').textContent = (Math.random() * 10 + 90).toFixed(1) + '%';
+            document.getElementById('file-size').textContent = formatFileSize(item.file.size * 0.95);
+
+            // In production, show actual video previews
+            const beforePreview = document.getElementById('before-preview');
+            const afterPreview = document.getElementById('after-preview');
+
+            beforePreview.innerHTML = `<video src="${URL.createObjectURL(item.file)}" controls></video>`;
+            afterPreview.innerHTML = `<video src="${URL.createObjectURL(item.file)}" controls></video>`;
+        }
+
+        function downloadProcessed() {
+            if (processedVideos.length === 0) {
+                alert('No processed videos to download');
+                return;
+            }
+
+            // Download first processed video
+            const item = processedVideos[0];
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(item.file);
+            link.download = `cleaned_${item.file.name}`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function downloadAll() {
+            if (processedVideos.length === 0) {
+                alert('No processed videos to download');
+                return;
+            }
+
+            alert(`Preparing ZIP archive with ${processedVideos.length} processed videos...`);
+            // In production, this would create a ZIP file
+        }
+
+        function clearAll() {
+            if (uploadedFiles.length === 0) {
+                return;
+            }
+
+            if (confirm('Clear all uploaded and processed videos?')) {
+                uploadedFiles = [];
+                processedVideos = [];
+                renderFileList();
+                document.getElementById('process-btn').disabled = true;
+                document.getElementById('download-btn').disabled = true;
+                document.getElementById('download-all-btn').disabled = true;
+                document.getElementById('batch-progress').style.display = 'none';
+
+                // Reset previews
+                document.getElementById('before-preview').innerHTML = '<span>Original video will appear here</span>';
+                document.getElementById('after-preview').innerHTML = '<span>Processed video will appear here</span>';
+
+                // Reset stats
+                document.getElementById('watermarks-detected').textContent = '0';
+                document.getElementById('processing-time').textContent = '--';
+                document.getElementById('quality-score').textContent = '--';
+                document.getElementById('file-size').textContent = '--';
+            }
+        }
+    </script>
+</body>
+</html>

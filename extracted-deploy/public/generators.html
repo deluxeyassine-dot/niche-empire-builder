@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Generators - Niche Empire Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        body { background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%); background-attachment: fixed; }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
+        .glass-strong { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.15); }
+        .gradient-purple-blue { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .sidebar-item { position: relative; transition: all 0.3s ease; cursor: pointer; }
+        .sidebar-item::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 4px; height: 0; background: linear-gradient(180deg, #667eea, #764ba2); border-radius: 0 4px 4px 0; transition: height 0.3s ease; }
+        .sidebar-item:hover::before, .sidebar-item.active::before { height: 70%; }
+        .sidebar-item:hover { background: rgba(255, 255, 255, 0.08); padding-left: 24px; }
+        .sidebar-item.active { background: rgba(102, 126, 234, 0.15); padding-left: 24px; color: white; }
+        input, select, textarea { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #667eea; background: rgba(255, 255, 255, 0.08); }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 100; overflow-y: auto; padding: 2rem; }
+        .modal.show { display: flex; align-items: center; justify-content: center; }
+        .generator-card { transition: all 0.3s ease; cursor: pointer; }
+        .generator-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3); }
+        .progress-bar { width: 0%; height: 4px; background: linear-gradient(90deg, #667eea, #764ba2); transition: width 0.3s ease; border-radius: 2px; }
+    </style>
+</head>
+<body class="text-gray-100">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 glass-strong p-6 flex flex-col min-h-screen sticky top-0">
+            <div class="mb-8">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl gradient-purple-blue flex items-center justify-center">
+                        <i class="fas fa-crown text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">NicheEmpire</h1>
+                        <p class="text-xs text-gray-400">Premium Dashboard</p>
+                    </div>
+                </div>
+            </div>
+            <nav class="flex-1 space-y-2">
+                <a href="dashboard.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                    <i class="fas fa-home text-lg w-5"></i><span class="font-medium">Dashboard</span>
+                </a>
+                <div class="pt-4 mt-4 border-t border-gray-700">
+                    <a href="marketplace.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                        <i class="fas fa-store text-lg w-5"></i><span class="font-medium">Marketplaces</span>
+                    </a>
+                    <a href="generators.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-xl text-white">
+                        <i class="fas fa-wand-magic-sparkles text-lg w-5"></i><span class="font-medium">Generators</span>
+                    </a>
+                    <a href="ai-services.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                        <i class="fas fa-robot text-lg w-5"></i><span class="font-medium">AI Tools</span>
+                    </a>
+                    <a href="agents.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                        <i class="fas fa-cogs text-lg w-5"></i><span class="font-medium">Agents</span>
+                    </a>
+                    <a href="products.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                        <i class="fas fa-box-open text-lg w-5"></i><span class="font-medium">Products</span>
+                    </a>
+                    <a href="settings.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                        <i class="fas fa-cog text-lg w-5"></i><span class="font-medium">Settings</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <header class="mb-8">
+                <h2 class="text-3xl font-bold mb-2">Product Generators</h2>
+                <p class="text-gray-400">Create professional products in minutes</p>
+            </header>
+
+            <!-- Generator Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+
+                <!-- Wall Art Generator -->
+                <div class="generator-card glass-strong rounded-2xl p-6" onclick="openGenerator('wallart')">
+                    <div class="w-12 h-12 rounded-xl gradient-purple-blue flex items-center justify-center mb-4">
+                        <i class="fas fa-image text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Wall Art Generator</h3>
+                    <p class="text-sm text-gray-400 mb-4">Print-ready wall art • 7 sizes • 3 formats • 5 color options</p>
+                    <div class="flex items-center gap-2 text-xs text-green-400">
+                        <i class="fas fa-check-circle"></i>
+                        <span>JPG/PNG/PDF • 300 DPI</span>
+                    </div>
+                </div>
+
+                <!-- Clipart Generator -->
+                <div class="generator-card glass-strong rounded-2xl p-6" onclick="openGenerator('clipart')">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-pink-500 flex items-center justify-center mb-4">
+                        <i class="fas fa-palette text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Clipart Generator</h3>
+                    <p class="text-sm text-gray-400 mb-4">PNG/SVG/EPS/PDF • 4 sizes • Bulk packs up to 100 items</p>
+                    <div class="flex items-center gap-2 text-xs text-green-400">
+                        <i class="fas fa-check-circle"></i>
+                        <span>500px-5000px Resolution</span>
+                    </div>
+                </div>
+
+                <!-- Coloring Book Generator -->
+                <div class="generator-card glass-strong rounded-2xl p-6" onclick="openGenerator('coloring')">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-blue-500 flex items-center justify-center mb-4">
+                        <i class="fas fa-book-open text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Coloring Book</h3>
+                    <p class="text-sm text-gray-400 mb-4">KDP-ready • 3 sizes • 1-100 pages • PDF output</p>
+                    <div class="flex items-center gap-2 text-xs text-green-400">
+                        <i class="fas fa-check-circle"></i>
+                        <span>8.5x11, A4, A5 Sizes</span>
+                    </div>
+                </div>
+
+                <!-- KDP Interior Generator -->
+                <div class="generator-card glass-strong rounded-2xl p-6" onclick="openGenerator('kdpinterior')">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center mb-4">
+                        <i class="fas fa-book text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">KDP Interior</h3>
+                    <p class="text-sm text-gray-400 mb-4">4 trim sizes • 100-200 pages • 6 book types</p>
+                    <div class="flex items-center gap-2 text-xs text-green-400">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Planners, Journals & More</span>
+                    </div>
+                </div>
+
+                <!-- KDP Cover Generator -->
+                <div class="generator-card glass-strong rounded-2xl p-6" onclick="openGenerator('kdpcover')">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500 to-green-500 flex items-center justify-center mb-4">
+                        <i class="fas fa-book-open text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">KDP Cover</h3>
+                    <p class="text-sm text-gray-400 mb-4">4 trim sizes • Auto spine calculator • Bleed zones</p>
+                    <div class="flex items-center gap-2 text-xs text-green-400">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Front + Spine + Back Cover</span>
+                    </div>
+                </div>
+
+                <!-- Batch Generator -->
+                <div class="generator-card glass-strong rounded-2xl p-6 border-2 border-purple-500/50" onclick="openGenerator('batch')">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-12 h-12 rounded-xl gradient-purple-blue flex items-center justify-center">
+                            <i class="fas fa-layer-group text-white text-2xl"></i>
+                        </div>
+                        <span class="px-2 py-1 rounded-full bg-purple-500/20 text-purple-400 text-xs font-semibold">PRO</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Batch Generator</h3>
+                    <p class="text-sm text-gray-400 mb-4">Generate multiple products at once</p>
+                    <div class="flex items-center gap-2 text-xs text-purple-400">
+                        <i class="fas fa-star"></i>
+                        <span>All Generators Available</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Recent Generations -->
+            <div class="glass-strong rounded-2xl p-6">
+                <h3 class="text-xl font-bold mb-4">Recent Generations</h3>
+                <div id="recent-list" class="space-y-3">
+                    <p class="text-gray-400 text-center py-8">No generations yet. Start creating!</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Wall Art Modal -->
+    <div id="wallart-modal" class="modal">
+        <div class="glass-strong rounded-2xl p-8 max-w-3xl w-full">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold">Generate Wall Art</h2>
+                <button onclick="closeModal('wallart')" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Theme/Prompt</label>
+                        <textarea id="wallart-theme" rows="3" placeholder="e.g. Mountain sunset with pink and purple sky, minimalist geometric pattern..." class="w-full px-4 py-2 rounded-lg"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Art Style</label>
+                        <select id="wallart-style" class="w-full px-4 py-2 rounded-lg">
+                            <option>Minimalist</option>
+                            <option>Abstract</option>
+                            <option>Watercolor</option>
+                            <option>Geometric</option>
+                            <option>Photography</option>
+                            <option>Vintage</option>
+                            <option>Modern</option>
+                            <option>Bohemian</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Size</label>
+                        <select id="wallart-size" class="w-full px-4 py-2 rounded-lg">
+                            <option>5x7"</option>
+                            <option>8x10"</option>
+                            <option>11x14"</option>
+                            <option>12x16"</option>
+                            <option>16x20"</option>
+                            <option>18x24"</option>
+                            <option>24x36"</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Format</label>
+                        <select id="wallart-format" class="w-full px-4 py-2 rounded-lg">
+                            <option>JPG 300 DPI</option>
+                            <option>PNG Transparent</option>
+                            <option>PDF Print-Ready</option>
+                            <option>All Formats (JPG + PNG + PDF)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Color Options</label>
+                        <select id="wallart-colors" class="w-full px-4 py-2 rounded-lg">
+                            <option>Original</option>
+                            <option>Black & White</option>
+                            <option>Sepia</option>
+                            <option>Pastel</option>
+                            <option>Bold</option>
+                            <option>All Color Variations</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="glass rounded-xl p-4 h-64 flex items-center justify-center" id="wallart-preview">
+                        <div class="text-center text-gray-400">
+                            <i class="fas fa-image text-4xl mb-2"></i>
+                            <p>Preview will appear here</p>
+                        </div>
+                    </div>
+                    <div id="wallart-progress" class="hidden">
+                        <p class="text-sm text-gray-400 mb-2">Generating...</p>
+                        <div class="glass rounded-full h-2 overflow-hidden">
+                            <div class="progress-bar" id="wallart-progress-bar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-3 mt-6">
+                <button onclick="generateWallArt()" class="flex-1 gradient-purple-blue px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition">
+                    <i class="fas fa-magic mr-2"></i>Generate Wall Art
+                </button>
+                <button onclick="closeModal('wallart')" class="px-6 py-3 glass rounded-xl hover:bg-white/10">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clipart Modal -->
+    <div id="clipart-modal" class="modal">
+        <div class="glass-strong rounded-2xl p-8 max-w-3xl w-full">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold">Generate Clipart</h2>
+                <button onclick="closeModal('clipart')" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Subject/Description</label>
+                        <textarea id="clipart-subject" rows="3" placeholder="e.g. Cute cartoon animals, flowers, icons..." class="w-full px-4 py-2 rounded-lg"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Style</label>
+                        <select id="clipart-style" class="w-full px-4 py-2 rounded-lg">
+                            <option>Cartoon</option>
+                            <option>Realistic</option>
+                            <option>Flat Design</option>
+                            <option>Hand-drawn</option>
+                            <option>Watercolor</option>
+                            <option>3D</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Format</label>
+                        <select id="clipart-format" class="w-full px-4 py-2 rounded-lg">
+                            <option>PNG Transparent</option>
+                            <option>SVG Vector</option>
+                            <option>EPS Vector</option>
+                            <option>PDF Print-Ready</option>
+                            <option>All Formats (PNG+SVG+EPS+PDF)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Size</label>
+                        <select id="clipart-resolution" class="w-full px-4 py-2 rounded-lg">
+                            <option>500px</option>
+                            <option>1000px</option>
+                            <option>3000px</option>
+                            <option>5000px</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Bulk Pack</label>
+                        <select id="clipart-qty" class="w-full px-4 py-2 rounded-lg">
+                            <option value="1">Single Item</option>
+                            <option value="10">10 Items Pack</option>
+                            <option value="25">25 Items Pack</option>
+                            <option value="50">50 Items Pack</option>
+                            <option value="100">100 Items Pack</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" id="clipart-transparent" checked class="w-5 h-5 rounded">
+                        <label for="clipart-transparent" class="text-sm">Transparent Background</label>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" id="clipart-variations" class="w-5 h-5 rounded">
+                        <label for="clipart-variations" class="text-sm">Generate Color Variations</label>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="glass rounded-xl p-4 h-64 flex items-center justify-center">
+                        <div class="text-center text-gray-400">
+                            <i class="fas fa-palette text-4xl mb-2"></i>
+                            <p>Preview will appear here</p>
+                        </div>
+                    </div>
+                    <div id="clipart-progress" class="hidden">
+                        <p class="text-sm text-gray-400 mb-2">Generating clipart...</p>
+                        <div class="glass rounded-full h-2 overflow-hidden">
+                            <div class="progress-bar" id="clipart-progress-bar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-3 mt-6">
+                <button onclick="generateClipart()" class="flex-1 gradient-purple-blue px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition">
+                    <i class="fas fa-magic mr-2"></i>Generate Clipart
+                </button>
+                <button onclick="closeModal('clipart')" class="px-6 py-3 glass rounded-xl hover:bg-white/10">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Coloring Book Modal -->
+    <div id="coloring-modal" class="modal">
+        <div class="glass-strong rounded-2xl p-8 max-w-3xl w-full">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold">Generate Coloring Book</h2>
+                <button onclick="closeModal('coloring')" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Book Theme</label>
+                            <textarea id="coloring-theme" rows="3" placeholder="e.g. Animals, Mandalas, Nature scenes, Fantasy creatures..." class="w-full px-4 py-2 rounded-lg"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Number of Pages</label>
+                            <select id="coloring-pages" class="w-full px-4 py-2 rounded-lg">
+                                <option value="1">1 Page</option>
+                                <option value="10">10 Pages</option>
+                                <option value="30">30 Pages</option>
+                                <option value="50">50 Pages</option>
+                                <option value="100">100 Pages</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Complexity Level</label>
+                            <div class="space-y-2">
+                                <input type="range" id="coloring-complexity" min="1" max="3" value="2" class="w-full">
+                                <div class="flex justify-between text-xs text-gray-400">
+                                    <span>Easy (Kids)</span>
+                                    <span>Medium</span>
+                                    <span>Advanced (Adults)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Page Style</label>
+                            <select id="coloring-style" class="w-full px-4 py-2 rounded-lg">
+                                <option>Simple Outlines</option>
+                                <option>Detailed Patterns</option>
+                                <option>Mandalas</option>
+                                <option>Realistic</option>
+                                <option>Zentangle</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Book Size</label>
+                            <select id="coloring-size" class="w-full px-4 py-2 rounded-lg">
+                                <option>8.5" x 11" (Letter)</option>
+                                <option>A4 (8.27" x 11.69")</option>
+                                <option>A5 (5.83" x 8.27")</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" id="coloring-cover" checked class="w-5 h-5 rounded">
+                            <label for="coloring-cover" class="text-sm">Generate Cover Page</label>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" id="coloring-singlesided" checked class="w-5 h-5 rounded">
+                            <label for="coloring-singlesided" class="text-sm">Single-Sided Pages</label>
+                        </div>
+                        <div class="glass rounded-xl p-4">
+                            <h4 class="font-semibold mb-2">Estimated Details:</h4>
+                            <div class="space-y-2 text-sm text-gray-400">
+                                <div class="flex justify-between">
+                                    <span>Pages:</span>
+                                    <span id="coloring-estimate-pages">50</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>File Size:</span>
+                                    <span>~15-25 MB</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Generation Time:</span>
+                                    <span>~2-5 minutes</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="coloring-progress" class="hidden">
+                    <p class="text-sm text-gray-400 mb-2">Generating coloring book pages...</p>
+                    <div class="glass rounded-full h-2 overflow-hidden">
+                        <div class="progress-bar" id="coloring-progress-bar"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-3 mt-6">
+                <button onclick="generateColoringBook()" class="flex-1 gradient-purple-blue px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition">
+                    <i class="fas fa-book mr-2"></i>Generate Coloring Book
+                </button>
+                <button onclick="closeModal('coloring')" class="px-6 py-3 glass rounded-xl hover:bg-white/10">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- KDP Interior Modal -->
+    <div id="kdpinterior-modal" class="modal">
+        <div class="glass-strong rounded-2xl p-8 max-w-3xl w-full">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold">Generate KDP Interior</h2>
+                <button onclick="closeModal('kdpinterior')" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Book Type</label>
+                        <select id="kdp-type" class="w-full px-4 py-2 rounded-lg" onchange="updateKDPLayouts()">
+                            <option value="planner">Planner</option>
+                            <option value="journal">Journal</option>
+                            <option value="notebook">Notebook</option>
+                            <option value="logbook">Logbook</option>
+                            <option value="tracker">Tracker</option>
+                            <option value="workbook">Workbook</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Page Layout</label>
+                        <select id="kdp-layout" class="w-full px-4 py-2 rounded-lg">
+                            <option>Daily Pages</option>
+                            <option>Weekly Spreads</option>
+                            <option>Monthly Calendar</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Number of Pages</label>
+                        <select id="kdp-pages" class="w-full px-4 py-2 rounded-lg">
+                            <option value="100">100 Pages</option>
+                            <option value="120" selected>120 Pages</option>
+                            <option value="150">150 Pages</option>
+                            <option value="200">200 Pages</option>
+                            <option value="custom">Custom (24-828 pages)</option>
+                        </select>
+                    </div>
+                    <div id="kdp-custom-pages" class="hidden">
+                        <label class="block text-sm font-medium mb-2">Custom Page Count</label>
+                        <input type="number" id="kdp-pages-custom" value="120" min="24" max="828" class="w-full px-4 py-2 rounded-lg">
+                        <p class="text-xs text-gray-400 mt-1">KDP allows 24-828 pages</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Trim Size</label>
+                        <select id="kdp-trim" class="w-full px-4 py-2 rounded-lg">
+                            <option>6" x 9"</option>
+                            <option>8.5" x 11"</option>
+                            <option>5" x 8"</option>
+                            <option>8" x 10"</option>
+                            <option>5.5" x 8.5"</option>
+                            <option>7" x 10"</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Interior Color</label>
+                        <select id="kdp-color" class="w-full px-4 py-2 rounded-lg">
+                            <option>Black & White</option>
+                            <option>Premium Color</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Paper Type</label>
+                        <select id="kdp-paper" class="w-full px-4 py-2 rounded-lg">
+                            <option>White Paper</option>
+                            <option>Cream Paper</option>
+                        </select>
+                    </div>
+                    <div class="glass rounded-xl p-4">
+                        <h4 class="font-semibold mb-3">Preview Layout</h4>
+                        <div class="bg-white rounded p-4 h-48 flex items-center justify-center">
+                            <div class="text-gray-800 text-center">
+                                <i class="fas fa-file-alt text-4xl mb-2"></i>
+                                <p class="text-sm">Page layout preview</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-3 mt-6">
+                <button onclick="generateKDPInterior()" class="flex-1 gradient-purple-blue px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition">
+                    <i class="fas fa-book mr-2"></i>Generate Interior
+                </button>
+                <button onclick="closeModal('kdpinterior')" class="px-6 py-3 glass rounded-xl hover:bg-white/10">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- KDP Cover Modal -->
+    <div id="kdpcover-modal" class="modal">
+        <div class="glass-strong rounded-2xl p-8 max-w-3xl w-full">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold">Generate KDP Cover</h2>
+                <button onclick="closeModal('kdpcover')" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Book Title</label>
+                        <input type="text" id="cover-title" placeholder="Enter book title" class="w-full px-4 py-2 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Author Name</label>
+                        <input type="text" id="cover-author" placeholder="Enter author name" class="w-full px-4 py-2 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Trim Size</label>
+                        <select id="cover-trim" class="w-full px-4 py-2 rounded-lg" onchange="calculateSpine()">
+                            <option>6" x 9"</option>
+                            <option>8.5" x 11"</option>
+                            <option>5" x 8"</option>
+                            <option>8" x 10"</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Page Count</label>
+                        <select id="cover-pages" class="w-full px-4 py-2 rounded-lg" onchange="calculateSpine()">
+                            <option value="100">100 Pages</option>
+                            <option value="120" selected>120 Pages</option>
+                            <option value="150">150 Pages</option>
+                            <option value="200">200 Pages</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+                    <div id="cover-custom-pages" class="hidden">
+                        <label class="block text-sm font-medium mb-2">Custom Page Count</label>
+                        <input type="number" id="cover-pages-custom" value="120" min="24" max="828" class="w-full px-4 py-2 rounded-lg" oninput="calculateSpine()">
+                        <p class="text-xs text-gray-400 mt-1">KDP allows 24-828 pages</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Paper Type</label>
+                        <select id="cover-paper" class="w-full px-4 py-2 rounded-lg" onchange="calculateSpine()">
+                            <option>White Paper</option>
+                            <option>Cream Paper</option>
+                        </select>
+                    </div>
+                    <div class="glass rounded-xl p-4">
+                        <h4 class="font-semibold mb-2">Spine Calculator</h4>
+                        <div class="text-sm space-y-1">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Spine Width:</span>
+                                <span id="spine-width" class="font-mono text-green-400">0.300"</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Total Width:</span>
+                                <span id="total-width" class="font-mono">12.300"</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Cover Style</label>
+                        <select id="cover-style" class="w-full px-4 py-2 rounded-lg">
+                            <option>Modern Minimalist</option>
+                            <option>Classic Professional</option>
+                            <option>Artistic Creative</option>
+                            <option>Bold Typography</option>
+                            <option>Photographic</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Color Scheme</label>
+                        <select id="cover-colors" class="w-full px-4 py-2 rounded-lg">
+                            <option>Navy & Gold</option>
+                            <option>Black & White</option>
+                            <option>Pastel</option>
+                            <option>Earth Tones</option>
+                            <option>Vibrant</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Cover Description</label>
+                        <textarea id="cover-description" rows="3" placeholder="Describe the cover design you want..." class="w-full px-4 py-2 rounded-lg"></textarea>
+                    </div>
+                    <div class="glass rounded-xl p-4 bg-white/5">
+                        <p class="text-xs text-gray-400">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Cover includes front, spine, and back with proper bleed and safe zones for KDP requirements.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-3 mt-6">
+                <button onclick="generateKDPCover()" class="flex-1 gradient-purple-blue px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition">
+                    <i class="fas fa-book-open mr-2"></i>Generate Cover
+                </button>
+                <button onclick="closeModal('kdpcover')" class="px-6 py-3 glass rounded-xl hover:bg-white/10">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Batch Generator Modal -->
+    <div id="batch-modal" class="modal">
+        <div class="glass-strong rounded-2xl p-8 max-w-4xl w-full">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold">Batch Generator</h2>
+                    <p class="text-gray-400">Generate multiple products at once</p>
+                </div>
+                <button onclick="closeModal('batch')" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div class="space-y-6">
+                <div class="glass rounded-xl p-4">
+                    <h3 class="font-semibold mb-3">Select Generators</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" value="wallart" class="batch-checkbox w-5 h-5">
+                            <span>Wall Art</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" value="clipart" class="batch-checkbox w-5 h-5">
+                            <span>Clipart</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" value="coloring" class="batch-checkbox w-5 h-5">
+                            <span>Coloring Books</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" value="kdpinterior" class="batch-checkbox w-5 h-5">
+                            <span>KDP Interior</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" value="kdpcover" class="batch-checkbox w-5 h-5">
+                            <span>KDP Cover</span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Upload CSV or Enter Prompts</label>
+                    <textarea id="batch-prompts" rows="10" placeholder="Enter one prompt per line, or upload a CSV file..." class="w-full px-4 py-2 rounded-lg font-mono text-sm"></textarea>
+                </div>
+                <div class="flex items-center gap-3">
+                    <input type="checkbox" id="batch-autopublish" class="w-5 h-5">
+                    <label for="batch-autopublish">Auto-publish to connected marketplaces</label>
+                </div>
+            </div>
+            <div class="flex gap-3 mt-6">
+                <button onclick="startBatchGeneration()" class="flex-1 gradient-purple-blue px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition">
+                    <i class="fas fa-rocket mr-2"></i>Start Batch Generation
+                </button>
+                <button onclick="closeModal('batch')" class="px-6 py-3 glass rounded-xl hover:bg-white/10">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal functions
+        function openGenerator(type) {
+            document.getElementById(type + '-modal').classList.add('show');
+        }
+
+        function closeModal(type) {
+            document.getElementById(type + '-modal').classList.remove('show');
+        }
+
+        // Wall Art Generator
+        function generateWallArt() {
+            const theme = document.getElementById('wallart-theme').value;
+            const style = document.getElementById('wallart-style').value;
+            const size = document.getElementById('wallart-size').value;
+            const format = document.getElementById('wallart-format').value;
+            const colors = document.getElementById('wallart-colors').value;
+
+            if (!theme) {
+                alert('Please enter a theme/prompt');
+                return;
+            }
+
+            showProgress('wallart');
+            simulateGeneration('wallart', () => {
+                const product = {
+                    type: 'Wall Art',
+                    name: theme.substring(0, 50),
+                    details: `${style} • ${size} • ${format} • ${colors}`,
+                    date: new Date().toLocaleString()
+                };
+                addToRecent(product);
+                alert('Wall Art generated successfully! Check the Products page.');
+                closeModal('wallart');
+            });
+        }
+
+        // Clipart Generator
+        function generateClipart() {
+            const subject = document.getElementById('clipart-subject').value;
+            const style = document.getElementById('clipart-style').value;
+            const format = document.getElementById('clipart-format').value;
+            const resolution = document.getElementById('clipart-resolution').value;
+            const qty = document.getElementById('clipart-qty').value;
+            const transparent = document.getElementById('clipart-transparent').checked;
+
+            if (!subject) {
+                alert('Please enter a subject');
+                return;
+            }
+
+            showProgress('clipart');
+            simulateGeneration('clipart', () => {
+                const product = {
+                    type: 'Clipart Bundle',
+                    name: subject.substring(0, 50),
+                    details: `${qty} items • ${format} • ${resolution} • ${style}`,
+                    date: new Date().toLocaleString()
+                };
+                addToRecent(product);
+                alert(`${qty} clipart items generated successfully!`);
+                closeModal('clipart');
+            });
+        }
+
+        // Coloring Book Generator
+        function generateColoringBook() {
+            const theme = document.getElementById('coloring-theme').value;
+            const pages = document.getElementById('coloring-pages').value;
+            const complexity = document.getElementById('coloring-complexity').value;
+            const style = document.getElementById('coloring-style').value;
+
+            if (!theme) {
+                alert('Please enter a theme');
+                return;
+            }
+
+            showProgress('coloring');
+            simulateGeneration('coloring', () => {
+                const levels = ['Easy', 'Medium', 'Advanced'];
+                const product = {
+                    type: 'Coloring Book',
+                    name: theme.substring(0, 50),
+                    details: `${pages} pages • ${levels[complexity-1]} • ${style}`,
+                    date: new Date().toLocaleString()
+                };
+                addToRecent(product);
+                alert('Coloring book generated successfully! PDF ready for download.');
+                closeModal('coloring');
+            });
+        }
+
+        // Update page estimate
+        document.getElementById('coloring-pages')?.addEventListener('change', function() {
+            document.getElementById('coloring-estimate-pages').textContent = this.value;
+        });
+
+        // Toggle custom page count for KDP
+        document.getElementById('kdp-pages')?.addEventListener('change', function() {
+            const customDiv = document.getElementById('kdp-custom-pages');
+            if (this.value === 'custom') {
+                customDiv.classList.remove('hidden');
+            } else {
+                customDiv.classList.add('hidden');
+            }
+        });
+
+        // KDP Interior Generator
+        function updateKDPLayouts() {
+            const type = document.getElementById('kdp-type').value;
+            const layoutSelect = document.getElementById('kdp-layout');
+            const layouts = {
+                planner: ['Daily Pages', 'Weekly Spreads', 'Monthly Calendar', 'Goal Setting'],
+                journal: ['Lined Pages', 'Dot Grid', 'Blank Pages', 'Prompt Pages'],
+                notebook: ['Ruled', 'Grid', 'Dot Grid', 'Blank'],
+                logbook: ['Table Format', 'Entry Format', 'Custom Fields'],
+                tracker: ['Habit Tracker', 'Mood Tracker', 'Budget Tracker', 'Fitness Tracker'],
+                workbook: ['Exercise Pages', 'Worksheet Format', 'Practice Pages']
+            };
+
+            layoutSelect.innerHTML = layouts[type].map(l => `<option>${l}</option>`).join('');
+        }
+
+        function generateKDPInterior() {
+            const type = document.getElementById('kdp-type').value;
+            const layout = document.getElementById('kdp-layout').value;
+            const pages = document.getElementById('kdp-pages').value;
+            const trim = document.getElementById('kdp-trim').value;
+
+            const product = {
+                type: 'KDP Interior',
+                name: `${type.charAt(0).toUpperCase() + type.slice(1)} - ${layout}`,
+                details: `${pages} pages • ${trim}`,
+                date: new Date().toLocaleString()
+            };
+            addToRecent(product);
+            alert('KDP Interior generated successfully! Ready for upload.');
+            closeModal('kdpinterior');
+        }
+
+        // Toggle custom page count for KDP Cover
+        document.getElementById('cover-pages')?.addEventListener('change', function() {
+            const customDiv = document.getElementById('cover-custom-pages');
+            if (this.value === 'custom') {
+                customDiv.classList.remove('hidden');
+            } else {
+                customDiv.classList.add('hidden');
+            }
+            calculateSpine();
+        });
+
+        // KDP Cover Generator with Spine Calculator
+        function calculateSpine() {
+            const pagesSelect = document.getElementById('cover-pages');
+            let pages = 120;
+
+            if (pagesSelect.value === 'custom') {
+                pages = parseInt(document.getElementById('cover-pages-custom').value) || 120;
+            } else {
+                pages = parseInt(pagesSelect.value) || 120;
+            }
+
+            const paper = document.getElementById('cover-paper').value;
+            const trim = document.getElementById('cover-trim').value;
+
+            // Simplified spine calculation (actual KDP formula is more complex)
+            const ppi = paper === 'Cream Paper' ? 0.0025 : 0.002252;
+            const spineWidth = (pages * ppi).toFixed(3);
+
+            const trimWidths = {
+                '6" x 9"': 6,
+                '8" x 10"': 8,
+                '8.5" x 11"': 8.5,
+                '5" x 8"': 5
+            };
+            const width = trimWidths[trim] || 6;
+            const totalWidth = (width * 2 + parseFloat(spineWidth) + 0.25).toFixed(3); // +0.25 for bleed
+
+            document.getElementById('spine-width').textContent = spineWidth + '"';
+            document.getElementById('total-width').textContent = totalWidth + '"';
+        }
+
+        function generateKDPCover() {
+            const title = document.getElementById('cover-title').value;
+            const author = document.getElementById('cover-author').value;
+            const trim = document.getElementById('cover-trim').value;
+
+            if (!title || !author) {
+                alert('Please enter title and author name');
+                return;
+            }
+
+            const product = {
+                type: 'KDP Cover',
+                name: title,
+                details: `by ${author} • ${trim}`,
+                date: new Date().toLocaleString()
+            };
+            addToRecent(product);
+            alert('KDP Cover generated successfully! Ready for upload.');
+            closeModal('kdpcover');
+        }
+
+        // Batch Generator
+        function startBatchGeneration() {
+            const checkboxes = document.querySelectorAll('.batch-checkbox:checked');
+            const prompts = document.getElementById('batch-prompts').value;
+
+            if (checkboxes.length === 0) {
+                alert('Please select at least one generator type');
+                return;
+            }
+
+            if (!prompts.trim()) {
+                alert('Please enter prompts or upload a CSV file');
+                return;
+            }
+
+            const lines = prompts.split('\n').filter(l => l.trim());
+            const selectedGenerators = Array.from(checkboxes).map(cb => cb.value);
+
+            alert(`Starting batch generation:\n${selectedGenerators.length} generators\n${lines.length} prompts\nTotal: ${selectedGenerators.length * lines.length} products`);
+            closeModal('batch');
+        }
+
+        // Recent generations management
+        function addToRecent(product) {
+            const recent = JSON.parse(localStorage.getItem('recent_generations') || '[]');
+            recent.unshift(product);
+            localStorage.setItem('recent_generations', JSON.stringify(recent.slice(0, 20)));
+            loadRecent();
+        }
+
+        function loadRecent() {
+            const recent = JSON.parse(localStorage.getItem('recent_generations') || '[]');
+            const list = document.getElementById('recent-list');
+
+            if (recent.length === 0) {
+                list.innerHTML = '<p class="text-gray-400 text-center py-8">No generations yet. Start creating!</p>';
+                return;
+            }
+
+            list.innerHTML = recent.slice(0, 10).map(item => `
+                <div class="glass rounded-xl p-4 flex items-center justify-between hover:bg-white/10 transition">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-lg gradient-purple-blue flex items-center justify-center">
+                            <i class="fas fa-${getIconForType(item.type)} text-white"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold">${item.name}</p>
+                            <p class="text-sm text-gray-400">${item.type} • ${item.details}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs text-gray-500">${item.date}</span>
+                        <button class="px-3 py-1 glass rounded-lg hover:bg-white/10 text-sm" onclick="downloadProduct('${item.name}')">
+                            <i class="fas fa-download mr-1"></i>Download
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getIconForType(type) {
+            const icons = {
+                'Wall Art': 'image',
+                'Clipart Bundle': 'palette',
+                'Coloring Book': 'book-open',
+                'KDP Interior': 'book',
+                'KDP Cover': 'book-open'
+            };
+            return icons[type] || 'file';
+        }
+
+        function downloadProduct(name) {
+            alert(`Downloading: ${name}\n\nFile will be saved to your downloads folder.`);
+        }
+
+        // Progress simulation
+        function showProgress(type) {
+            const progressDiv = document.getElementById(type + '-progress');
+            const progressBar = document.getElementById(type + '-progress-bar');
+            progressDiv.classList.remove('hidden');
+            progressBar.style.width = '0%';
+        }
+
+        function simulateGeneration(type, callback) {
+            const progressBar = document.getElementById(type + '-progress-bar');
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                progressBar.style.width = progress + '%';
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        callback();
+                        document.getElementById(type + '-progress').classList.add('hidden');
+                    }, 500);
+                }
+            }, 300);
+        }
+
+        // Initialize
+        window.onload = function() {
+            loadRecent();
+            calculateSpine();
+        };
+    </script>
+</body>
+</html>

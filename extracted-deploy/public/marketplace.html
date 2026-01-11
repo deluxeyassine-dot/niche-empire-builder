@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplaces - Niche Empire Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        body { background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%); background-attachment: fixed; }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
+        .glass-strong { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.15); }
+        .gradient-purple-blue { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .sidebar-item { position: relative; transition: all 0.3s ease; cursor: pointer; }
+        .sidebar-item::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 4px; height: 0; background: linear-gradient(180deg, #667eea, #764ba2); border-radius: 0 4px 4px 0; transition: height 0.3s ease; }
+        .sidebar-item:hover::before, .sidebar-item.active::before { height: 70%; }
+        .sidebar-item:hover { background: rgba(255, 255, 255, 0.08); padding-left: 24px; }
+        .sidebar-item.active { background: rgba(102, 126, 234, 0.15); padding-left: 24px; color: white; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 100; }
+        .modal.show { display: flex; align-items: center; justify-content: center; }
+        input, select, textarea { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #667eea; background: rgba(255, 255, 255, 0.08); }
+    </style>
+</head>
+<body class="text-gray-100">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 glass-strong p-6 flex flex-col min-h-screen sticky top-0">
+            <div class="mb-8">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl gradient-purple-blue flex items-center justify-center">
+                        <i class="fas fa-crown text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">NicheEmpire</h1>
+                        <p class="text-xs text-gray-400">Premium Dashboard</p>
+                    </div>
+                </div>
+            </div>
+            <nav class="flex-1 space-y-2">
+                <a href="dashboard.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                    <i class="fas fa-home text-lg w-5"></i><span class="font-medium">Dashboard</span>
+                </a>
+                <div class="pt-4 mt-4 border-t border-gray-700">
+                    <div class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Marketplaces</div>
+                    <a href="marketplace.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-xl text-white">
+                        <i class="fas fa-store text-lg w-5"></i><span class="font-medium">All Marketplaces</span>
+                    </a>
+                </div>
+                <div class="pt-4 mt-4 border-t border-gray-700">
+                    <a href="generators.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                        <i class="fas fa-wand-magic-sparkles text-lg w-5"></i><span class="font-medium">Generators</span>
+                    </a>
+                    <a href="ai-services.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                        <i class="fas fa-robot text-lg w-5"></i><span class="font-medium">AI Tools</span>
+                    </a>
+                    <a href="agents.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                        <i class="fas fa-cogs text-lg w-5"></i><span class="font-medium">Agents</span>
+                    </a>
+                    <a href="products.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white">
+                        <i class="fas fa-box-open text-lg w-5"></i><span class="font-medium">Products</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <header class="mb-8">
+                <h2 class="text-3xl font-bold mb-2">Marketplace Integrations</h2>
+                <p class="text-gray-400">Connect and manage your marketplace accounts</p>
+            </header>
+
+            <!-- Marketplace Connection Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Etsy -->
+                <div class="glass-strong rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-xl bg-orange-500 flex items-center justify-center">
+                                <i class="fas fa-shopping-bag text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold">Etsy</h3>
+                                <p class="text-sm text-gray-400">Handmade & Vintage</p>
+                            </div>
+                        </div>
+                        <span id="etsy-status" class="px-3 py-1 rounded-full bg-gray-500/20 text-gray-400 text-xs font-semibold">
+                            <i class="fas fa-circle text-xs"></i> Not Connected
+                        </span>
+                    </div>
+
+                    <div id="etsy-connect-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">API Key</label>
+                            <input type="text" id="etsy-api-key" placeholder="Enter your Etsy API Key" class="w-full px-4 py-2 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Shop Name</label>
+                            <input type="text" id="etsy-shop-name" placeholder="Your Etsy Shop Name" class="w-full px-4 py-2 rounded-lg">
+                        </div>
+                        <button onclick="connectEtsy()" class="w-full gradient-purple-blue px-4 py-3 rounded-xl font-semibold hover:shadow-lg transition-all">
+                            <i class="fas fa-plug mr-2"></i>Connect Etsy
+                        </button>
+                    </div>
+
+                    <div id="etsy-dashboard" class="hidden space-y-4">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="glass rounded-lg p-3">
+                                <p class="text-xs text-gray-400">Active Listings</p>
+                                <p class="text-2xl font-bold">247</p>
+                            </div>
+                            <div class="glass rounded-lg p-3">
+                                <p class="text-xs text-gray-400">Total Sales</p>
+                                <p class="text-2xl font-bold text-green-400">$12,458</p>
+                            </div>
+                        </div>
+                        <button onclick="openListingModal('etsy')" class="w-full gradient-purple-blue px-4 py-3 rounded-xl font-semibold">
+                            <i class="fas fa-plus mr-2"></i>New Listing
+                        </button>
+                        <button onclick="disconnectMarketplace('etsy')" class="w-full glass px-4 py-3 rounded-xl text-red-400 hover:bg-white/10">
+                            Disconnect
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Gumroad -->
+                <div class="glass-strong rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-xl bg-pink-500 flex items-center justify-center">
+                                <i class="fas fa-box text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold">Gumroad</h3>
+                                <p class="text-sm text-gray-400">Digital Products</p>
+                            </div>
+                        </div>
+                        <span id="gumroad-status" class="px-3 py-1 rounded-full bg-gray-500/20 text-gray-400 text-xs font-semibold">
+                            <i class="fas fa-circle text-xs"></i> Not Connected
+                        </span>
+                    </div>
+
+                    <div id="gumroad-connect-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Access Token</label>
+                            <input type="password" id="gumroad-token" placeholder="Enter Gumroad Access Token" class="w-full px-4 py-2 rounded-lg">
+                        </div>
+                        <button onclick="connectGumroad()" class="w-full gradient-purple-blue px-4 py-3 rounded-xl font-semibold hover:shadow-lg transition-all">
+                            <i class="fas fa-plug mr-2"></i>Connect Gumroad
+                        </button>
+                    </div>
+
+                    <div id="gumroad-dashboard" class="hidden space-y-4">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="glass rounded-lg p-3">
+                                <p class="text-xs text-gray-400">Products</p>
+                                <p class="text-2xl font-bold">34</p>
+                            </div>
+                            <div class="glass rounded-lg p-3">
+                                <p class="text-xs text-gray-400">Revenue</p>
+                                <p class="text-2xl font-bold text-green-400">$8,925</p>
+                            </div>
+                        </div>
+                        <button onclick="openProductModal('gumroad')" class="w-full gradient-purple-blue px-4 py-3 rounded-xl font-semibold">
+                            <i class="fas fa-plus mr-2"></i>New Product
+                        </button>
+                        <button onclick="disconnectMarketplace('gumroad')" class="w-full glass px-4 py-3 rounded-xl text-red-400 hover:bg-white/10">
+                            Disconnect
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Shopify -->
+                <div class="glass-strong rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-xl bg-green-600 flex items-center justify-center">
+                                <i class="fab fa-shopify text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold">Shopify</h3>
+                                <p class="text-sm text-gray-400">E-Commerce Store</p>
+                            </div>
+                        </div>
+                        <span id="shopify-status" class="px-3 py-1 rounded-full bg-gray-500/20 text-gray-400 text-xs font-semibold">
+                            <i class="fas fa-circle text-xs"></i> Not Connected
+                        </span>
+                    </div>
+
+                    <div id="shopify-connect-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Shop Domain</label>
+                            <input type="text" id="shopify-domain" placeholder="yourstore.myshopify.com" class="w-full px-4 py-2 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Access Token</label>
+                            <input type="password" id="shopify-token" placeholder="Admin API Access Token" class="w-full px-4 py-2 rounded-lg">
+                        </div>
+                        <button onclick="connectShopify()" class="w-full gradient-purple-blue px-4 py-3 rounded-xl font-semibold hover:shadow-lg transition-all">
+                            <i class="fas fa-plug mr-2"></i>Connect Shopify
+                        </button>
+                    </div>
+
+                    <div id="shopify-dashboard" class="hidden space-y-4">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="glass rounded-lg p-3">
+                                <p class="text-xs text-gray-400">Products</p>
+                                <p class="text-2xl font-bold">128</p>
+                            </div>
+                            <div class="glass rounded-lg p-3">
+                                <p class="text-xs text-gray-400">Revenue</p>
+                                <p class="text-2xl font-bold text-green-400">$18,742</p>
+                            </div>
+                        </div>
+                        <button onclick="syncShopify()" class="w-full gradient-purple-blue px-4 py-3 rounded-xl font-semibold">
+                            <i class="fas fa-sync mr-2"></i>Sync Products
+                        </button>
+                        <button onclick="disconnectMarketplace('shopify')" class="w-full glass px-4 py-3 rounded-xl text-red-400 hover:bg-white/10">
+                            Disconnect
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Printful -->
+                <div class="glass-strong rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-xl bg-blue-500 flex items-center justify-center">
+                                <i class="fas fa-print text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold">Printful</h3>
+                                <p class="text-sm text-gray-400">Print-on-Demand</p>
+                            </div>
+                        </div>
+                        <span id="printful-status" class="px-3 py-1 rounded-full bg-gray-500/20 text-gray-400 text-xs font-semibold">
+                            <i class="fas fa-circle text-xs"></i> Not Connected
+                        </span>
+                    </div>
+
+                    <div id="printful-connect-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">API Key</label>
+                            <input type="password" id="printful-api-key" placeholder="Printful API Key" class="w-full px-4 py-2 rounded-lg">
+                        </div>
+                        <button onclick="connectPrintful()" class="w-full gradient-purple-blue px-4 py-3 rounded-xl font-semibold hover:shadow-lg transition-all">
+                            <i class="fas fa-plug mr-2"></i>Connect Printful
+                        </button>
+                    </div>
+
+                    <div id="printful-dashboard" class="hidden space-y-4">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="glass rounded-lg p-3">
+                                <p class="text-xs text-gray-400">Sync Products</p>
+                                <p class="text-2xl font-bold">67</p>
+                            </div>
+                            <div class="glass rounded-lg p-3">
+                                <p class="text-xs text-gray-400">Orders</p>
+                                <p class="text-2xl font-bold">134</p>
+                            </div>
+                        </div>
+                        <button onclick="createPrintfulProduct()" class="w-full gradient-purple-blue px-4 py-3 rounded-xl font-semibold">
+                            <i class="fas fa-plus mr-2"></i>Create Product
+                        </button>
+                        <button onclick="disconnectMarketplace('printful')" class="w-full glass px-4 py-3 rounded-xl text-red-400 hover:bg-white/10">
+                            Disconnect
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Connection functions
+        function connectEtsy() {
+            const apiKey = document.getElementById('etsy-api-key').value;
+            const shopName = document.getElementById('etsy-shop-name').value;
+
+            if (!apiKey || !shopName) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Simulate API connection
+            localStorage.setItem('etsy_connected', JSON.stringify({ apiKey, shopName }));
+            updateMarketplaceStatus('etsy', true);
+            alert('Etsy connected successfully!');
+        }
+
+        function connectGumroad() {
+            const token = document.getElementById('gumroad-token').value;
+            if (!token) {
+                alert('Please enter your access token');
+                return;
+            }
+            localStorage.setItem('gumroad_connected', JSON.stringify({ token }));
+            updateMarketplaceStatus('gumroad', true);
+            alert('Gumroad connected successfully!');
+        }
+
+        function connectShopify() {
+            const domain = document.getElementById('shopify-domain').value;
+            const token = document.getElementById('shopify-token').value;
+            if (!domain || !token) {
+                alert('Please fill in all fields');
+                return;
+            }
+            localStorage.setItem('shopify_connected', JSON.stringify({ domain, token }));
+            updateMarketplaceStatus('shopify', true);
+            alert('Shopify connected successfully!');
+        }
+
+        function connectPrintful() {
+            const apiKey = document.getElementById('printful-api-key').value;
+            if (!apiKey) {
+                alert('Please enter your API key');
+                return;
+            }
+            localStorage.setItem('printful_connected', JSON.stringify({ apiKey }));
+            updateMarketplaceStatus('printful', true);
+            alert('Printful connected successfully!');
+        }
+
+        function disconnectMarketplace(marketplace) {
+            if (confirm(`Disconnect ${marketplace}?`)) {
+                localStorage.removeItem(`${marketplace}_connected`);
+                updateMarketplaceStatus(marketplace, false);
+            }
+        }
+
+        function updateMarketplaceStatus(marketplace, connected) {
+            const status = document.getElementById(`${marketplace}-status`);
+            const connectForm = document.getElementById(`${marketplace}-connect-form`);
+            const dashboard = document.getElementById(`${marketplace}-dashboard`);
+
+            if (connected) {
+                status.className = 'px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-xs font-semibold';
+                status.innerHTML = '<i class="fas fa-circle text-xs"></i> Connected';
+                connectForm.classList.add('hidden');
+                dashboard.classList.remove('hidden');
+            } else {
+                status.className = 'px-3 py-1 rounded-full bg-gray-500/20 text-gray-400 text-xs font-semibold';
+                status.innerHTML = '<i class="fas fa-circle text-xs"></i> Not Connected';
+                connectForm.classList.remove('hidden');
+                dashboard.classList.add('hidden');
+            }
+        }
+
+        function openListingModal(marketplace) {
+            alert(`Opening ${marketplace} listing creator...`);
+        }
+
+        function openProductModal(marketplace) {
+            alert(`Opening ${marketplace} product creator...`);
+        }
+
+        function syncShopify() {
+            alert('Syncing Shopify products...');
+        }
+
+        function createPrintfulProduct() {
+            alert('Opening Printful product creator...');
+        }
+
+        // Check connection status on load
+        window.onload = function() {
+            ['etsy', 'gumroad', 'shopify', 'printful'].forEach(marketplace => {
+                const connected = localStorage.getItem(`${marketplace}_connected`);
+                if (connected) {
+                    updateMarketplaceStatus(marketplace, true);
+                }
+            });
+        };
+    </script>
+</body>
+</html>
