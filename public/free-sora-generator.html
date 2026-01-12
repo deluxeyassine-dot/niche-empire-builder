@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FREE AI Video Generator - Sora Alternative | Niche Empire Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-dark: #7c3aed;
+            --secondary: #06b6d4;
+            --accent: #f472b6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f0a1f;
+            --darker: #080510;
+            --card-bg: rgba(139, 92, 246, 0.08);
+            --card-border: rgba(139, 92, 246, 0.2);
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --gradient-1: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 50%, #f472b6 100%);
+            --gradient-2: linear-gradient(135deg, #f472b6 0%, #8b5cf6 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--darker);
+            min-height: 100vh;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(244, 114, 182, 0.1) 0%, transparent 50%),
+                var(--darker);
+        }
+
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 { width: 400px; height: 400px; background: rgba(139, 92, 246, 0.3); top: 10%; left: 10%; animation-delay: 0s; }
+        .orb-2 { width: 300px; height: 300px; background: rgba(6, 182, 212, 0.3); top: 60%; right: 10%; animation-delay: -7s; }
+        .orb-3 { width: 350px; height: 350px; background: rgba(244, 114, 182, 0.2); bottom: 10%; left: 30%; animation-delay: -14s; }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -30px) scale(1.1); }
+            50% { transform: translate(-30px, 50px) scale(0.9); }
+            75% { transform: translate(-50px, -20px) scale(1.05); }
+        }
+
+        /* Header */
+        .header {
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text span {
+            font-size: 0.75rem;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .free-badge {
+            background: var(--gradient-1);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.8); }
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 2rem 0;
+            grid-column: 1 / -1;
+        }
+
+        .hero h2 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .provider-badges {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .provider-badge {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .provider-badge i {
+            color: var(--success);
+        }
+
+        /* Generator Panel */
+        .generator-panel {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2rem;
+        }
+
+        .panel-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .panel-title i {
+            color: var(--primary);
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.25rem;
+        }
+
+        /* Style Selector */
+        .style-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+        }
+
+        .style-option {
+            padding: 0.75rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .style-option:hover {
+            border-color: var(--card-border);
+            transform: translateY(-2px);
+        }
+
+        .style-option.active {
+            border-color: var(--primary);
+            background: rgba(139, 92, 246, 0.2);
+        }
+
+        .style-option i {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .style-option span {
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        /* Duration Slider */
+        .slider-container {
+            position: relative;
+        }
+
+        .slider-value {
+            position: absolute;
+            right: 0;
+            top: -1.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .form-range {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .form-range::-webkit-slider-thumb {
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Quality Options */
+        .quality-options {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .quality-option {
+            flex: 1;
+            padding: 0.75rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .quality-option:hover {
+            border-color: var(--card-border);
+        }
+
+        .quality-option.active {
+            border-color: var(--primary);
+            background: rgba(139, 92, 246, 0.2);
+        }
+
+        .quality-option .quality-name {
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        .quality-option .quality-res {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* Image Upload */
+        .image-upload {
+            border: 2px dashed var(--card-border);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .image-upload:hover {
+            border-color: var(--primary);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .image-upload i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .image-upload p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .image-upload input {
+            display: none;
+        }
+
+        .image-preview {
+            margin-top: 1rem;
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .image-preview img {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+        }
+
+        /* Generate Button */
+        .generate-btn {
+            width: 100%;
+            padding: 1.25rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-size: 1.125rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(139, 92, 246, 0.4);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .generate-btn .btn-shimmer {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            100% { left: 100%; }
+        }
+
+        /* Cost Display */
+        .cost-display {
+            text-align: center;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 10px;
+        }
+
+        .cost-display .cost-amount {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--success);
+        }
+
+        .cost-display .cost-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Preview Panel */
+        .preview-panel {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-preview {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-preview video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 16px;
+        }
+
+        .preview-placeholder {
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .preview-placeholder i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .progress-container.active {
+            display: block;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .action-btn {
+            padding: 0.875rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background: var(--card-bg);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .action-btn i {
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .action-btn.success {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: var(--success);
+        }
+
+        .action-btn.success i {
+            color: var(--success);
+        }
+
+        /* Trending Panel */
+        .trending-panel {
+            grid-column: 1 / -1;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2rem;
+            margin-top: 1rem;
+        }
+
+        .trending-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .trending-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .trending-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .trending-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
+        }
+
+        .trending-card h4 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .trending-card p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .trending-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .trending-tag {
+            background: rgba(139, 92, 246, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            color: var(--primary);
+        }
+
+        /* Provider Status */
+        .provider-status {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--card-border);
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .status-dot.online { background: var(--success); }
+        .status-dot.offline { background: var(--danger); }
+        .status-dot.checking { background: var(--warning); animation: pulse 1s infinite; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success { border-color: var(--success); }
+        .notification.error { border-color: var(--danger); }
+
+        .notification i {
+            font-size: 1.5rem;
+        }
+
+        .notification.success i { color: var(--success); }
+        .notification.error i { color: var(--danger); }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero h2 {
+                font-size: 2rem;
+            }
+
+            .style-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .quality-options {
+                flex-wrap: wrap;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+        <div class="floating-orb orb-3"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-video"></i>
+            </div>
+            <div class="logo-text">
+                <h1>AI Video Generator</h1>
+                <span>100% FREE - No Watermarks</span>
+            </div>
+        </div>
+        <nav class="nav-links">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="video-generator.html" class="nav-link">Legacy Generator</a>
+            <a href="ai-services.html" class="nav-link">AI Services</a>
+        </nav>
+        <div class="free-badge">
+            <i class="fas fa-gift"></i> 100% FREE Forever
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h2>FREE Sora-Quality Video Generation</h2>
+        <p>Create stunning AI videos using Open-Sora, CogVideoX, and other open-source models. No API costs, no watermarks, no limits!</p>
+        <div class="provider-badges">
+            <div class="provider-badge">
+                <i class="fas fa-check-circle"></i>
+                Open-Sora 2.0
+            </div>
+            <div class="provider-badge">
+                <i class="fas fa-check-circle"></i>
+                CogVideoX-5B
+            </div>
+            <div class="provider-badge">
+                <i class="fas fa-check-circle"></i>
+                Stable Video Diffusion
+            </div>
+            <div class="provider-badge">
+                <i class="fas fa-check-circle"></i>
+                Real-ESRGAN 4K
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Generator Panel -->
+        <div class="generator-panel">
+            <h3 class="panel-title">
+                <i class="fas fa-magic"></i>
+                Create Your Video
+            </h3>
+
+            <!-- Prompt -->
+            <div class="form-group">
+                <label class="form-label">Video Description (Prompt)</label>
+                <textarea id="promptInput" class="form-textarea" placeholder="Describe your video... e.g., 'A serene forest with sunlight filtering through trees, cinematic, 4K quality'"></textarea>
+            </div>
+
+            <!-- Negative Prompt -->
+            <div class="form-group">
+                <label class="form-label">Negative Prompt (What to avoid)</label>
+                <input type="text" id="negativePrompt" class="form-input" placeholder="blurry, low quality, watermark, text">
+            </div>
+
+            <!-- Style Selection -->
+            <div class="form-group">
+                <label class="form-label">Video Style</label>
+                <div class="style-grid">
+                    <div class="style-option active" data-style="cinematic">
+                        <i class="fas fa-film"></i>
+                        <span>Cinematic</span>
+                    </div>
+                    <div class="style-option" data-style="realistic">
+                        <i class="fas fa-camera"></i>
+                        <span>Realistic</span>
+                    </div>
+                    <div class="style-option" data-style="anime">
+                        <i class="fas fa-ghost"></i>
+                        <span>Anime</span>
+                    </div>
+                    <div class="style-option" data-style="3d">
+                        <i class="fas fa-cube"></i>
+                        <span>3D Render</span>
+                    </div>
+                    <div class="style-option" data-style="artistic">
+                        <i class="fas fa-palette"></i>
+                        <span>Artistic</span>
+                    </div>
+                    <div class="style-option" data-style="vintage">
+                        <i class="fas fa-clock"></i>
+                        <span>Vintage</span>
+                    </div>
+                    <div class="style-option" data-style="neon">
+                        <i class="fas fa-bolt"></i>
+                        <span>Neon</span>
+                    </div>
+                    <div class="style-option" data-style="custom">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>Custom</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Duration -->
+            <div class="form-group">
+                <label class="form-label">Duration</label>
+                <div class="slider-container">
+                    <span class="slider-value" id="durationValue">6 seconds</span>
+                    <input type="range" id="durationSlider" class="form-range" min="2" max="16" value="6">
+                </div>
+            </div>
+
+            <!-- Quality -->
+            <div class="form-group">
+                <label class="form-label">Quality</label>
+                <div class="quality-options">
+                    <div class="quality-option" data-quality="480p">
+                        <div class="quality-name">SD</div>
+                        <div class="quality-res">480p</div>
+                    </div>
+                    <div class="quality-option active" data-quality="720p">
+                        <div class="quality-name">HD</div>
+                        <div class="quality-res">720p</div>
+                    </div>
+                    <div class="quality-option" data-quality="1080p">
+                        <div class="quality-name">Full HD</div>
+                        <div class="quality-res">1080p</div>
+                    </div>
+                    <div class="quality-option" data-quality="4k">
+                        <div class="quality-name">4K</div>
+                        <div class="quality-res">2160p</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aspect Ratio -->
+            <div class="form-group">
+                <label class="form-label">Aspect Ratio</label>
+                <select id="aspectRatio" class="form-select">
+                    <option value="16:9">16:9 (Landscape - YouTube)</option>
+                    <option value="9:16">9:16 (Portrait - TikTok/Reels)</option>
+                    <option value="1:1">1:1 (Square - Instagram)</option>
+                    <option value="4:3">4:3 (Classic)</option>
+                    <option value="21:9">21:9 (Cinematic Ultra-Wide)</option>
+                </select>
+            </div>
+
+            <!-- Provider Selection -->
+            <div class="form-group">
+                <label class="form-label">AI Provider</label>
+                <select id="providerSelect" class="form-select">
+                    <option value="auto">Auto (Best Available)</option>
+                    <option value="open-sora">Open-Sora 2.0 (Best Quality)</option>
+                    <option value="cogvideox">CogVideoX-5B (10s max)</option>
+                    <option value="stable-video">Stable Video Diffusion</option>
+                    <option value="latte">Latte (Fast)</option>
+                </select>
+            </div>
+
+            <!-- Image Upload (Optional) -->
+            <div class="form-group">
+                <label class="form-label">Reference Image (Optional - for Image-to-Video)</label>
+                <div class="image-upload" onclick="document.getElementById('imageInput').click()">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Click to upload or drag & drop</p>
+                    <p style="font-size: 0.7rem; margin-top: 0.5rem;">PNG, JPG up to 10MB</p>
+                    <input type="file" id="imageInput" accept="image/*">
+                </div>
+                <div class="image-preview" id="imagePreview">
+                    <img id="previewImg" src="" alt="Preview">
+                </div>
+            </div>
+
+            <!-- Generate Button -->
+            <button class="generate-btn" id="generateBtn" onclick="generateVideo()">
+                <span class="btn-shimmer"></span>
+                <i class="fas fa-wand-magic-sparkles"></i>
+                Generate Video (FREE)
+            </button>
+
+            <!-- Cost Display -->
+            <div class="cost-display">
+                <div class="cost-amount">$0.00</div>
+                <div class="cost-label">100% FREE - Using Open Source Models</div>
+            </div>
+
+            <!-- Provider Status -->
+            <div class="provider-status">
+                <div class="status-item">
+                    <div class="status-dot checking" id="status-open-sora"></div>
+                    <span>Open-Sora</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-dot checking" id="status-cogvideox"></div>
+                    <span>CogVideoX</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-dot checking" id="status-esrgan"></div>
+                    <span>Real-ESRGAN</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preview Panel -->
+        <div class="preview-panel">
+            <h3 class="panel-title">
+                <i class="fas fa-play-circle"></i>
+                Preview
+            </h3>
+
+            <div class="video-preview" id="videoPreview">
+                <div class="preview-placeholder">
+                    <i class="fas fa-video"></i>
+                    <p>Your video will appear here</p>
+                </div>
+            </div>
+
+            <!-- Progress -->
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="progressStatus">Initializing...</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="action-btn" onclick="upscaleTo4K()" id="upscaleBtn" disabled>
+                    <i class="fas fa-expand-arrows-alt"></i>
+                    Upscale to 4K
+                </button>
+                <button class="action-btn" onclick="enhanceVideo()" id="enhanceBtn" disabled>
+                    <i class="fas fa-magic"></i>
+                    Enhance
+                </button>
+                <button class="action-btn" onclick="removeWatermark()" id="watermarkBtn" disabled>
+                    <i class="fas fa-eraser"></i>
+                    Remove Watermark
+                </button>
+                <button class="action-btn" onclick="downloadVideo()" id="downloadBtn" disabled>
+                    <i class="fas fa-download"></i>
+                    Download
+                </button>
+                <button class="action-btn" onclick="shareVideo()" id="shareBtn" disabled>
+                    <i class="fas fa-share-alt"></i>
+                    Share
+                </button>
+                <button class="action-btn success" onclick="regenerateVideo()" id="regenerateBtn" disabled>
+                    <i class="fas fa-redo"></i>
+                    Regenerate
+                </button>
+            </div>
+        </div>
+
+        <!-- Trending Ideas -->
+        <div class="trending-panel">
+            <div class="trending-header">
+                <h3 class="panel-title" style="margin-bottom: 0;">
+                    <i class="fas fa-fire"></i>
+                    Trending Video Ideas
+                </h3>
+                <button class="action-btn" onclick="refreshTrends()" style="padding: 0.5rem 1rem;">
+                    <i class="fas fa-sync-alt"></i>
+                    Refresh
+                </button>
+            </div>
+            <div class="trending-grid" id="trendingGrid">
+                <!-- Trending cards will be populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <div>
+            <strong id="notifTitle">Success!</strong>
+            <p id="notifMessage" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;"></p>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let currentVideo = null;
+        let selectedStyle = 'cinematic';
+        let selectedQuality = '720p';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initStyleSelector();
+            initQualitySelector();
+            initDurationSlider();
+            initImageUpload();
+            checkProviderStatus();
+            loadTrendingIdeas();
+        });
+
+        // Style Selector
+        function initStyleSelector() {
+            document.querySelectorAll('.style-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.style-option').forEach(o => o.classList.remove('active'));
+                    option.classList.add('active');
+                    selectedStyle = option.dataset.style;
+                });
+            });
+        }
+
+        // Quality Selector
+        function initQualitySelector() {
+            document.querySelectorAll('.quality-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.quality-option').forEach(o => o.classList.remove('active'));
+                    option.classList.add('active');
+                    selectedQuality = option.dataset.quality;
+                });
+            });
+        }
+
+        // Duration Slider
+        function initDurationSlider() {
+            const slider = document.getElementById('durationSlider');
+            const value = document.getElementById('durationValue');
+
+            slider.addEventListener('input', () => {
+                value.textContent = `${slider.value} seconds`;
+            });
+        }
+
+        // Image Upload
+        function initImageUpload() {
+            const input = document.getElementById('imageInput');
+            const preview = document.getElementById('imagePreview');
+            const previewImg = document.getElementById('previewImg');
+
+            input.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        previewImg.src = e.target.result;
+                        preview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // Check Provider Status
+        async function checkProviderStatus() {
+            const providers = ['open-sora', 'cogvideox', 'esrgan'];
+
+            for (const provider of providers) {
+                const dot = document.getElementById(`status-${provider}`);
+                try {
+                    // Simulate checking - in production, call actual health endpoint
+                    await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
+                    dot.classList.remove('checking');
+                    dot.classList.add('online');
+                } catch {
+                    dot.classList.remove('checking');
+                    dot.classList.add('offline');
+                }
+            }
+        }
+
+        // Generate Video
+        async function generateVideo() {
+            const prompt = document.getElementById('promptInput').value.trim();
+            if (!prompt) {
+                showNotification('error', 'Error', 'Please enter a video description');
+                return;
+            }
+
+            const btn = document.getElementById('generateBtn');
+            const progressContainer = document.getElementById('progressContainer');
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            progressContainer.classList.add('active');
+
+            try {
+                // Simulate generation progress
+                await simulateProgress();
+
+                // In production, call actual API
+                const result = await callGenerationAPI({
+                    prompt,
+                    negativePrompt: document.getElementById('negativePrompt').value,
+                    duration: parseInt(document.getElementById('durationSlider').value),
+                    quality: selectedQuality,
+                    style: selectedStyle,
+                    aspectRatio: document.getElementById('aspectRatio').value,
+                    provider: document.getElementById('providerSelect').value
+                });
+
+                if (result.success) {
+                    displayVideo(result);
+                    enableActionButtons();
+                    showNotification('success', 'Video Generated!', 'Your video is ready to view and download');
+                } else {
+                    throw new Error(result.error || 'Generation failed');
+                }
+
+            } catch (error) {
+                showNotification('error', 'Generation Failed', error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<span class="btn-shimmer"></span><i class="fas fa-wand-magic-sparkles"></i> Generate Video (FREE)';
+            }
+        }
+
+        // Simulate Progress
+        function simulateProgress() {
+            return new Promise((resolve) => {
+                const fill = document.getElementById('progressFill');
+                const status = document.getElementById('progressStatus');
+                const percent = document.getElementById('progressPercent');
+
+                const stages = [
+                    { progress: 10, text: 'Initializing AI model...' },
+                    { progress: 25, text: 'Processing prompt...' },
+                    { progress: 40, text: 'Generating frames...' },
+                    { progress: 60, text: 'Rendering video...' },
+                    { progress: 80, text: 'Encoding...' },
+                    { progress: 95, text: 'Finalizing...' },
+                    { progress: 100, text: 'Complete!' }
+                ];
+
+                let i = 0;
+                const interval = setInterval(() => {
+                    if (i >= stages.length) {
+                        clearInterval(interval);
+                        resolve();
+                        return;
+                    }
+
+                    fill.style.width = `${stages[i].progress}%`;
+                    status.textContent = stages[i].text;
+                    percent.textContent = `${stages[i].progress}%`;
+                    i++;
+                }, 800);
+            });
+        }
+
+        // Call Generation API
+        async function callGenerationAPI(params) {
+            // In production, call actual backend API
+            // For demo, return mock success
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            return {
+                success: true,
+                videoUrl: 'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
+                thumbnailUrl: '',
+                provider: params.provider === 'auto' ? 'Open-Sora 2.0' : params.provider,
+                duration: params.duration,
+                resolution: params.quality
+            };
+        }
+
+        // Display Video
+        function displayVideo(result) {
+            const preview = document.getElementById('videoPreview');
+            currentVideo = result;
+
+            preview.innerHTML = `
+                <video controls autoplay loop>
+                    <source src="${result.videoUrl}" type="video/mp4">
+                    Your browser does not support video playback.
+                </video>
+            `;
+        }
+
+        // Enable Action Buttons
+        function enableActionButtons() {
+            ['upscaleBtn', 'enhanceBtn', 'watermarkBtn', 'downloadBtn', 'shareBtn', 'regenerateBtn'].forEach(id => {
+                document.getElementById(id).disabled = false;
+            });
+        }
+
+        // Upscale to 4K
+        async function upscaleTo4K() {
+            showNotification('success', 'Upscaling Started', 'Using Real-ESRGAN to upscale to 4K...');
+            // In production, call upscale API
+        }
+
+        // Enhance Video
+        async function enhanceVideo() {
+            showNotification('success', 'Enhancement Started', 'Applying color correction and stabilization...');
+            // In production, call enhance API
+        }
+
+        // Remove Watermark
+        async function removeWatermark() {
+            showNotification('success', 'Processing', 'Removing watermarks using AI...');
+            // In production, call watermark removal API
+        }
+
+        // Download Video
+        function downloadVideo() {
+            if (currentVideo && currentVideo.videoUrl) {
+                const a = document.createElement('a');
+                a.href = currentVideo.videoUrl;
+                a.download = `ai-video-${Date.now()}.mp4`;
+                a.click();
+                showNotification('success', 'Download Started', 'Your video is downloading...');
+            }
+        }
+
+        // Share Video
+        function shareVideo() {
+            if (navigator.share && currentVideo) {
+                navigator.share({
+                    title: 'AI Generated Video',
+                    text: 'Check out this AI-generated video!',
+                    url: currentVideo.videoUrl
+                });
+            } else {
+                // Copy link to clipboard
+                navigator.clipboard.writeText(currentVideo?.videoUrl || '');
+                showNotification('success', 'Link Copied', 'Video link copied to clipboard!');
+            }
+        }
+
+        // Regenerate Video
+        function regenerateVideo() {
+            generateVideo();
+        }
+
+        // Load Trending Ideas
+        function loadTrendingIdeas() {
+            const ideas = [
+                {
+                    title: 'Satisfying ASMR Nature Scenes',
+                    description: 'Calming forest sounds with gentle rain and bird songs',
+                    tags: ['asmr', 'nature', 'relaxing', 'viral'],
+                    prompt: 'Peaceful forest scene with rain drops on leaves, sunlight filtering through trees, birds flying, cinematic, 4K, ASMR aesthetic'
+                },
+                {
+                    title: 'AI Art Transformation',
+                    description: 'Watch ordinary photos transform into stunning art',
+                    tags: ['ai', 'art', 'transformation', 'trending'],
+                    prompt: 'Mesmerizing art transformation sequence, ordinary photo morphing into beautiful oil painting, magical particles, smooth transition'
+                },
+                {
+                    title: 'Futuristic City Flythrough',
+                    description: 'Cyberpunk cityscape with neon lights and flying cars',
+                    tags: ['cyberpunk', 'city', 'futuristic', 'scifi'],
+                    prompt: 'Cinematic flythrough of futuristic cyberpunk city, neon lights reflecting on wet streets, flying vehicles, rain, night scene, blade runner style'
+                },
+                {
+                    title: 'Product Showcase Animation',
+                    description: 'Professional 3D product reveal animation',
+                    tags: ['product', '3d', 'commercial', 'marketing'],
+                    prompt: 'Sleek 3D product showcase animation, floating smartphone rotating slowly, gradient background, soft studio lighting, professional commercial style'
+                },
+                {
+                    title: 'Motivational Quote Animation',
+                    description: 'Inspiring text with dynamic background effects',
+                    tags: ['motivation', 'quotes', 'instagram', 'shorts'],
+                    prompt: 'Inspirational quote appearing with dynamic particle effects, sunrise background, dramatic clouds, epic orchestral mood, 9:16 vertical format'
+                },
+                {
+                    title: 'Food Cooking Timelapse',
+                    description: 'Satisfying cooking process from start to finish',
+                    tags: ['food', 'cooking', 'timelapse', 'satisfying'],
+                    prompt: 'Overhead cooking timelapse, ingredients transforming into delicious meal, professional kitchen, warm lighting, appetizing colors, food photography style'
+                }
+            ];
+
+            const grid = document.getElementById('trendingGrid');
+            grid.innerHTML = ideas.map(idea => `
+                <div class="trending-card" onclick="useTrendingIdea('${encodeURIComponent(idea.prompt)}')">
+                    <h4>${idea.title}</h4>
+                    <p>${idea.description}</p>
+                    <div class="trending-tags">
+                        ${idea.tags.map(tag => `<span class="trending-tag">#${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Use Trending Idea
+        function useTrendingIdea(encodedPrompt) {
+            const prompt = decodeURIComponent(encodedPrompt);
+            document.getElementById('promptInput').value = prompt;
+            document.getElementById('promptInput').scrollIntoView({ behavior: 'smooth' });
+            showNotification('success', 'Prompt Added!', 'Click Generate to create your video');
+        }
+
+        // Refresh Trends
+        function refreshTrends() {
+            loadTrendingIdeas();
+            showNotification('success', 'Refreshed', 'Trending ideas updated!');
+        }
+
+        // Show Notification
+        function showNotification(type, title, message) {
+            const notif = document.getElementById('notification');
+            const notifTitle = document.getElementById('notifTitle');
+            const notifMessage = document.getElementById('notifMessage');
+            const icon = notif.querySelector('i');
+
+            notif.className = `notification ${type}`;
+            notifTitle.textContent = title;
+            notifMessage.textContent = message;
+            icon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+
+            notif.classList.add('show');
+
+            setTimeout(() => {
+                notif.classList.remove('show');
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
