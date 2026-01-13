@@ -438,23 +438,26 @@
                 <div class="status-message" id="nanobanana-message"></div>
             </div>
 
-            <!-- Sora 2 API -->
+            <!-- Hugging Face API (FREE Video Generation) -->
             <div class="api-card">
                 <h2>
-                    <span class="icon">🎥</span>
-                    Sora 2 AI
-                    <span class="status-indicator disconnected" id="sora-status"></span>
+                    <span class="icon">🤗</span>
+                    Hugging Face (FREE)
+                    <span class="status-indicator connected" id="huggingface-status"></span>
                 </h2>
+                <p style="color: rgba(255,255,255,0.8); margin-bottom: 15px; font-size: 0.9rem;">
+                    Powers Open-Sora, CogVideoX, AnimateDiff - 100% FREE video generation!
+                </p>
                 <div class="input-group">
-                    <label>API Key</label>
-                    <input type="password" id="sora-api-key" placeholder="Enter Sora 2 API Key">
-                    <button class="toggle-visibility" onclick="toggleVisibility('sora-api-key')">👁️ Show</button>
+                    <label>Access Token (Get free at huggingface.co/settings/tokens)</label>
+                    <input type="password" id="huggingface-api-key" placeholder="hf_xxxxxxxxxxxxxxxxxxxx">
+                    <button class="toggle-visibility" onclick="toggleVisibility('huggingface-api-key')">👁️ Show</button>
                 </div>
                 <div class="button-group">
-                    <button class="btn btn-primary" onclick="testConnection('sora')">Test Connection</button>
-                    <button class="btn btn-success" onclick="saveApiKey('sora')">💾 Save</button>
+                    <button class="btn btn-primary" onclick="testConnection('huggingface')">Test Connection</button>
+                    <button class="btn btn-success" onclick="saveApiKey('huggingface')">💾 Save</button>
                 </div>
-                <div class="status-message" id="sora-message"></div>
+                <div class="status-message" id="huggingface-message" style="color: #4ade80;">Token configured - Ready for FREE video generation!</div>
             </div>
 
             <!-- Leonardo.ai API -->
@@ -561,9 +564,9 @@
                         apiKey: document.getElementById('nanobanana-api-key').value
                     };
                     break;
-                case 'sora':
+                case 'huggingface':
                     keys = {
-                        apiKey: document.getElementById('sora-api-key').value
+                        apiKey: document.getElementById('huggingface-api-key').value
                     };
                     break;
                 case 'leonardo':
@@ -586,7 +589,7 @@
         }
 
         function loadAllKeys() {
-            const platforms = ['youtube', 'instagram', 'tiktok', 'facebook', 'pinterest', 'gemini', 'nanobanana', 'sora', 'leonardo'];
+            const platforms = ['youtube', 'instagram', 'tiktok', 'facebook', 'pinterest', 'gemini', 'nanobanana', 'huggingface', 'leonardo'];
 
             platforms.forEach(platform => {
                 const saved = localStorage.getItem(`${platform}_api_keys`);
@@ -617,8 +620,8 @@
                         case 'nanobanana':
                             if (keys.apiKey) document.getElementById('nanobanana-api-key').value = keys.apiKey;
                             break;
-                        case 'sora':
-                            if (keys.apiKey) document.getElementById('sora-api-key').value = keys.apiKey;
+                        case 'huggingface':
+                            if (keys.apiKey) document.getElementById('huggingface-api-key').value = keys.apiKey;
                             break;
                         case 'leonardo':
                             if (keys.apiKey) document.getElementById('leonardo-api-key').value = keys.apiKey;
@@ -654,7 +657,7 @@
         }
 
         function saveAllKeys() {
-            const platforms = ['youtube', 'instagram', 'tiktok', 'facebook', 'pinterest', 'gemini', 'nanobanana', 'sora', 'leonardo'];
+            const platforms = ['youtube', 'instagram', 'tiktok', 'facebook', 'pinterest', 'gemini', 'nanobanana', 'huggingface', 'leonardo'];
             let savedCount = 0;
 
             platforms.forEach(platform => {
@@ -667,7 +670,7 @@
         }
 
         function testAllConnections() {
-            const platforms = ['youtube', 'instagram', 'tiktok', 'facebook', 'pinterest', 'gemini', 'nanobanana', 'sora', 'leonardo'];
+            const platforms = ['youtube', 'instagram', 'tiktok', 'facebook', 'pinterest', 'gemini', 'nanobanana', 'huggingface', 'leonardo'];
 
             platforms.forEach((platform, index) => {
                 setTimeout(() => {
@@ -678,7 +681,7 @@
 
         function clearAllKeys() {
             if (confirm('Are you sure you want to clear all API keys? This action cannot be undone.')) {
-                const platforms = ['youtube', 'instagram', 'tiktok', 'facebook', 'pinterest', 'gemini', 'nanobanana', 'sora', 'leonardo'];
+                const platforms = ['youtube', 'instagram', 'tiktok', 'facebook', 'pinterest', 'gemini', 'nanobanana', 'huggingface', 'leonardo'];
 
                 platforms.forEach(platform => {
                     localStorage.removeItem(`${platform}_api_keys`);
