@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+<!-- FORCED REDEPLOY: 2026-01-13 - 100% FREE Hugging Face Models ONLY - NO PAID APIs -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Video Generator - AI Automation System</title>
+    <title>FREE AI Video Generator - 100% Free Hugging Face Models</title>
     <style>
         * {
             margin: 0;
@@ -404,8 +405,11 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎬 AI Video Generator <span style="background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%); padding: 5px 15px; border-radius: 20px; font-size: 1rem; margin-left: 10px;">100% FREE</span></h1>
-            <p>Create professional videos using FREE open-source AI models - No API costs!</p>
+            <h1>🎬 FREE AI Video Generator <span style="background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%); padding: 5px 15px; border-radius: 20px; font-size: 1rem; margin-left: 10px;">100% FREE - NO API KEYS NEEDED</span></h1>
+            <p>Create professional videos using FREE open-source AI models via Hugging Face - Zero Cost!</p>
+            <div style="background: rgba(34, 197, 94, 0.3); border: 2px solid #22c55e; border-radius: 12px; padding: 12px 20px; margin-top: 15px; display: inline-block;">
+                <strong style="color: #4ade80;">✅ 100% FREE</strong> - Uses Open-Sora, CogVideoX, AnimateDiff, ZeroScope (all via Hugging Face)
+            </div>
         </div>
 
         <div class="nav-buttons">
@@ -479,17 +483,17 @@
                 </div>
 
                 <div class="section">
-                    <h3>AI Model <span style="background: #22c55e; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; margin-left: 8px;">100% FREE</span></h3>
+                    <h3>AI Model <span style="background: #22c55e; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; margin-left: 8px;">100% FREE - NO PAID APIs</span></h3>
                     <div class="input-group">
-                        <label>Select AI Model (All FREE via Hugging Face)</label>
+                        <label>Select FREE AI Model (Hugging Face - $0 Cost)</label>
                         <select id="ai-model">
-                            <option value="open-sora" selected>Open-Sora (Free) - 85% Sora quality</option>
-                            <option value="cogvideox">CogVideoX-5B (Free) - Best for faces</option>
-                            <option value="animatediff">AnimateDiff V3 (Free) - Artistic</option>
-                            <option value="zeroscope">ZeroScope V2 (Free) - Action</option>
+                            <option value="open-sora" selected>🆓 Open-Sora (FREE) - Near Sora quality</option>
+                            <option value="cogvideox">🆓 CogVideoX-5B (FREE) - Best for faces</option>
+                            <option value="animatediff">🆓 AnimateDiff V3 (FREE) - Artistic style</option>
+                            <option value="zeroscope">🆓 ZeroScope V2 (FREE) - Action scenes</option>
                         </select>
                     </div>
-                    <p style="color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-top: 8px;">Powered by Hugging Face - Uses your HUGGINGFACE_TOKEN</p>
+                    <p style="color: #4ade80; font-size: 0.9rem; margin-top: 8px; font-weight: 600;">✅ All models are 100% FREE via Hugging Face - Only needs free HUGGINGFACE_TOKEN</p>
                 </div>
 
                 <div class="section">
@@ -528,7 +532,7 @@
                     </div>
                 </div>
 
-                <button class="btn btn-primary" onclick="generateVideo()">🎬 Generate Video</button>
+                <button class="btn btn-primary" onclick="generateVideo()">🎬 Generate FREE Video (No Cost!)</button>
             </div>
 
             <!-- Preview Panel -->
@@ -595,7 +599,7 @@
             const hfToken = localStorage.getItem('huggingface_token') || localStorage.getItem('HUGGINGFACE_TOKEN');
 
             if (!hfToken) {
-                if (confirm('Hugging Face token not configured (FREE to get!). Would you like to configure it now?')) {
+                if (confirm('🆓 FREE Hugging Face token needed!\n\nThis is 100% FREE - just create an account at huggingface.co\nNo credit card or payment required!\n\nWould you like to configure it now?')) {
                     window.location.href = 'api-keys.html';
                     return;
                 }
