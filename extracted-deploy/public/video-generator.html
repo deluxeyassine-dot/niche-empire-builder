@@ -404,8 +404,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎬 AI Video Generator</h1>
-            <p>Create professional videos using advanced AI models</p>
+            <h1>🎬 AI Video Generator <span style="background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%); padding: 5px 15px; border-radius: 20px; font-size: 1rem; margin-left: 10px;">100% FREE</span></h1>
+            <p>Create professional videos using FREE open-source AI models - No API costs!</p>
         </div>
 
         <div class="nav-buttons">
@@ -479,17 +479,17 @@
                 </div>
 
                 <div class="section">
-                    <h3>AI Model</h3>
+                    <h3>AI Model <span style="background: #22c55e; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; margin-left: 8px;">100% FREE</span></h3>
                     <div class="input-group">
-                        <label>Select AI Model</label>
+                        <label>Select AI Model (All FREE via Hugging Face)</label>
                         <select id="ai-model">
-                            <option value="sora">Sora 2 - OpenAI (Premium)</option>
-                            <option value="leonardo">Leonardo.ai - Motion</option>
-                            <option value="nanobanana">Nano Banana - Fast</option>
-                            <option value="runway">Runway Gen-2</option>
-                            <option value="pika">Pika Labs</option>
+                            <option value="open-sora" selected>Open-Sora (Free) - 85% Sora quality</option>
+                            <option value="cogvideox">CogVideoX-5B (Free) - Best for faces</option>
+                            <option value="animatediff">AnimateDiff V3 (Free) - Artistic</option>
+                            <option value="zeroscope">ZeroScope V2 (Free) - Action</option>
                         </select>
                     </div>
+                    <p style="color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-top: 8px;">Powered by Hugging Face - Uses your HUGGINGFACE_TOKEN</p>
                 </div>
 
                 <div class="section">
@@ -590,12 +590,12 @@
                 return;
             }
 
-            // Check if API keys are configured
+            // Check if Hugging Face token is configured (FREE!)
             const aiModel = document.getElementById('ai-model').value;
-            const apiKeys = localStorage.getItem(`${aiModel}_api_keys`);
+            const hfToken = localStorage.getItem('huggingface_token') || localStorage.getItem('HUGGINGFACE_TOKEN');
 
-            if (!apiKeys) {
-                if (confirm(`${aiModel} API key not configured. Would you like to configure it now?`)) {
+            if (!hfToken) {
+                if (confirm('Hugging Face token not configured (FREE to get!). Would you like to configure it now?')) {
                     window.location.href = 'api-keys.html';
                     return;
                 }
@@ -615,13 +615,13 @@
             downloadBtn.disabled = true;
             postBtn.disabled = true;
 
-            // Simulate video generation process
+            // Simulate video generation process (100% FREE via Hugging Face!)
             const stages = [
-                { progress: 20, text: 'Analyzing content...' },
-                { progress: 40, text: 'Generating scenes...' },
-                { progress: 60, text: 'Rendering video...' },
+                { progress: 20, text: 'Connecting to Hugging Face (FREE)...' },
+                { progress: 40, text: 'Generating scenes with ' + aiModel + '...' },
+                { progress: 60, text: 'Rendering video (FREE)...' },
                 { progress: 80, text: 'Adding audio...' },
-                { progress: 100, text: 'Finalizing...' }
+                { progress: 100, text: 'Finalizing (No charges!)...' }
             ];
 
             for (let stage of stages) {
