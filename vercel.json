@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "echo Static site - Cache bust v2",
+  "buildCommand": "echo Static site - NO POPUPS v5 - 2026-01-16",
   "outputDirectory": "public",
   "framework": null,
   "headers": [
