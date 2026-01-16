@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "echo Static site - NO POPUPS v5 - 2026-01-16",
+  "buildCommand": "echo FORCE DEPLOY v6 - NO POPUPS - $(date)",
   "outputDirectory": "public",
   "framework": null,
   "headers": [
