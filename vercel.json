@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "echo FORCE DEPLOY v6 - NO POPUPS - $(date)",
+  "buildCommand": "echo FORCE DEPLOY v7 - Ultimate Video Generator - $(date)",
   "outputDirectory": "public",
   "framework": null,
   "headers": [
