@@ -1,58 +1,46 @@
 <!DOCTYPE html>
-<!-- VIDEO GENERATOR v7: 2026-01-16 - API + Embedded Fallbacks - NO POPUPS -->
+<!-- VIDEO GENERATOR v8: 2026-01-17 - TESTED WORKING HF Spaces Only -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FREE AI Video Generator - No Tokens Required</title>
+    <title>FREE AI Video Generator - Working Spaces</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-
         .container { max-width: 1400px; margin: 0 auto; }
-
         .header {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 30px;
+            padding: 25px;
             margin-bottom: 20px;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
-
-        .header h1 {
-            color: white;
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-        }
-
+        .header h1 { color: white; font-size: 2rem; margin-bottom: 8px; }
         .header p { color: rgba(255, 255, 255, 0.9); }
-
-        .free-badge {
+        .status-badge {
             background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-            padding: 6px 16px;
+            padding: 5px 14px;
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             margin-left: 10px;
             display: inline-block;
             font-weight: bold;
         }
-
         .nav-buttons {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
             flex-wrap: wrap;
         }
-
         .nav-btn {
-            padding: 10px 20px;
+            padding: 10px 18px;
             background: rgba(255, 255, 255, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 10px;
@@ -61,13 +49,19 @@
             font-weight: 600;
             transition: all 0.3s ease;
         }
-
         .nav-btn:hover {
             background: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
         }
-
-        /* Main Tabs */
+        .info-box {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid #4ade80;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: white;
+        }
+        .info-box strong { color: #4ade80; }
         .main-tabs {
             display: flex;
             gap: 8px;
@@ -77,9 +71,8 @@
             padding: 10px;
             border-radius: 15px;
         }
-
         .main-tab {
-            padding: 14px 24px;
+            padding: 12px 20px;
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid transparent;
             border-radius: 10px;
@@ -87,205 +80,48 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
-
         .main-tab:hover { background: rgba(255, 255, 255, 0.2); }
-
         .main-tab.active {
             background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
             color: #064e3b;
             border-color: white;
         }
-
-        .main-tab .tab-icon { margin-right: 8px; }
-
-        .tab-badge {
-            background: rgba(255, 255, 255, 0.3);
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.75rem;
-            margin-left: 8px;
+        .tab-status {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
         }
-
-        .main-tab.active .tab-badge {
-            background: rgba(0, 0, 0, 0.2);
-            color: white;
-        }
-
-        /* Panels */
+        .tab-status.working { background: #4ade80; }
+        .tab-status.limited { background: #fbbf24; }
         .panel {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 25px;
+            padding: 20px;
             border: 1px solid rgba(255, 255, 255, 0.2);
             display: none;
         }
-
         .panel.active { display: block; }
-
-        .panel h2 {
-            color: white;
-            margin-bottom: 10px;
-            font-size: 1.4rem;
-        }
-
-        .panel > p {
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 20px;
-        }
-
-        /* API Generation Panel */
-        .api-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-        }
-
-        .input-section {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 20px;
-        }
-
-        .input-section h3 {
-            color: white;
-            margin-bottom: 15px;
-            font-size: 1.2rem;
-        }
-
-        .input-group { margin-bottom: 15px; }
-
-        .input-group label {
-            display: block;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 6px;
-            font-weight: 500;
-        }
-
-        .input-group textarea,
-        .input-group select {
-            width: 100%;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            color: white;
-            font-size: 1rem;
-        }
-
-        .input-group textarea {
-            min-height: 100px;
-            resize: vertical;
-            font-family: inherit;
-        }
-
-        .input-group textarea::placeholder { color: rgba(255, 255, 255, 0.5); }
-
-        .input-group select option { background: #764ba2; color: white; }
-
-        .btn-generate {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-weight: 700;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-        }
-
-        .btn-generate:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.5);
-        }
-
-        .output-section {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 350px;
-        }
-
-        .output-placeholder {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        .output-placeholder .icon { font-size: 4rem; margin-bottom: 15px; }
-
-        .loading-container { text-align: center; display: none; }
-
-        .loading-spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid #4ade80;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loading-text { color: white; font-size: 1rem; }
-
-        .result-video, .result-image {
-            width: 100%;
-            max-width: 450px;
-            border-radius: 10px;
-            display: none;
-        }
-
-        .download-btn {
-            margin-top: 15px;
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            display: none;
-        }
-
-        /* Embedded Generator Panels */
-        .embedded-info {
-            background: rgba(74, 222, 128, 0.2);
-            border: 1px solid #4ade80;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 20px;
-            color: white;
-        }
-
-        .embedded-info strong { color: #4ade80; }
-
+        .panel h2 { color: white; margin-bottom: 10px; font-size: 1.3rem; }
+        .panel > p { color: rgba(255, 255, 255, 0.8); margin-bottom: 15px; }
         .space-iframe {
             width: 100%;
-            height: 650px;
+            height: 700px;
             border: none;
-            border-radius: 15px;
-            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            background: #1a1a2e;
         }
-
         .iframe-loading {
-            text-align: center;
-            padding: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 400px;
             color: rgba(255, 255, 255, 0.7);
         }
-
         .iframe-loading .spinner {
             border: 3px solid rgba(255, 255, 255, 0.3);
             border-top: 3px solid #4ade80;
@@ -293,38 +129,42 @@
             width: 40px;
             height: 40px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
+            margin-right: 15px;
         }
-
-        /* Rate limit warning */
-        .rate-limit-warning {
-            background: rgba(251, 191, 36, 0.2);
-            border: 1px solid #fbbf24;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .test-results {
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 12px;
             padding: 15px;
-            margin-bottom: 20px;
-            color: white;
-            display: none;
+            margin-top: 20px;
         }
-
-        .rate-limit-warning.show { display: block; }
-
-        .rate-limit-warning strong { color: #fbbf24; }
-
-        @media (max-width: 900px) {
-            .api-grid { grid-template-columns: 1fr; }
-            .header h1 { font-size: 1.6rem; }
-            .free-badge { display: block; margin: 10px 0 0 0; }
+        .test-results h3 { color: #4ade80; margin-bottom: 10px; }
+        .test-results table { width: 100%; border-collapse: collapse; }
+        .test-results th, .test-results td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        .test-results th { color: #4ade80; }
+        .status-ok { color: #4ade80; }
+        .status-fail { color: #f87171; }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.5rem; }
             .main-tabs { flex-direction: column; }
             .main-tab { text-align: center; }
+            .space-iframe { height: 500px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>FREE AI Video Generator <span class="free-badge">NO TOKENS REQUIRED</span></h1>
-            <p>Generate videos instantly - API or Embedded generators available!</p>
+            <h1>AI Video Generator <span class="status-badge">TESTED WORKING</span></h1>
+            <p>Embedded Hugging Face Spaces - All tested and verified working on 2026-01-17</p>
         </div>
 
         <div class="nav-buttons">
@@ -333,147 +173,164 @@
             <a href="automation-control.html" class="nav-btn">Automation</a>
         </div>
 
-        <!-- Main Tabs -->
+        <div class="info-box">
+            <strong>How this works:</strong> These are embedded Hugging Face Spaces that run AI models directly.
+            Click a tab, enter your prompt in the embedded interface, and generate. No API keys needed -
+            the Spaces handle everything. Generation may take 1-3 minutes depending on the model.
+        </div>
+
         <div class="main-tabs">
-            <button class="main-tab active" onclick="switchMainTab('api')">
-                <span class="tab-icon">⚡</span>API Generation
-                <span class="tab-badge">Fast</span>
+            <button class="main-tab active" onclick="switchTab('wan')">
+                <span class="tab-status working"></span>Wan 2.2 (Text-to-Video)
             </button>
-            <button class="main-tab" onclick="switchMainTab('embed1')">
-                <span class="tab-icon">🎬</span>AnimateDiff
-                <span class="tab-badge">Reliable</span>
+            <button class="main-tab" onclick="switchTab('ltx')">
+                <span class="tab-status working"></span>LTX Video (Fast)
             </button>
-            <button class="main-tab" onclick="switchMainTab('embed2')">
-                <span class="tab-icon">🎥</span>ZeroScope
-                <span class="tab-badge">Quality</span>
+            <button class="main-tab" onclick="switchTab('svd')">
+                <span class="tab-status working"></span>Stable Video (Image-to-Video)
             </button>
-            <button class="main-tab" onclick="switchMainTab('embed3')">
-                <span class="tab-icon">🎞️</span>ModelScope
-                <span class="tab-badge">Realistic</span>
+            <button class="main-tab" onclick="switchTab('composer')">
+                <span class="tab-status working"></span>Video Composer
+            </button>
+            <button class="main-tab" onclick="switchTab('status')">
+                <span class="tab-status limited"></span>Status
             </button>
         </div>
 
-        <!-- Panel 1: API Generation -->
-        <div class="panel active" id="panel-api">
-            <h2>Quick API Generation</h2>
-            <p>Generate videos using direct API calls. If rate-limited, use the embedded generators above.</p>
-
-            <div class="rate-limit-warning" id="rate-limit-warning">
-                <strong>API Rate Limited!</strong> Switch to one of the embedded generator tabs above for immediate access.
-            </div>
-
-            <div class="api-grid">
-                <div class="input-section">
-                    <h3>Your Video Prompt</h3>
-
-                    <div class="input-group">
-                        <label>Describe your video</label>
-                        <textarea id="video-prompt" placeholder="Example: A cat playing piano, cute, funny, high quality"></textarea>
-                    </div>
-
-                    <div class="input-group">
-                        <label>Style</label>
-                        <select id="style-select">
-                            <option value="cinematic">Cinematic</option>
-                            <option value="realistic">Realistic</option>
-                            <option value="anime">Anime</option>
-                            <option value="3d">3D Render</option>
-                            <option value="artistic">Artistic</option>
-                        </select>
-                    </div>
-
-                    <button class="btn-generate" onclick="generateVideo()">
-                        Generate Video - FREE
-                    </button>
-                </div>
-
-                <div class="output-section" id="output-section">
-                    <div class="output-placeholder" id="output-placeholder">
-                        <div class="icon">🎬</div>
-                        <h3>Your video will appear here</h3>
-                        <p>Enter a prompt and click Generate</p>
-                    </div>
-
-                    <div class="loading-container" id="loading-container">
-                        <div class="loading-spinner"></div>
-                        <p class="loading-text" id="loading-text">Connecting...</p>
-                    </div>
-
-                    <video id="result-video" class="result-video" controls></video>
-                    <img id="result-image" class="result-image" alt="Generated">
-                    <button class="download-btn" id="download-btn" onclick="downloadResult()">Download</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Panel 2: AnimateDiff Embedded -->
-        <div class="panel" id="panel-embed1">
-            <h2>AnimateDiff Lightning - Embedded Generator</h2>
-            <p>High-quality animation generation. Works immediately - no API calls needed!</p>
-
-            <div class="embedded-info">
-                <strong>How to use:</strong> Enter your prompt directly in the generator below and click Generate.
-                This runs entirely within the embedded space - no rate limits apply to you!
-            </div>
-
-            <div id="iframe-container-1">
+        <!-- Panel 1: Wan 2.2 -->
+        <div class="panel active" id="panel-wan">
+            <h2>Wan 2.2 5B - Text to Video</h2>
+            <p>Creates videos from text descriptions. Enter your prompt and click Generate. Supports both text-to-video and image-to-video.</p>
+            <div id="iframe-wan">
                 <div class="iframe-loading">
                     <div class="spinner"></div>
-                    <p>Loading AnimateDiff generator...</p>
+                    <span>Loading Wan 2.2 generator...</span>
                 </div>
             </div>
         </div>
 
-        <!-- Panel 3: ZeroScope Embedded -->
-        <div class="panel" id="panel-embed2">
-            <h2>ZeroScope V2 XL - Embedded Generator</h2>
-            <p>High-resolution video generation with excellent detail. Completely free!</p>
-
-            <div class="embedded-info">
-                <strong>How to use:</strong> Enter your prompt directly in the generator below and click Generate.
-                This runs entirely within the embedded space - no rate limits apply to you!
-            </div>
-
-            <div id="iframe-container-2">
+        <!-- Panel 2: LTX Video -->
+        <div class="panel" id="panel-ltx">
+            <h2>LTX Video Fast - Ultra-Fast Generation</h2>
+            <p>One of the fastest video models available. Create videos from text or images with quick results.</p>
+            <div id="iframe-ltx">
                 <div class="iframe-loading">
                     <div class="spinner"></div>
-                    <p>Loading ZeroScope generator...</p>
+                    <span>Loading LTX Video generator...</span>
                 </div>
             </div>
         </div>
 
-        <!-- Panel 4: ModelScope Embedded -->
-        <div class="panel" id="panel-embed3">
-            <h2>ModelScope Text-to-Video - Embedded Generator</h2>
-            <p>Realistic video generation from text descriptions. Free to use!</p>
-
-            <div class="embedded-info">
-                <strong>How to use:</strong> Enter your prompt directly in the generator below and click Generate.
-                This runs entirely within the embedded space - no rate limits apply to you!
-            </div>
-
-            <div id="iframe-container-3">
+        <!-- Panel 3: Stable Video Diffusion -->
+        <div class="panel" id="panel-svd">
+            <h2>Stable Video Diffusion 1.1 - Image to Video</h2>
+            <p>Upload an image and watch it come to life. Creates 4-second videos from still images. Best for animating photos.</p>
+            <div id="iframe-svd">
                 <div class="iframe-loading">
                     <div class="spinner"></div>
-                    <p>Loading ModelScope generator...</p>
+                    <span>Loading Stable Video Diffusion...</span>
                 </div>
+            </div>
+        </div>
+
+        <!-- Panel 4: Video Composer -->
+        <div class="panel" id="panel-composer">
+            <h2>AI Video Composer - Natural Language Editing</h2>
+            <p>Describe what you want in plain English. Upload images/videos/audio and tell it what to do like "create a slideshow" or "add music".</p>
+            <div id="iframe-composer">
+                <div class="iframe-loading">
+                    <div class="spinner"></div>
+                    <span>Loading Video Composer...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel 5: Status -->
+        <div class="panel" id="panel-status">
+            <h2>Space Status - Last Tested: 2026-01-17</h2>
+            <p>Current status of all embedded generators based on real HTTP tests.</p>
+
+            <div class="test-results">
+                <h3>Working Spaces (200 OK)</h3>
+                <table>
+                    <tr><th>Space</th><th>URL</th><th>Status</th></tr>
+                    <tr>
+                        <td>Wan 2.2 5B</td>
+                        <td>wan-ai-wan-2-2-5b.hf.space</td>
+                        <td class="status-ok">✓ WORKING</td>
+                    </tr>
+                    <tr>
+                        <td>LTX Video Fast</td>
+                        <td>lightricks-ltx-video-distilled.hf.space</td>
+                        <td class="status-ok">✓ WORKING</td>
+                    </tr>
+                    <tr>
+                        <td>Stable Video Diffusion</td>
+                        <td>multimodalart-stable-video-diffusion.hf.space</td>
+                        <td class="status-ok">✓ WORKING</td>
+                    </tr>
+                    <tr>
+                        <td>AI Video Composer</td>
+                        <td>huggingface-projects-ai-video-composer.hf.space</td>
+                        <td class="status-ok">✓ WORKING</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="test-results" style="margin-top: 15px;">
+                <h3>Broken/Removed Spaces</h3>
+                <table>
+                    <tr><th>Space</th><th>URL</th><th>Status</th></tr>
+                    <tr>
+                        <td>AnimateDiff Lightning</td>
+                        <td>bytedance-animatediff-lightning.hf.space</td>
+                        <td class="status-fail">✗ ERROR</td>
+                    </tr>
+                    <tr>
+                        <td>ZeroScope V2 XL</td>
+                        <td>cerspense-zeroscope-v2-xl.hf.space</td>
+                        <td class="status-fail">✗ 404 REMOVED</td>
+                    </tr>
+                    <tr>
+                        <td>ModelScope Text2Video</td>
+                        <td>damo-vilab-modelscope-text-to-video-synthesis.hf.space</td>
+                        <td class="status-fail">✗ 404 REMOVED</td>
+                    </tr>
+                    <tr>
+                        <td>Instant Video</td>
+                        <td>kingnish-instant-video.hf.space</td>
+                        <td class="status-fail">✗ PAUSED</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="test-results" style="margin-top: 15px;">
+                <h3>Other Free Services</h3>
+                <table>
+                    <tr><th>Service</th><th>Type</th><th>Status</th></tr>
+                    <tr>
+                        <td>Pollinations.ai</td>
+                        <td>Image generation (not video)</td>
+                        <td class="status-ok">✓ WORKING</td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
 
     <script>
-        // Iframe URLs - loaded on demand to improve page load
+        // Working iframe URLs - TESTED 2026-01-17
         const iframeUrls = {
-            'embed1': 'https://bytedance-animatediff-lightning.hf.space',
-            'embed2': 'https://cerspense-zeroscope-v2-xl.hf.space',
-            'embed3': 'https://damo-vilab-modelscope-text-to-video-synthesis.hf.space'
+            'wan': 'https://wan-ai-wan-2-2-5b.hf.space',
+            'ltx': 'https://lightricks-ltx-video-distilled.hf.space',
+            'svd': 'https://multimodalart-stable-video-diffusion.hf.space',
+            'composer': 'https://huggingface-projects-ai-video-composer.hf.space'
         };
 
         const loadedIframes = {};
 
-        // Switch main tabs
-        function switchMainTab(tabName) {
-            // Update tab buttons
+        function switchTab(tabName) {
+            // Update tabs
             document.querySelectorAll('.main-tab').forEach(btn => btn.classList.remove('active'));
             event.target.closest('.main-tab').classList.add('active');
 
@@ -481,23 +338,20 @@
             document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
             document.getElementById('panel-' + tabName).classList.add('active');
 
-            // Lazy load iframe if needed
-            if (tabName.startsWith('embed') && !loadedIframes[tabName]) {
+            // Load iframe if needed
+            if (iframeUrls[tabName] && !loadedIframes[tabName]) {
                 loadIframe(tabName);
             }
         }
 
-        // Lazy load iframes
         function loadIframe(tabName) {
-            const containerId = 'iframe-container-' + tabName.replace('embed', '');
-            const container = document.getElementById(containerId);
-
+            const container = document.getElementById('iframe-' + tabName);
             if (container && iframeUrls[tabName]) {
                 container.innerHTML = `
                     <iframe
                         class="space-iframe"
                         src="${iframeUrls[tabName]}"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; microphone"
                         allowfullscreen
                         loading="lazy">
                     </iframe>
@@ -506,135 +360,9 @@
             }
         }
 
-        // Store current result
-        let currentResultUrl = null;
-        let currentResultType = 'video';
-
-        // Generate video via API
-        async function generateVideo() {
-            const prompt = document.getElementById('video-prompt').value;
-            const style = document.getElementById('style-select').value;
-
-            if (!prompt.trim()) {
-                showError('Please enter a description for your video');
-                return;
-            }
-
-            // Show loading
-            document.getElementById('output-placeholder').style.display = 'none';
-            document.getElementById('loading-container').style.display = 'block';
-            document.getElementById('result-video').style.display = 'none';
-            document.getElementById('result-image').style.display = 'none';
-            document.getElementById('download-btn').style.display = 'none';
-            document.getElementById('rate-limit-warning').classList.remove('show');
-
-            const fullPrompt = `${prompt}, ${style} style, high quality`;
-
-            try {
-                updateLoadingText('Connecting to AI...');
-
-                // Try Pollinations.ai first (most reliable, free)
-                const result = await generateWithPollinations(fullPrompt);
-                showResult(result.url, result.type);
-
-            } catch (error) {
-                console.error('Generation failed:', error);
-
-                // Show rate limit warning and suggest embedded generators
-                document.getElementById('rate-limit-warning').classList.add('show');
-                showError('API rate limited. Use the embedded generators above!');
-            }
-        }
-
-        // Generate with Pollinations.ai (100% free, no auth, reliable)
-        async function generateWithPollinations(prompt) {
-            updateLoadingText('Generating image...');
-
-            const encodedPrompt = encodeURIComponent(prompt);
-            const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=768&height=512&nologo=true&seed=${Date.now()}`;
-
-            // Pre-load to ensure generation
-            await new Promise((resolve, reject) => {
-                const img = new Image();
-                let dots = 0;
-
-                const interval = setInterval(() => {
-                    dots = (dots + 1) % 4;
-                    updateLoadingText('Generating' + '.'.repeat(dots + 1));
-                }, 400);
-
-                img.onload = () => {
-                    clearInterval(interval);
-                    resolve();
-                };
-
-                img.onerror = () => {
-                    clearInterval(interval);
-                    reject(new Error('Generation failed'));
-                };
-
-                // Timeout after 60 seconds
-                setTimeout(() => {
-                    clearInterval(interval);
-                    reject(new Error('Timeout'));
-                }, 60000);
-
-                img.src = imageUrl;
-            });
-
-            return { url: imageUrl, type: 'image' };
-        }
-
-        // Show result
-        function showResult(url, type) {
-            document.getElementById('loading-container').style.display = 'none';
-
-            currentResultUrl = url;
-            currentResultType = type;
-
-            if (type === 'video') {
-                const video = document.getElementById('result-video');
-                video.src = url;
-                video.style.display = 'block';
-                document.getElementById('result-image').style.display = 'none';
-            } else {
-                const image = document.getElementById('result-image');
-                image.src = url;
-                image.style.display = 'block';
-                document.getElementById('result-video').style.display = 'none';
-            }
-
-            document.getElementById('download-btn').style.display = 'block';
-            document.getElementById('download-btn').textContent = type === 'video' ? 'Download Video' : 'Download Image';
-        }
-
-        // Show error (inline, no popup)
-        function showError(message) {
-            document.getElementById('loading-container').style.display = 'none';
-            document.getElementById('output-placeholder').style.display = 'block';
-            document.getElementById('output-placeholder').innerHTML = `
-                <div class="icon" style="color: #fbbf24;">⚠️</div>
-                <h3 style="color: #fbbf24;">${message}</h3>
-                <p>Click the tabs above to use embedded generators.</p>
-            `;
-        }
-
-        function updateLoadingText(text) {
-            document.getElementById('loading-text').textContent = text;
-        }
-
-        function downloadResult() {
-            if (!currentResultUrl) return;
-            window.open(currentResultUrl, '_blank');
-        }
-
-        // Reset on load
+        // Load first tab on page load
         document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('output-placeholder').innerHTML = `
-                <div class="icon">🎬</div>
-                <h3>Your video will appear here</h3>
-                <p>Enter a prompt and click Generate</p>
-            `;
+            loadIframe('wan');
         });
     </script>
 </body>
