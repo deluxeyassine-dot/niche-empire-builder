@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "echo FORCE DEPLOY v8 - Ultimate Video Generator BUILD - $(date) && ls -la public/ultimate-video-gen.html",
+  "buildCommand": "echo FORCE DEPLOY v9 - Simple Video Gen - $(date) && ls -la public/*.html | wc -l",
   "outputDirectory": "public",
   "framework": null,
   "headers": [
