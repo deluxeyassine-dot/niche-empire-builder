@@ -1,0 +1,41 @@
+{
+  "id": "smart-home-automation-software-pro",
+  "type": "digital",
+  "name": "Smart Home Automation Software Pro",
+  "description": "Complete home automation software suite with AI scheduling, energy optimization, and cross-device synchronization. Includes mobile apps for iOS and Android.",
+  "shortDescription": "Complete home automation software suite with AI scheduling, energy optimization, and cross-device synchronization. Includes mobile apps for iOS and Android.",
+  "price": 149.99,
+  "currency": "USD",
+  "category": "Software",
+  "tags": [],
+  "images": [
+    "https://example.com/images/software-1.jpg",
+    "https://example.com/images/software-2.jpg"
+  ],
+  "featured": false,
+  "active": true,
+  "downloadable": true,
+  "download": {
+    "fileUrl": "https://example.com/downloads/smarthome-pro-v2.zip",
+    "fileSize": 524288000,
+    "fileType": "zip",
+    "downloadLimit": 5,
+    "downloadExpiry": 30
+  },
+  "license": {
+    "type": "multi",
+    "seats": 5,
+    "duration": null,
+    "allowTransfer": false
+  },
+  "version": "2.1.0",
+  "systemRequirements": [
+    "Windows 10/11 or macOS 10.15+",
+    "4GB RAM minimum",
+    "Internet connection required",
+    "1GB free disk space"
+  ],
+  "autoUpdate": true,
+  "createdAt": "2026-01-11T11:08:44.902Z",
+  "updatedAt": "2026-01-11T11:08:44.902Z"
+}

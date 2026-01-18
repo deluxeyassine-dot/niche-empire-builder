@@ -1,0 +1,36 @@
+{
+  "id": "complete-smart-home-security-package",
+  "name": "Complete Smart Home Security Package",
+  "description": "Everything you need for comprehensive home security. Includes 2 cameras, 1 smart lock, installation service, and 1-year software subscription.",
+  "products": [
+    {
+      "productId": "smartguard-pro-security-camera",
+      "quantity": 2,
+      "optional": false
+    },
+    {
+      "productId": "smart-home-automation-software-pro",
+      "quantity": 1,
+      "optional": false
+    },
+    {
+      "productId": "smart-home-installation-service",
+      "quantity": 1,
+      "optional": false
+    }
+  ],
+  "pricing": {
+    "totalPrice": 849.96,
+    "bundlePrice": 679.9680000000001,
+    "savings": 169.99199999999996,
+    "savingsPercentage": 20
+  },
+  "images": [
+    "https://example.com/images/bundle-security-package.jpg"
+  ],
+  "active": true,
+  "limitedTime": {
+    "startDate": "2024-12-01T00:00:00.000Z",
+    "endDate": "2024-12-31T00:00:00.000Z"
+  }
+}

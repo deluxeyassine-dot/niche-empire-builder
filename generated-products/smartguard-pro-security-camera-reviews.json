@@ -1,0 +1,70 @@
+{
+  "reviews": [
+    {
+      "id": "smartguard-pro-security-camera-review-1",
+      "productId": "smartguard-pro-security-camera",
+      "author": "Yassine",
+      "rating": 5,
+      "title": "Excellent camera!",
+      "comment": "Crystal clear video quality, easy to install, and the AI detection works perfectly. Highly recommend!",
+      "verified": true,
+      "date": "2024-12-15T00:00:00.000Z",
+      "helpful": 0
+    },
+    {
+      "id": "smartguard-pro-security-camera-review-2",
+      "productId": "smartguard-pro-security-camera",
+      "author": "Sarah Johnson",
+      "rating": 5,
+      "title": "Best security camera",
+      "comment": "Love the night vision and two-way audio. Feel much safer now.",
+      "verified": true,
+      "date": "2024-12-10T00:00:00.000Z",
+      "helpful": 0
+    },
+    {
+      "id": "smartguard-pro-security-camera-review-3",
+      "productId": "smartguard-pro-security-camera",
+      "author": "Mike Chen",
+      "rating": 4,
+      "title": "Great product",
+      "comment": "Works well, setup was straightforward. Only wish the app was a bit more intuitive.",
+      "verified": true,
+      "date": "2024-12-08T00:00:00.000Z",
+      "helpful": 0
+    },
+    {
+      "id": "smartguard-pro-security-camera-review-4",
+      "productId": "smartguard-pro-security-camera",
+      "author": "Emily Rodriguez",
+      "rating": 5,
+      "title": "Perfect for home security",
+      "comment": "The AI detection is amazing - no more false alerts from trees! Worth every penny.",
+      "verified": true,
+      "date": "2024-12-05T00:00:00.000Z",
+      "helpful": 0
+    },
+    {
+      "id": "smartguard-pro-security-camera-review-5",
+      "productId": "smartguard-pro-security-camera",
+      "author": "David Lee",
+      "rating": 4,
+      "title": "Solid choice",
+      "comment": "Good quality camera. Installation was easy. Customer support was helpful.",
+      "verified": true,
+      "date": "2024-12-01T00:00:00.000Z",
+      "helpful": 0
+    }
+  ],
+  "statistics": {
+    "averageRating": 4.6,
+    "totalReviews": 5,
+    "ratingDistribution": {
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 2,
+      "5": 3
+    }
+  }
+}

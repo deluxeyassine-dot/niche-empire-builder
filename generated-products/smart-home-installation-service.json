@@ -1,0 +1,76 @@
+{
+  "id": "smart-home-installation-service",
+  "type": "service",
+  "name": "Smart Home Installation Service",
+  "description": "Professional installation and configuration of your smart home devices. Our certified technicians will set up cameras, sensors, and automation routines tailored to your needs.",
+  "shortDescription": "Professional installation and configuration of your smart home devices. Our certified technicians will set up cameras, sensors, and automation routines tailo...",
+  "price": 299.99,
+  "currency": "USD",
+  "category": "Services",
+  "tags": [
+    "smart",
+    "professional"
+  ],
+  "images": [
+    "https://example.com/images/installation-service.jpg"
+  ],
+  "featured": false,
+  "active": true,
+  "service": {
+    "duration": 180,
+    "durationType": "fixed",
+    "bookingWindow": {
+      "minAdvance": 24,
+      "maxAdvance": 60
+    },
+    "availability": {
+      "monday": [
+        {
+          "start": "09:00",
+          "end": "17:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "start": "09:00",
+          "end": "17:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "start": "09:00",
+          "end": "17:00"
+        }
+      ],
+      "thursday": [
+        {
+          "start": "09:00",
+          "end": "17:00"
+        }
+      ],
+      "friday": [
+        {
+          "start": "09:00",
+          "end": "17:00"
+        }
+      ],
+      "saturday": [
+        {
+          "start": "10:00",
+          "end": "14:00"
+        }
+      ]
+    },
+    "maxBookingsPerSlot": 1,
+    "requiresApproval": true,
+    "cancellationPolicy": "24 hours notice required for full refund"
+  },
+  "location": "client-location",
+  "deliveryMethod": [
+    "On-site Visit",
+    "Home Service"
+  ],
+  "staffRequired": 1,
+  "createdAt": "2026-01-11T11:08:44.905Z",
+  "updatedAt": "2026-01-11T11:08:44.905Z"
+}

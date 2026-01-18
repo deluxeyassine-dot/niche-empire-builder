@@ -1,0 +1,180 @@
+{
+  "id": "smartguard-pro-security-camera",
+  "type": "physical",
+  "name": "SmartGuard Pro Security Camera",
+  "description": "Professional 4K security camera with AI-powered motion detection, night vision, and cloud storage. Features advanced facial recognition, two-way audio, and weather-resistant housing for indoor and outdoor use.",
+  "shortDescription": "Professional 4K security camera with AI-powered motion detection, night vision, and cloud storage. Features advanced facial recognition, two-way audio, and w...",
+  "price": 199.99,
+  "currency": "USD",
+  "category": "Security",
+  "tags": [
+    "professional"
+  ],
+  "images": [
+    "https://example.com/images/camera-1.jpg",
+    "https://example.com/images/camera-2.jpg",
+    "https://example.com/images/camera-3.jpg"
+  ],
+  "sku": "SGP-CAM-001",
+  "featured": false,
+  "active": true,
+  "inventory": {
+    "quantity": 150,
+    "lowStockThreshold": 30,
+    "trackInventory": true,
+    "allowBackorders": false
+  },
+  "shipping": {
+    "weight": 0.5,
+    "weightUnit": "kg",
+    "dimensions": {
+      "length": 12,
+      "width": 8,
+      "height": 8,
+      "unit": "cm"
+    },
+    "requiresShipping": true,
+    "shippingClass": "light"
+  },
+  "createdAt": "2026-01-11T11:08:44.890Z",
+  "updatedAt": "2026-01-11T11:08:44.890Z",
+  "variations": [
+    {
+      "id": "smartguard-pro-security-camera-var-1",
+      "name": "SmartGuard Pro Security Camera (White, 32GB)",
+      "attributes": {
+        "color": "White",
+        "storage": "32GB"
+      },
+      "price": 199.99,
+      "sku": "SGP-CAM-001-WHT-32GB",
+      "inventory": 150,
+      "active": true
+    },
+    {
+      "id": "smartguard-pro-security-camera-var-2",
+      "name": "SmartGuard Pro Security Camera (White, 64GB)",
+      "attributes": {
+        "color": "White",
+        "storage": "64GB"
+      },
+      "price": 219.99,
+      "sku": "SGP-CAM-001-WHT-64GB",
+      "inventory": 150,
+      "active": true
+    },
+    {
+      "id": "smartguard-pro-security-camera-var-3",
+      "name": "SmartGuard Pro Security Camera (White, 128GB)",
+      "attributes": {
+        "color": "White",
+        "storage": "128GB"
+      },
+      "price": 239.99,
+      "sku": "SGP-CAM-001-WHT-128GB",
+      "inventory": 150,
+      "active": true
+    },
+    {
+      "id": "smartguard-pro-security-camera-var-4",
+      "name": "SmartGuard Pro Security Camera (Black, 32GB)",
+      "attributes": {
+        "color": "Black",
+        "storage": "32GB"
+      },
+      "price": 199.99,
+      "sku": "SGP-CAM-001-BLK-32GB",
+      "inventory": 150,
+      "active": true
+    },
+    {
+      "id": "smartguard-pro-security-camera-var-5",
+      "name": "SmartGuard Pro Security Camera (Black, 64GB)",
+      "attributes": {
+        "color": "Black",
+        "storage": "64GB"
+      },
+      "price": 219.99,
+      "sku": "SGP-CAM-001-BLK-64GB",
+      "inventory": 150,
+      "active": true
+    },
+    {
+      "id": "smartguard-pro-security-camera-var-6",
+      "name": "SmartGuard Pro Security Camera (Black, 128GB)",
+      "attributes": {
+        "color": "Black",
+        "storage": "128GB"
+      },
+      "price": 239.99,
+      "sku": "SGP-CAM-001-BLK-128GB",
+      "inventory": 150,
+      "active": true
+    },
+    {
+      "id": "smartguard-pro-security-camera-var-7",
+      "name": "SmartGuard Pro Security Camera (Silver, 32GB)",
+      "attributes": {
+        "color": "Silver",
+        "storage": "32GB"
+      },
+      "price": 209.99,
+      "sku": "SGP-CAM-001-SLV-32GB",
+      "inventory": 150,
+      "active": true
+    },
+    {
+      "id": "smartguard-pro-security-camera-var-8",
+      "name": "SmartGuard Pro Security Camera (Silver, 64GB)",
+      "attributes": {
+        "color": "Silver",
+        "storage": "64GB"
+      },
+      "price": 229.99,
+      "sku": "SGP-CAM-001-SLV-64GB",
+      "inventory": 150,
+      "active": true
+    },
+    {
+      "id": "smartguard-pro-security-camera-var-9",
+      "name": "SmartGuard Pro Security Camera (Silver, 128GB)",
+      "attributes": {
+        "color": "Silver",
+        "storage": "128GB"
+      },
+      "price": 249.99,
+      "sku": "SGP-CAM-001-SLV-128GB",
+      "inventory": 150,
+      "active": true
+    }
+  ],
+  "pricingTiers": [
+    {
+      "minQuantity": 1,
+      "maxQuantity": 9,
+      "price": 199.99,
+      "discountType": "fixed",
+      "discountValue": 0
+    },
+    {
+      "minQuantity": 10,
+      "maxQuantity": 49,
+      "price": 179.991,
+      "discountType": "percentage",
+      "discountValue": 10
+    },
+    {
+      "minQuantity": 50,
+      "maxQuantity": 99,
+      "price": 169.9915,
+      "discountType": "percentage",
+      "discountValue": 15
+    },
+    {
+      "minQuantity": 100,
+      "price": 159.99200000000002,
+      "discountType": "percentage",
+      "discountValue": 20
+    }
+  ]
+}

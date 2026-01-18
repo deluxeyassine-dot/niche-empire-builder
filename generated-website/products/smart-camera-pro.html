@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartGuard Pro Camera - SmartHome Pro</title>
+    <meta name="description" content="The SmartGuard Pro is our flagship 4K security camera featuring advanced AI-powered motion detection, crystal-clear night vision up to 100 feet, two-way audio communication, and cloud storage. Perfect for both indoor and outdoor use, this camera provides 360-degree coverage and instant alerts to keep your home safe 24/7.">
+    
+    
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://smarthomepro.example.com/products/smart-camera-pro">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="SmartGuard Pro Camera - SmartHome Pro">
+    <meta property="og:description" content="The SmartGuard Pro is our flagship 4K security camera featuring advanced AI-powered motion detection, crystal-clear night vision up to 100 feet, two-way audio communication, and cloud storage. Perfect for both indoor and outdoor use, this camera provides 360-degree coverage and instant alerts to keep your home safe 24/7.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://smarthomepro.example.com/products/smart-camera-pro">
+    <meta property="og:image" content="https://via.placeholder.com/800x600?text=Smart+Camera+Main">
+    <meta property="og:site_name" content="SmartHome Pro">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SmartGuard Pro Camera - SmartHome Pro">
+    <meta name="twitter:description" content="The SmartGuard Pro is our flagship 4K security camera featuring advanced AI-powered motion detection, crystal-clear night vision up to 100 feet, two-way audio communication, and cloud storage. Perfect for both indoor and outdoor use, this camera provides 360-degree coverage and instant alerts to keep your home safe 24/7.">
+    <meta name="twitter:image" content="https://via.placeholder.com/800x600?text=Smart+Camera+Main">
+    
+
+    
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "SmartGuard Pro Camera",
+  "description": "The SmartGuard Pro is our flagship 4K security camera featuring advanced AI-powered motion detection, crystal-clear night vision up to 100 feet, two-way audio communication, and cloud storage. Perfect for both indoor and outdoor use, this camera provides 360-degree coverage and instant alerts to keep your home safe 24/7.",
+  "image": [
+    "https://via.placeholder.com/800x600?text=Smart+Camera+Main",
+    "https://via.placeholder.com/800x600?text=Smart+Camera+Side",
+    "https://via.placeholder.com/800x600?text=Smart+Camera+Night",
+    "https://via.placeholder.com/800x600?text=Smart+Camera+App"
+  ],
+  "sku": "SGP-CAM-001",
+  "brand": {
+    "@type": "Brand",
+    "name": "SmartHome Pro"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "199.99",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "reviewCount": "524"
+  }
+}
+    </script>
+    
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --primary-color: #2563eb;
+        --secondary-color: #1e40af;
+        --accent-color: #f59e0b;
+        --text-color: #1f2937;
+        --text-light: #6b7280;
+        --border-color: #e5e7eb;
+        --bg-color: #ffffff;
+        --bg-light: #f9fafb;
+        --font-family: Inter, system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+        font-family: var(--font-family);
+        color: var(--text-color);
+        line-height: 1.6;
+        background-color: var(--bg-color);
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    /* Buttons */
+    .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--secondary-color);
+        transform: translateY(-2px);
+    }
+
+    .btn-outline {
+        background-color: transparent;
+        color: var(--primary-color);
+        border: 2px solid var(--primary-color);
+    }
+
+    .btn-outline:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .btn-lg {
+        padding: 16px 32px;
+        font-size: 18px;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4, h5, h6 {
+        line-height: 1.2;
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    h1 { font-size: 3rem; }
+    h2 { font-size: 2.5rem; }
+    h3 { font-size: 2rem; }
+
+    p {
+        margin-bottom: 1rem;
+    }
+
+    /* Grid */
+    .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+    }
+
+    .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+
+    /* Card */
+    .card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Forms */
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: var(--text-color);
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 16px;
+        font-family: var(--font-family);
+        transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: var(--primary-color);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.75rem; }
+        h3 { font-size: 1.5rem; }
+
+        .grid-2, .grid-3, .grid-4 {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+        
+    .product-page {
+        padding: 2rem 0 4rem;
+    }
+
+    .breadcrumb {
+        margin-bottom: 2rem;
+        color: var(--text-light);
+    }
+
+    .breadcrumb a {
+        color: var(--primary-color);
+        text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+        text-decoration: underline;
+    }
+
+    .product-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        margin-bottom: 4rem;
+    }
+
+    .product-gallery .main-image img {
+        width: 100%;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .thumbnail-gallery {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .thumbnail {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: border-color 0.3s ease;
+    }
+
+    .thumbnail:hover,
+    .thumbnail.active {
+        border-color: var(--primary-color);
+    }
+
+    .product-title {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .product-rating {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .product-price {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin: 1.5rem 0;
+    }
+
+    .product-description {
+        margin: 2rem 0;
+        line-height: 1.8;
+    }
+
+    .product-features ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .product-features li {
+        padding: 0.5rem 0;
+        padding-left: 1.5rem;
+        position: relative;
+    }
+
+    .product-features li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: var(--primary-color);
+        font-weight: 700;
+    }
+
+    .product-actions {
+        display: flex;
+        gap: 1rem;
+        margin: 2rem 0;
+    }
+
+    .product-actions .btn {
+        flex: 1;
+    }
+
+    .product-meta {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border-color);
+        color: var(--text-light);
+    }
+
+    .out-of-stock {
+        padding: 1.5rem;
+        background: var(--bg-light);
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .out-of-stock span {
+        display: block;
+        margin-bottom: 1rem;
+        font-weight: 600;
+        color: #dc2626;
+    }
+
+    .related-products {
+        margin-top: 4rem;
+        padding-top: 4rem;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .related-products h2 {
+        margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+        .product-container {
+            grid-template-columns: 1fr;
+        }
+
+        .product-actions {
+            flex-direction: column;
+        }
+    }
+    
+    </style>
+</head>
+<body>
+    
+    <style>
+        nav {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                display: none;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+        }
+    </style>
+
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">SmartHome Pro</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li><li><a href="/products">Products</a></li><li><a href="/about">About</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+        </div>
+    </nav>
+    
+
+    <main class="container product-page">
+        <div class="breadcrumb">
+            <a href="/">Home</a> /
+            <a href="/products">Products</a> /
+            <a href="/products/Security">Security</a> / 
+            <span>SmartGuard Pro Camera</span>
+        </div>
+
+        <div class="product-container">
+            <!-- Product Images -->
+            <div class="product-gallery">
+                <div class="main-image">
+                    <img src="https://via.placeholder.com/800x600?text=Smart+Camera+Main" alt="SmartGuard Pro Camera" id="mainProductImage">
+                </div>
+                
+                <div class="thumbnail-gallery">
+                    
+                        <img src="https://via.placeholder.com/800x600?text=Smart+Camera+Main"
+                             alt="SmartGuard Pro Camera - View 1"
+                             class="thumbnail active"
+                             onclick="changeProductImage('https://via.placeholder.com/800x600?text=Smart+Camera+Main', this)">
+                    
+                        <img src="https://via.placeholder.com/800x600?text=Smart+Camera+Side"
+                             alt="SmartGuard Pro Camera - View 2"
+                             class="thumbnail "
+                             onclick="changeProductImage('https://via.placeholder.com/800x600?text=Smart+Camera+Side', this)">
+                    
+                        <img src="https://via.placeholder.com/800x600?text=Smart+Camera+Night"
+                             alt="SmartGuard Pro Camera - View 3"
+                             class="thumbnail "
+                             onclick="changeProductImage('https://via.placeholder.com/800x600?text=Smart+Camera+Night', this)">
+                    
+                        <img src="https://via.placeholder.com/800x600?text=Smart+Camera+App"
+                             alt="SmartGuard Pro Camera - View 4"
+                             class="thumbnail "
+                             onclick="changeProductImage('https://via.placeholder.com/800x600?text=Smart+Camera+App', this)">
+                    
+                </div>
+                
+            </div>
+
+            <!-- Product Details -->
+            <div class="product-details">
+                <h1 class="product-title">SmartGuard Pro Camera</h1>
+
+                
+                <div class="product-rating">
+                    ★★★★⯨
+                    <span class="rating-text">4.8 (524 reviews)</span>
+                </div>
+                
+
+                <div class="product-price">
+                    <span class="currency">$</span>
+                    <span class="amount">199.99</span>
+                </div>
+
+                <div class="product-description">
+                    The SmartGuard Pro is our flagship 4K security camera featuring advanced AI-powered motion detection, crystal-clear night vision up to 100 feet, two-way audio communication, and cloud storage. Perfect for both indoor and outdoor use, this camera provides 360-degree coverage and instant alerts to keep your home safe 24/7.
+                </div>
+
+                
+                <div class="product-features">
+                    <h3>Key Features</h3>
+                    <ul>
+                        <li>4K Ultra HD resolution</li><li>AI-powered motion and person detection</li><li>360-degree pan and tilt</li><li>Night vision up to 100 feet</li><li>Two-way audio with noise cancellation</li><li>Weather-resistant (IP66 rating)</li><li>Cloud and local storage options</li><li>Works with Alexa and Google Home</li>
+                    </ul>
+                </div>
+                
+
+                <div class="product-actions">
+                    
+                        <button class="btn btn-primary btn-lg add-to-cart" data-product-id="smart-camera-pro">
+                            Add to Cart
+                        </button>
+                        <button class="btn btn-outline btn-lg" onclick="addToWishlist('smart-camera-pro')">
+                            ♥ Add to Wishlist
+                        </button>
+                    
+                </div>
+
+                <div class="product-meta">
+                    <p><strong>SKU:</strong> SGP-CAM-001</p>
+                    <p><strong>Category:</strong> Security</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Products Section -->
+        <section class="related-products">
+            <h2>You May Also Like</h2>
+            <div id="relatedProductsContainer"></div>
+        </section>
+    </main>
+
+    
+    <style>
+        footer {
+            background: var(--text-color);
+            color: white;
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            line-height: 2;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+        }
+    </style>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>SmartHome Pro</h3>
+                    <p>Making your home smarter, one device at a time</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/products">Products</a></li>
+                        <li><a href="/about">About</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="/blog">Blog</a></li>
+                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/support">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SmartHome Pro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+
+    <script>
+        
+    // Mobile menu toggle
+    function toggleMobileMenu() {
+        const navLinks = document.getElementById('navLinks');
+        navLinks.classList.toggle('active');
+    }
+
+    // Add to cart functionality
+    function addToCart(productId) {
+        console.log('Adding product to cart:', productId);
+        alert('Product added to cart!');
+        // Implement actual cart logic here
+    }
+
+    // Wishlist functionality
+    function addToWishlist(productId) {
+        console.log('Adding to wishlist:', productId);
+        alert('Added to wishlist!');
+    }
+
+    // Notify when available
+    function notifyWhenAvailable(productId) {
+        const email = prompt('Enter your email to be notified:');
+        if (email) {
+            alert('We will notify you when this product is back in stock!');
+        }
+    }
+
+    // Add to cart buttons
+    document.addEventListener('DOMContentLoaded', function() {
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.getAttribute('data-product-id');
+                addToCart(productId);
+            });
+        });
+    });
+    
+        
+    function changeProductImage(src, thumbnail) {
+        document.getElementById('mainProductImage').src = src;
+
+        // Update active thumbnail
+        document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+        thumbnail.classList.add('active');
+    }
+    
+    </script>
+</body>
+</html>
