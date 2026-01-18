@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Generator</title>
+</head>
+<body style="font-family: Arial, sans-serif; background: #111; color: white; margin: 0; padding: 20px;">
+
+    <div style="max-width: 600px; margin: 50px auto; text-align: center;">
+
+        <h1 style="font-size: 2.5rem;">Video Generator</h1>
+        <p style="color: #888; margin-bottom: 30px;">Type your prompt and generate a video</p>
+
+        <!-- ONE BIG TEXT BOX -->
+        <textarea
+            id="prompt"
+            placeholder="A wolf running through snow at sunset, cinematic lighting, dramatic..."
+            style="width:100%; height:120px; font-size:16px; padding:15px; margin:20px 0; border-radius:12px; border:1px solid #333; background:#222; color:white; resize:none; box-sizing:border-box;"
+        ></textarea>
+
+        <!-- ONE BIG BUTTON -->
+        <button
+            id="generateBtn"
+            style="width:100%; padding:20px; font-size:18px; font-weight:bold; background:#22c55e; color:white; border:none; border-radius:12px; cursor:pointer;">
+            Generate Video
+        </button>
+
+        <!-- PROGRESS (hidden until generating) -->
+        <div id="progress" style="display:none; margin-top:30px;">
+            <div style="background:#333; border-radius:10px; overflow:hidden;">
+                <div id="progressBar" style="background:linear-gradient(90deg, #22c55e, #16a34a); height:8px; width:0%; transition:width 0.5s;"></div>
+            </div>
+            <p id="status" style="color:#888; margin-top:15px;">Connecting to AI...</p>
+        </div>
+
+        <!-- VIDEO RESULT (hidden until ready) -->
+        <div id="result" style="display:none; margin-top:30px;">
+            <iframe
+                id="videoFrame"
+                style="width:100%; height:500px; border:none; border-radius:12px; background:#000;"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+            </iframe>
+            <p style="color:#666; font-size:14px; margin-top:15px;">Enter your prompt in the interface above and click Generate</p>
+            <button
+                onclick="location.reload()"
+                style="margin-top:15px; padding:15px 30px; font-size:16px; background:#333; color:white; border:none; border-radius:8px; cursor:pointer;">
+                Start Over
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        const btn = document.getElementById('generateBtn');
+        const progress = document.getElementById('progress');
+        const progressBar = document.getElementById('progressBar');
+        const status = document.getElementById('status');
+        const result = document.getElementById('result');
+        const frame = document.getElementById('videoFrame');
+        const prompt = document.getElementById('prompt');
+
+        btn.onclick = async function() {
+            if (!prompt.value.trim()) {
+                alert('Please enter a prompt');
+                return;
+            }
+
+            // Hide button, show progress
+            btn.style.display = 'none';
+            progress.style.display = 'block';
+
+            // Animate progress
+            let p = 0;
+            const interval = setInterval(() => {
+                p += Math.random() * 15;
+                if (p > 95) p = 95;
+                progressBar.style.width = p + '%';
+
+                if (p < 30) status.textContent = 'Connecting to AI model...';
+                else if (p < 60) status.textContent = 'Loading video generator...';
+                else if (p < 90) status.textContent = 'Almost ready...';
+                else status.textContent = 'Generator loaded!';
+            }, 500);
+
+            // Load the HuggingFace Space after 3 seconds
+            setTimeout(() => {
+                clearInterval(interval);
+                progressBar.style.width = '100%';
+                status.textContent = 'Ready! Use the interface below.';
+
+                setTimeout(() => {
+                    progress.style.display = 'none';
+                    result.style.display = 'block';
+                    frame.src = 'https://lightricks-ltx-video-distilled.hf.space';
+                }, 500);
+            }, 3000);
+        };
+
+        // Ctrl+Enter to generate
+        prompt.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') btn.click();
+        });
+    </script>
+
+</body>
+</html>
