@@ -3,403 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Generator - Simple & Fast</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #000;
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 700px;
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            background: linear-gradient(90deg, #fff, #888);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .subtitle {
-            color: #666;
-            margin-bottom: 40px;
-            font-size: 1rem;
-        }
-
-        .badge {
-            display: inline-block;
-            background: #10b981;
-            color: #000;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-
-        .prompt-box {
-            width: 100%;
-            padding: 20px 24px;
-            font-size: 1.1rem;
-            border: 1px solid #333;
-            border-radius: 16px;
-            background: #111;
-            color: #fff;
-            resize: none;
-            min-height: 120px;
-            margin-bottom: 20px;
-            transition: border-color 0.2s;
-        }
-
-        .prompt-box:focus {
-            outline: none;
-            border-color: #10b981;
-        }
-
-        .prompt-box::placeholder {
-            color: #555;
-        }
-
-        .model-select {
-            width: 100%;
-            padding: 14px 20px;
-            font-size: 1rem;
-            border: 1px solid #333;
-            border-radius: 12px;
-            background: #111;
-            color: #fff;
-            margin-bottom: 20px;
-            cursor: pointer;
-        }
-
-        .model-select:focus {
-            outline: none;
-            border-color: #10b981;
-        }
-
-        .generate-btn {
-            width: 100%;
-            padding: 18px 32px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            background: #10b981;
-            color: #000;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .generate-btn:hover:not(:disabled) {
-            background: #0d9668;
-            transform: scale(1.02);
-        }
-
-        .generate-btn:disabled {
-            background: #333;
-            color: #666;
-            cursor: not-allowed;
-        }
-
-        .progress-container {
-            margin-top: 40px;
-            display: none;
-        }
-
-        .progress-container.active {
-            display: block;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #222;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 16px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #10b981, #3b82f6);
-            border-radius: 4px;
-            transition: width 0.3s ease;
-            width: 0%;
-        }
-
-        .progress-text {
-            color: #888;
-            font-size: 0.95rem;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            border: 2px solid #333;
-            border-top-color: #10b981;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 10px;
-            vertical-align: middle;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .result-container {
-            margin-top: 40px;
-            display: none;
-        }
-
-        .result-container.active {
-            display: block;
-        }
-
-        .video-wrapper {
-            width: 100%;
-            border-radius: 16px;
-            overflow: hidden;
-            background: #111;
-            margin-bottom: 20px;
-            min-height: 400px;
-        }
-
-        .video-wrapper iframe {
-            width: 100%;
-            height: 500px;
-            border: none;
-        }
-
-        .download-btn {
-            width: 100%;
-            padding: 16px 32px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            background: #3b82f6;
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-bottom: 12px;
-        }
-
-        .download-btn:hover {
-            background: #2563eb;
-        }
-
-        .new-btn {
-            width: 100%;
-            padding: 14px 32px;
-            font-size: 1rem;
-            background: transparent;
-            color: #888;
-            border: 1px solid #333;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .new-btn:hover {
-            border-color: #555;
-            color: #fff;
-        }
-
-        .tip {
-            color: #444;
-            font-size: 0.85rem;
-            margin-top: 30px;
-        }
-
-        .tip a {
-            color: #10b981;
-            text-decoration: none;
-        }
-
-        @media (max-width: 600px) {
-            h1 { font-size: 1.8rem; }
-            .prompt-box { font-size: 1rem; padding: 16px; }
-            .generate-btn { font-size: 1rem; padding: 16px; }
-        }
-    </style>
+    <title>Video Generator</title>
 </head>
-<body>
-    <div class="container">
-        <h1>Video Generator <span class="badge">FREE</span></h1>
-        <p class="subtitle">Describe your video and watch it come to life</p>
+<body style="font-family: Arial, sans-serif; background: #111; color: white; margin: 0; padding: 20px;">
 
+    <div style="max-width: 600px; margin: 50px auto; text-align: center;">
+
+        <h1 style="font-size: 2.5rem;">Video Generator</h1>
+        <p style="color: #888; margin-bottom: 30px;">Type your prompt and generate a video</p>
+
+        <!-- ONE BIG TEXT BOX -->
         <textarea
             id="prompt"
-            class="prompt-box"
-            placeholder="A golden retriever running through a field of sunflowers at sunset, cinematic lighting, slow motion..."
+            placeholder="A wolf running through snow at sunset, cinematic lighting, dramatic..."
+            style="width:100%; height:120px; font-size:16px; padding:15px; margin:20px 0; border-radius:12px; border:1px solid #333; background:#222; color:white; resize:none; box-sizing:border-box;"
         ></textarea>
 
-        <select id="modelSelect" class="model-select">
-            <option value="ltx2">LTX-2 (Fastest, Best Quality)</option>
-            <option value="ltx">LTX Video Fast</option>
-            <option value="wan">Wan 2.1 (High Quality)</option>
-            <option value="svd">Stable Video (Image to Video)</option>
-        </select>
-
-        <button id="generateBtn" class="generate-btn">
+        <!-- ONE BIG BUTTON -->
+        <button
+            id="generateBtn"
+            style="width:100%; padding:20px; font-size:18px; font-weight:bold; background:#22c55e; color:white; border:none; border-radius:12px; cursor:pointer;">
             Generate Video
         </button>
 
-        <div id="progress" class="progress-container">
-            <div class="progress-bar">
-                <div id="progressFill" class="progress-fill"></div>
+        <!-- PROGRESS (hidden until generating) -->
+        <div id="progress" style="display:none; margin-top:30px;">
+            <div style="background:#333; border-radius:10px; overflow:hidden;">
+                <div id="progressBar" style="background:linear-gradient(90deg, #22c55e, #16a34a); height:8px; width:0%; transition:width 0.5s;"></div>
             </div>
-            <p class="progress-text">
-                <span class="loading-spinner"></span>
-                <span id="statusText">Loading AI model...</span>
-            </p>
+            <p id="status" style="color:#888; margin-top:15px;">Connecting to AI...</p>
         </div>
 
-        <div id="result" class="result-container">
-            <div class="video-wrapper">
-                <iframe id="videoFrame" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
-            </div>
-            <button id="downloadBtn" class="download-btn">Open Generator Interface</button>
-            <button id="newBtn" class="new-btn">Generate Another</button>
+        <!-- VIDEO RESULT (hidden until ready) -->
+        <div id="result" style="display:none; margin-top:30px;">
+            <iframe
+                id="videoFrame"
+                style="width:100%; height:500px; border:none; border-radius:12px; background:#000;"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+            </iframe>
+            <p style="color:#666; font-size:14px; margin-top:15px;">Enter your prompt in the interface above and click Generate</p>
+            <button
+                onclick="location.reload()"
+                style="margin-top:15px; padding:15px 30px; font-size:16px; background:#333; color:white; border:none; border-radius:8px; cursor:pointer;">
+                Start Over
+            </button>
         </div>
 
-        <p class="tip">
-            Tip: Be descriptive - include style, mood, camera movement, lighting.<br>
-            <a href="/dashboard.html">Back to Dashboard</a>
-        </p>
     </div>
 
     <script>
-        // Model configurations
-        const MODELS = {
-            'ltx2': {
-                name: 'LTX-2',
-                url: 'https://lightricks-ltx-2.hf.space',
-                time: 90
-            },
-            'ltx': {
-                name: 'LTX Video Fast',
-                url: 'https://lightricks-ltx-video-distilled.hf.space',
-                time: 60
-            },
-            'wan': {
-                name: 'Wan 2.1',
-                url: 'https://wan-ai-wan2-1.hf.space',
-                time: 150
-            },
-            'svd': {
-                name: 'Stable Video Diffusion',
-                url: 'https://multimodalart-stable-video-diffusion.hf.space',
-                time: 120
-            }
-        };
+        const btn = document.getElementById('generateBtn');
+        const progress = document.getElementById('progress');
+        const progressBar = document.getElementById('progressBar');
+        const status = document.getElementById('status');
+        const result = document.getElementById('result');
+        const frame = document.getElementById('videoFrame');
+        const prompt = document.getElementById('prompt');
 
-        // Elements
-        const promptInput = document.getElementById('prompt');
-        const modelSelect = document.getElementById('modelSelect');
-        const generateBtn = document.getElementById('generateBtn');
-        const progressContainer = document.getElementById('progress');
-        const progressFill = document.getElementById('progressFill');
-        const statusText = document.getElementById('statusText');
-        const resultContainer = document.getElementById('result');
-        const videoFrame = document.getElementById('videoFrame');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const newBtn = document.getElementById('newBtn');
-
-        // Update progress
-        function updateProgress(percent, status) {
-            progressFill.style.width = `${percent}%`;
-            statusText.textContent = status;
-        }
-
-        // Generate video
-        async function generateVideo() {
-            const prompt = promptInput.value.trim();
-            const modelKey = modelSelect.value;
-
-            if (!prompt) {
-                alert('Please enter a description for your video.');
+        btn.onclick = async function() {
+            if (!prompt.value.trim()) {
+                alert('Please enter a prompt');
                 return;
             }
 
-            const model = MODELS[modelKey];
-
-            // Show progress
-            progressContainer.classList.add('active');
-            resultContainer.classList.remove('active');
-            generateBtn.disabled = true;
-            generateBtn.textContent = 'Loading...';
+            // Hide button, show progress
+            btn.style.display = 'none';
+            progress.style.display = 'block';
 
             // Animate progress
-            updateProgress(10, `Connecting to ${model.name}...`);
+            let p = 0;
+            const interval = setInterval(() => {
+                p += Math.random() * 15;
+                if (p > 95) p = 95;
+                progressBar.style.width = p + '%';
 
-            await new Promise(r => setTimeout(r, 800));
-            updateProgress(25, 'Loading AI model...');
+                if (p < 30) status.textContent = 'Connecting to AI model...';
+                else if (p < 60) status.textContent = 'Loading video generator...';
+                else if (p < 90) status.textContent = 'Almost ready...';
+                else status.textContent = 'Generator loaded!';
+            }, 500);
 
-            await new Promise(r => setTimeout(r, 1000));
-            updateProgress(50, 'Initializing generator...');
+            // Load the HuggingFace Space after 3 seconds
+            setTimeout(() => {
+                clearInterval(interval);
+                progressBar.style.width = '100%';
+                status.textContent = 'Ready! Use the interface below.';
 
-            await new Promise(r => setTimeout(r, 1200));
-            updateProgress(75, 'Almost ready...');
+                setTimeout(() => {
+                    progress.style.display = 'none';
+                    result.style.display = 'block';
+                    frame.src = 'https://lightricks-ltx-video-distilled.hf.space';
+                }, 500);
+            }, 3000);
+        };
 
-            await new Promise(r => setTimeout(r, 800));
-            updateProgress(100, 'Generator loaded!');
-
-            // Load iframe
-            videoFrame.src = model.url;
-
-            await new Promise(r => setTimeout(r, 500));
-
-            // Show result
-            progressContainer.classList.remove('active');
-            resultContainer.classList.add('active');
-            generateBtn.disabled = false;
-            generateBtn.textContent = 'Generate Video';
-
-            // Scroll to result
-            resultContainer.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Open in new tab
-        downloadBtn.addEventListener('click', () => {
-            const modelKey = modelSelect.value;
-            const model = MODELS[modelKey];
-            window.open(model.url, '_blank');
-        });
-
-        // Reset
-        newBtn.addEventListener('click', () => {
-            resultContainer.classList.remove('active');
-            promptInput.value = '';
-            promptInput.focus();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        // Generate on click
-        generateBtn.addEventListener('click', generateVideo);
-
-        // Ctrl+Enter
-        promptInput.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.key === 'Enter') {
-                generateVideo();
-            }
+        // Ctrl+Enter to generate
+        prompt.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') btn.click();
         });
     </script>
+
 </body>
 </html>
