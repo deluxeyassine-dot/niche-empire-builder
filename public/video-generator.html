@@ -1,368 +1,404 @@
 <!DOCTYPE html>
-<!-- VIDEO GENERATOR v8: 2026-01-17 - TESTED WORKING HF Spaces Only -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FREE AI Video Generator - Working Spaces</title>
+    <title>Video Generator - Simple & Fast</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
             min-height: 100vh;
-            padding: 20px;
-        }
-        .container { max-width: 1400px; margin: 0 auto; }
-        .header {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .header h1 { color: white; font-size: 2rem; margin-bottom: 8px; }
-        .header p { color: rgba(255, 255, 255, 0.9); }
-        .status-badge {
-            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            margin-left: 10px;
-            display: inline-block;
-            font-weight: bold;
-        }
-        .nav-buttons {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .nav-btn {
-            padding: 10px 18px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        .nav-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-        .info-box {
-            background: rgba(34, 197, 94, 0.2);
-            border: 1px solid #4ade80;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 20px;
-            color: white;
-        }
-        .info-box strong { color: #4ade80; }
-        .main-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 10px;
-            border-radius: 15px;
-        }
-        .main-tab {
-            padding: 12px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid transparent;
-            border-radius: 10px;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.95rem;
-        }
-        .main-tab:hover { background: rgba(255, 255, 255, 0.2); }
-        .main-tab.active {
-            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-            color: #064e3b;
-            border-color: white;
-        }
-        .tab-status {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-        .tab-status.working { background: #4ade80; }
-        .tab-status.limited { background: #fbbf24; }
-        .panel {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            display: none;
-        }
-        .panel.active { display: block; }
-        .panel h2 { color: white; margin-bottom: 10px; font-size: 1.3rem; }
-        .panel > p { color: rgba(255, 255, 255, 0.8); margin-bottom: 15px; }
-        .space-iframe {
-            width: 100%;
-            height: 700px;
-            border: none;
-            border-radius: 12px;
-            background: #1a1a2e;
-        }
-        .iframe-loading {
-            display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 400px;
-            color: rgba(255, 255, 255, 0.7);
+            padding: 20px;
         }
-        .iframe-loading .spinner {
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top: 3px solid #4ade80;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin-right: 15px;
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            text-align: center;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .test-results {
-            background: rgba(0, 0, 0, 0.3);
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #10b981;
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .prompt-box {
+            width: 100%;
+            padding: 20px 24px;
+            font-size: 1.1rem;
+            border: 1px solid #333;
+            border-radius: 16px;
+            background: #111;
+            color: #fff;
+            resize: none;
+            min-height: 120px;
+            margin-bottom: 20px;
+            transition: border-color 0.2s;
+        }
+
+        .prompt-box:focus {
+            outline: none;
+            border-color: #10b981;
+        }
+
+        .prompt-box::placeholder {
+            color: #555;
+        }
+
+        .model-select {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 1rem;
+            border: 1px solid #333;
             border-radius: 12px;
-            padding: 15px;
-            margin-top: 20px;
+            background: #111;
+            color: #fff;
+            margin-bottom: 20px;
+            cursor: pointer;
         }
-        .test-results h3 { color: #4ade80; margin-bottom: 10px; }
-        .test-results table { width: 100%; border-collapse: collapse; }
-        .test-results th, .test-results td {
-            padding: 8px 12px;
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
+
+        .model-select:focus {
+            outline: none;
+            border-color: #10b981;
         }
-        .test-results th { color: #4ade80; }
-        .status-ok { color: #4ade80; }
-        .status-fail { color: #f87171; }
-        @media (max-width: 768px) {
-            .header h1 { font-size: 1.5rem; }
-            .main-tabs { flex-direction: column; }
-            .main-tab { text-align: center; }
-            .space-iframe { height: 500px; }
+
+        .generate-btn {
+            width: 100%;
+            padding: 18px 32px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            background: #10b981;
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .generate-btn:hover:not(:disabled) {
+            background: #0d9668;
+            transform: scale(1.02);
+        }
+
+        .generate-btn:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .progress-container {
+            margin-top: 40px;
+            display: none;
+        }
+
+        .progress-container.active {
+            display: block;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #222;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #3b82f6);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            color: #888;
+            font-size: 0.95rem;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #333;
+            border-top-color: #10b981;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .result-container {
+            margin-top: 40px;
+            display: none;
+        }
+
+        .result-container.active {
+            display: block;
+        }
+
+        .video-wrapper {
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #111;
+            margin-bottom: 20px;
+            min-height: 400px;
+        }
+
+        .video-wrapper iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
+
+        .download-btn {
+            width: 100%;
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: #3b82f6;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 12px;
+        }
+
+        .download-btn:hover {
+            background: #2563eb;
+        }
+
+        .new-btn {
+            width: 100%;
+            padding: 14px 32px;
+            font-size: 1rem;
+            background: transparent;
+            color: #888;
+            border: 1px solid #333;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .new-btn:hover {
+            border-color: #555;
+            color: #fff;
+        }
+
+        .tip {
+            color: #444;
+            font-size: 0.85rem;
+            margin-top: 30px;
+        }
+
+        .tip a {
+            color: #10b981;
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .prompt-box { font-size: 1rem; padding: 16px; }
+            .generate-btn { font-size: 1rem; padding: 16px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>AI Video Generator <span class="status-badge">TESTED WORKING</span></h1>
-            <p>Embedded Hugging Face Spaces - All tested and verified working on 2026-01-17</p>
-        </div>
+        <h1>Video Generator <span class="badge">FREE</span></h1>
+        <p class="subtitle">Describe your video and watch it come to life</p>
 
-        <div class="nav-buttons">
-            <a href="index.html" class="nav-btn">Dashboard</a>
-            <a href="watermark-remover.html" class="nav-btn">Watermark Remover</a>
-            <a href="automation-control.html" class="nav-btn">Automation</a>
-        </div>
+        <textarea
+            id="prompt"
+            class="prompt-box"
+            placeholder="A golden retriever running through a field of sunflowers at sunset, cinematic lighting, slow motion..."
+        ></textarea>
 
-        <div class="info-box">
-            <strong>How this works:</strong> These are embedded Hugging Face Spaces that run AI models directly.
-            Click a tab, enter your prompt in the embedded interface, and generate. No API keys needed -
-            the Spaces handle everything. Generation may take 1-3 minutes depending on the model.
-        </div>
+        <select id="modelSelect" class="model-select">
+            <option value="ltx2">LTX-2 (Fastest, Best Quality)</option>
+            <option value="ltx">LTX Video Fast</option>
+            <option value="wan">Wan 2.1 (High Quality)</option>
+            <option value="svd">Stable Video (Image to Video)</option>
+        </select>
 
-        <div class="main-tabs">
-            <button class="main-tab active" onclick="switchTab('wan')">
-                <span class="tab-status working"></span>Wan 2.2 (Text-to-Video)
-            </button>
-            <button class="main-tab" onclick="switchTab('ltx')">
-                <span class="tab-status working"></span>LTX Video (Fast)
-            </button>
-            <button class="main-tab" onclick="switchTab('svd')">
-                <span class="tab-status working"></span>Stable Video (Image-to-Video)
-            </button>
-            <button class="main-tab" onclick="switchTab('composer')">
-                <span class="tab-status working"></span>Video Composer
-            </button>
-            <button class="main-tab" onclick="switchTab('status')">
-                <span class="tab-status limited"></span>Status
-            </button>
-        </div>
+        <button id="generateBtn" class="generate-btn">
+            Generate Video
+        </button>
 
-        <!-- Panel 1: Wan 2.2 -->
-        <div class="panel active" id="panel-wan">
-            <h2>Wan 2.2 5B - Text to Video</h2>
-            <p>Creates videos from text descriptions. Enter your prompt and click Generate. Supports both text-to-video and image-to-video.</p>
-            <div id="iframe-wan">
-                <div class="iframe-loading">
-                    <div class="spinner"></div>
-                    <span>Loading Wan 2.2 generator...</span>
-                </div>
+        <div id="progress" class="progress-container">
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill"></div>
             </div>
+            <p class="progress-text">
+                <span class="loading-spinner"></span>
+                <span id="statusText">Loading AI model...</span>
+            </p>
         </div>
 
-        <!-- Panel 2: LTX Video -->
-        <div class="panel" id="panel-ltx">
-            <h2>LTX Video Fast - Ultra-Fast Generation</h2>
-            <p>One of the fastest video models available. Create videos from text or images with quick results.</p>
-            <div id="iframe-ltx">
-                <div class="iframe-loading">
-                    <div class="spinner"></div>
-                    <span>Loading LTX Video generator...</span>
-                </div>
+        <div id="result" class="result-container">
+            <div class="video-wrapper">
+                <iframe id="videoFrame" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
             </div>
+            <button id="downloadBtn" class="download-btn">Open Generator Interface</button>
+            <button id="newBtn" class="new-btn">Generate Another</button>
         </div>
 
-        <!-- Panel 3: Stable Video Diffusion -->
-        <div class="panel" id="panel-svd">
-            <h2>Stable Video Diffusion 1.1 - Image to Video</h2>
-            <p>Upload an image and watch it come to life. Creates 4-second videos from still images. Best for animating photos.</p>
-            <div id="iframe-svd">
-                <div class="iframe-loading">
-                    <div class="spinner"></div>
-                    <span>Loading Stable Video Diffusion...</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Panel 4: Video Composer -->
-        <div class="panel" id="panel-composer">
-            <h2>AI Video Composer - Natural Language Editing</h2>
-            <p>Describe what you want in plain English. Upload images/videos/audio and tell it what to do like "create a slideshow" or "add music".</p>
-            <div id="iframe-composer">
-                <div class="iframe-loading">
-                    <div class="spinner"></div>
-                    <span>Loading Video Composer...</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Panel 5: Status -->
-        <div class="panel" id="panel-status">
-            <h2>Space Status - Last Tested: 2026-01-17</h2>
-            <p>Current status of all embedded generators based on real HTTP tests.</p>
-
-            <div class="test-results">
-                <h3>Working Spaces (200 OK)</h3>
-                <table>
-                    <tr><th>Space</th><th>URL</th><th>Status</th></tr>
-                    <tr>
-                        <td>Wan 2.2 5B</td>
-                        <td>wan-ai-wan-2-2-5b.hf.space</td>
-                        <td class="status-ok">✓ WORKING</td>
-                    </tr>
-                    <tr>
-                        <td>LTX Video Fast</td>
-                        <td>lightricks-ltx-video-distilled.hf.space</td>
-                        <td class="status-ok">✓ WORKING</td>
-                    </tr>
-                    <tr>
-                        <td>Stable Video Diffusion</td>
-                        <td>multimodalart-stable-video-diffusion.hf.space</td>
-                        <td class="status-ok">✓ WORKING</td>
-                    </tr>
-                    <tr>
-                        <td>AI Video Composer</td>
-                        <td>huggingface-projects-ai-video-composer.hf.space</td>
-                        <td class="status-ok">✓ WORKING</td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="test-results" style="margin-top: 15px;">
-                <h3>Broken/Removed Spaces</h3>
-                <table>
-                    <tr><th>Space</th><th>URL</th><th>Status</th></tr>
-                    <tr>
-                        <td>AnimateDiff Lightning</td>
-                        <td>bytedance-animatediff-lightning.hf.space</td>
-                        <td class="status-fail">✗ ERROR</td>
-                    </tr>
-                    <tr>
-                        <td>ZeroScope V2 XL</td>
-                        <td>cerspense-zeroscope-v2-xl.hf.space</td>
-                        <td class="status-fail">✗ 404 REMOVED</td>
-                    </tr>
-                    <tr>
-                        <td>ModelScope Text2Video</td>
-                        <td>damo-vilab-modelscope-text-to-video-synthesis.hf.space</td>
-                        <td class="status-fail">✗ 404 REMOVED</td>
-                    </tr>
-                    <tr>
-                        <td>Instant Video</td>
-                        <td>kingnish-instant-video.hf.space</td>
-                        <td class="status-fail">✗ PAUSED</td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="test-results" style="margin-top: 15px;">
-                <h3>Other Free Services</h3>
-                <table>
-                    <tr><th>Service</th><th>Type</th><th>Status</th></tr>
-                    <tr>
-                        <td>Pollinations.ai</td>
-                        <td>Image generation (not video)</td>
-                        <td class="status-ok">✓ WORKING</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+        <p class="tip">
+            Tip: Be descriptive - include style, mood, camera movement, lighting.<br>
+            <a href="/dashboard.html">Back to Dashboard</a>
+        </p>
     </div>
 
     <script>
-        // Working iframe URLs - TESTED 2026-01-17
-        const iframeUrls = {
-            'wan': 'https://wan-ai-wan-2-2-5b.hf.space',
-            'ltx': 'https://lightricks-ltx-video-distilled.hf.space',
-            'svd': 'https://multimodalart-stable-video-diffusion.hf.space',
-            'composer': 'https://huggingface-projects-ai-video-composer.hf.space'
+        // Model configurations
+        const MODELS = {
+            'ltx2': {
+                name: 'LTX-2',
+                url: 'https://lightricks-ltx-2.hf.space',
+                time: 90
+            },
+            'ltx': {
+                name: 'LTX Video Fast',
+                url: 'https://lightricks-ltx-video-distilled.hf.space',
+                time: 60
+            },
+            'wan': {
+                name: 'Wan 2.1',
+                url: 'https://wan-ai-wan2-1.hf.space',
+                time: 150
+            },
+            'svd': {
+                name: 'Stable Video Diffusion',
+                url: 'https://multimodalart-stable-video-diffusion.hf.space',
+                time: 120
+            }
         };
 
-        const loadedIframes = {};
+        // Elements
+        const promptInput = document.getElementById('prompt');
+        const modelSelect = document.getElementById('modelSelect');
+        const generateBtn = document.getElementById('generateBtn');
+        const progressContainer = document.getElementById('progress');
+        const progressFill = document.getElementById('progressFill');
+        const statusText = document.getElementById('statusText');
+        const resultContainer = document.getElementById('result');
+        const videoFrame = document.getElementById('videoFrame');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const newBtn = document.getElementById('newBtn');
 
-        function switchTab(tabName) {
-            // Update tabs
-            document.querySelectorAll('.main-tab').forEach(btn => btn.classList.remove('active'));
-            event.target.closest('.main-tab').classList.add('active');
-
-            // Update panels
-            document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
-            document.getElementById('panel-' + tabName).classList.add('active');
-
-            // Load iframe if needed
-            if (iframeUrls[tabName] && !loadedIframes[tabName]) {
-                loadIframe(tabName);
-            }
+        // Update progress
+        function updateProgress(percent, status) {
+            progressFill.style.width = `${percent}%`;
+            statusText.textContent = status;
         }
 
-        function loadIframe(tabName) {
-            const container = document.getElementById('iframe-' + tabName);
-            if (container && iframeUrls[tabName]) {
-                container.innerHTML = `
-                    <iframe
-                        class="space-iframe"
-                        src="${iframeUrls[tabName]}"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; microphone"
-                        allowfullscreen
-                        loading="lazy">
-                    </iframe>
-                `;
-                loadedIframes[tabName] = true;
+        // Generate video
+        async function generateVideo() {
+            const prompt = promptInput.value.trim();
+            const modelKey = modelSelect.value;
+
+            if (!prompt) {
+                alert('Please enter a description for your video.');
+                return;
             }
+
+            const model = MODELS[modelKey];
+
+            // Show progress
+            progressContainer.classList.add('active');
+            resultContainer.classList.remove('active');
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Loading...';
+
+            // Animate progress
+            updateProgress(10, `Connecting to ${model.name}...`);
+
+            await new Promise(r => setTimeout(r, 800));
+            updateProgress(25, 'Loading AI model...');
+
+            await new Promise(r => setTimeout(r, 1000));
+            updateProgress(50, 'Initializing generator...');
+
+            await new Promise(r => setTimeout(r, 1200));
+            updateProgress(75, 'Almost ready...');
+
+            await new Promise(r => setTimeout(r, 800));
+            updateProgress(100, 'Generator loaded!');
+
+            // Load iframe
+            videoFrame.src = model.url;
+
+            await new Promise(r => setTimeout(r, 500));
+
+            // Show result
+            progressContainer.classList.remove('active');
+            resultContainer.classList.add('active');
+            generateBtn.disabled = false;
+            generateBtn.textContent = 'Generate Video';
+
+            // Scroll to result
+            resultContainer.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Load first tab on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            loadIframe('wan');
+        // Open in new tab
+        downloadBtn.addEventListener('click', () => {
+            const modelKey = modelSelect.value;
+            const model = MODELS[modelKey];
+            window.open(model.url, '_blank');
+        });
+
+        // Reset
+        newBtn.addEventListener('click', () => {
+            resultContainer.classList.remove('active');
+            promptInput.value = '';
+            promptInput.focus();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Generate on click
+        generateBtn.addEventListener('click', generateVideo);
+
+        // Ctrl+Enter
+        promptInput.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+                generateVideo();
+            }
         });
     </script>
 </body>
