@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "echo FORCE DEPLOY v10 - 4K Cinema Studio - $(date) && ls -la public/*.html | wc -l",
+  "buildCommand": "echo FORCE DEPLOY v11 - simple-sora - $(date) && ls -la public/*.html | wc -l",
   "outputDirectory": "public",
   "framework": null,
   "headers": [
